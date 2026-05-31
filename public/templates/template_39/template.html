@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Glamour Magazine Cover Template</title>
+  <style>
+    :root {
+      --font-serif: serif;
+      --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #333;
+      font-family: var(--font-sans);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(255, 255, 255, 0.1); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+
+    /* Background Image */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #222;
+      cursor: pointer; overflow: hidden; position: absolute;
+      top: 0; left: 0; z-index: 1;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD COVER PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 18px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #aaa; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Foreground Overlays Container */
+    .overlays {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 10;
+      pointer-events: none; /* Let clicks pass through to background unless it's text */
+    }
+    
+    .overlays [data-editable="text"] {
+      pointer-events: auto; /* Enable editing on text */
+      color: #fff;
+      text-shadow: 1px 1px 10px rgba(0,0,0,0.5); /* Helps legibility over images */
+    }
+
+    /* Main Magazine Title */
+    .magazine-title {
+      position: absolute;
+      top: 30px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-family: var(--font-serif);
+      font-size: 155px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      line-height: 1;
+      transform: scaleY(1.1);
+    }
+
+    /* Shared style for all side text blocks */
+    .side-text {
+      position: absolute;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: 0.5px;
+      max-width: 320px;
+    }
+
+    /* Specific Placements */
+    .text-top-right {
+      top: 220px;
+      right: 30px;
+      text-align: right;
+    }
+    .text-top-left {
+      top: 260px;
+      left: 30px;
+      text-align: left;
+    }
+
+    .text-mid-left {
+      top: 400px;
+      left: 30px;
+      text-align: left;
+    }
+    .text-mid-right {
+      top: 450px;
+      right: 30px;
+      text-align: right;
+    }
+
+    .text-bot-left {
+      bottom: 220px;
+      left: 30px;
+      text-align: left;
+    }
+    .text-bot-right {
+      bottom: 250px;
+      right: 30px;
+      text-align: right;
+    }
+    
+    .text-footer-right {
+      bottom: 40px;
+      right: 30px;
+      text-align: right;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    /* Barcode */
+    .barcode {
+      position: absolute;
+      bottom: 40px;
+      left: 30px;
+      width: 150px;
+      height: 70px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 5px;
+      pointer-events: auto;
+    }
+    .barcode-svg {
+      width: 100%;
+      height: 45px;
+    }
+    .barcode-numbers {
+      font-family: monospace;
+      font-size: 12px;
+      color: #000;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Background Image -->
+    <div class="image-upload-box" id="main-image-box" data-editable="image">
+      <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+      <div class="image-preview-container">
+        <img id="main-image-img" class="image-preview" src="" alt="Cover Photo">
+      </div>
+      <div class="placeholder-state">
+        <svg viewBox="0 0 24 24" width="64" height="64" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Foreground Overlays -->
+    <div class="overlays">
+      
+      <div class="magazine-title" id="mag-title" data-editable="text">GLAMOUR</div>
+
+      <div class="side-text text-top-right" id="t-tr" data-editable="text">
+        WHERE ELEGANCE MEETS ATTITUDE
+      </div>
+      
+      <div class="side-text text-top-left" id="t-tl" data-editable="text">
+        THE POWER OF GLAM
+      </div>
+
+      <div class="side-text text-mid-left" id="t-ml" data-editable="text">
+        BOLD LIPS,<br>BLACK ELEGANCE -<br>THE ULTIMATE TIMELESS<br>COMBO
+      </div>
+
+      <div class="side-text text-mid-right" id="t-mr" data-editable="text">
+        INSIDE THE<br>ARTIST'S STUDIO -<br>BEHIND THE BRUSH<br>WITH TOP MUAS
+      </div>
+
+      <div class="side-text text-bot-left" id="t-bl" data-editable="text">
+        2025 MAKEUP<br>TRENDS -<br>FROM GLASS SKIN<br>TO GRAPHIC LINERS.
+      </div>
+
+      <div class="side-text text-bot-right" id="t-br" data-editable="text">
+        CONFIDENCE<br>UNCOVERED -<br>BEAUTY BEYOND<br>THE SURFACE.
+      </div>
+
+      <div class="side-text text-footer-right" id="t-fr" data-editable="text">
+        SEPTEMBER<br>2025
+      </div>
+
+      <div class="barcode">
+        <!-- SVG Barcode placeholder -->
+        <svg class="barcode-svg" preserveAspectRatio="none" viewBox="0 0 100 40">
+          <path d="M0,0 h3 v40 h-3 z M5,0 h1 v40 h-1 z M8,0 h2 v40 h-2 z M12,0 h4 v40 h-4 z M18,0 h1 v40 h-1 z M21,0 h3 v40 h-3 z M26,0 h2 v40 h-2 z M30,0 h1 v40 h-1 z M33,0 h3 v40 h-3 z M38,0 h2 v40 h-2 z M42,0 h1 v40 h-1 z M45,0 h4 v40 h-4 z M51,0 h1 v40 h-1 z M54,0 h3 v40 h-3 z M59,0 h2 v40 h-2 z M63,0 h1 v40 h-1 z M66,0 h3 v40 h-3 z M71,0 h2 v40 h-2 z M75,0 h1 v40 h-1 z M78,0 h4 v40 h-4 z M84,0 h1 v40 h-1 z M87,0 h3 v40 h-3 z M92,0 h2 v40 h-2 z M96,0 h4 v40 h-4 z" fill="#000" />
+        </svg>
+        <div class="barcode-numbers" id="barcode-num" data-editable="text">9 0123456789</div>
+      </div>
+
+    </div>
+
+  </article>
+</body>
+</html>

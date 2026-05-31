@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>The Birthday Times - Celebrate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --paper-bg: #fefefe;
+      --paper-bg-fallback: #ffffff;
+      --ink-color: #1a1a1a;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+      --font-gothic: serif;
+      --font-script: 'Great Vibes', cursive;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--paper-bg-fallback);
+      font-family: var(--font-sans);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 40px 50px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(26, 26, 26, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(26, 26, 26, 0.07); border-radius: 2px; }
+
+    .line-thin { border-top: 1px solid var(--ink-color); margin: 5px 0; }
+    .line-thick { border-top: 2px solid var(--ink-color); margin: 5px 0; }
+
+    /* Top Header Section */
+    .header-top-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      align-items: center;
+      padding: 10px 0;
+    }
+    .side-text-italic {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-style: italic;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    .main-site-title {
+      font-family: var(--font-gothic);
+      font-size: 56px;
+      text-align: center;
+      line-height: 1;
+      border-left: 1px solid var(--ink-color);
+      border-right: 1px solid var(--ink-color);
+      padding: 0 15px;
+    }
+
+    .header-sub-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 8px 0;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      letter-spacing: 1.5px;
+    }
+
+    /* Titles Section */
+    .titles-section {
+      text-align: center;
+      margin-top: 15px;
+      margin-bottom: 25px;
+      position: relative;
+    }
+    .script-title {
+      font-family: var(--font-script);
+      font-size: 110px;
+      line-height: 0.7;
+      font-weight: normal;
+      position: relative;
+      z-index: 2;
+      color: var(--ink-color);
+      margin-bottom: 10px;
+    }
+    .bold-title {
+      font-family: var(--font-sans);
+      font-size: 96px;
+      line-height: 0.9;
+      font-weight: 700;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+      transform: scaleY(1.1);
+    }
+
+    /* Image Section */
+    .image-container {
+      flex-grow: 1;
+      width: 100%;
+      position: relative;
+    }
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #f4f4f4;
+      cursor: pointer; overflow: hidden; position: absolute;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: sepia(0.2) contrast(1.1);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(26, 26, 26, 0.4);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Bottom Overlay Text */
+    .bottom-overlay-script {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-script);
+      font-size: 120px;
+      color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+      line-height: 0.9;
+      z-index: 10;
+      pointer-events: none;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    
+    /* Make overlay editable */
+    .bottom-overlay-script.editable-wrapper {
+      pointer-events: auto;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="line-thin"></div>
+    
+    <div class="header-top-row">
+      <div class="side-text-italic" id="header-left" data-editable="text">BREAKING<br>NEWS</div>
+      <div class="main-site-title" id="site-title" data-editable="text">THE BIRTHDAY TIMES</div>
+      <div class="side-text-italic" id="header-right" data-editable="text">BREAKING<br>NEWS</div>
+    </div>
+    
+    <div class="line-thick"></div>
+
+    <div class="header-sub-row">
+      <div style="text-align: left;" id="meta-city" data-editable="text">NEW YORK</div>
+      <div style="text-align: center;" id="meta-edition" data-editable="text">SPECIAL EDITION</div>
+      <div style="text-align: right;" id="meta-date" data-editable="text">SAT, MAY 15, 20XX</div>
+    </div>
+    
+    <div class="line-thin"></div>
+
+    <div class="titles-section">
+      <div class="script-title" id="script-title" data-editable="text">Sarah 23s</div>
+      <div class="bold-title" id="main-title" data-editable="text">TIME TO CELEBRATE!</div>
+    </div>
+
+    <div class="image-container">
+      <div class="image-upload-box" id="main-image-box" data-editable="image">
+        <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+        <div class="image-preview-container">
+          <img id="main-image-img" class="image-preview" src="" alt="Party Photo">
+        </div>
+        <div class="placeholder-state">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.5; margin-bottom: 10px;">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+          </svg>
+          <span style="font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;">UPLOAD PHOTO</span>
+        </div>
+      </div>
+      
+      <div class="bottom-overlay-script editable-wrapper" id="overlay-text" data-editable="text">
+        Birthday<br>Party
+      </div>
+    </div>
+
+  </article>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>ABOUT YOU The 1975</title>
+  <style>
+    :root {
+      --paper-bg: #f5f3e9;
+      --beige-block: #e2dcca;
+      --ink-color: #111111;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--paper-bg);
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(17, 17, 17, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(17, 17, 17, 0.07); border-radius: 2px; }
+
+    /* Top Margins and Borders */
+    .top-margin-block {
+      height: 40px;
+      width: 100%;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 50px;
+      font-family: var(--font-serif);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .thick-line {
+      height: 5px;
+      background-color: var(--ink-color);
+      width: calc(100% - 100px);
+      margin: 0 auto;
+    }
+
+    /* Headline Block */
+    .headline-block {
+      background-color: var(--beige-block);
+      width: 100%;
+      text-align: center;
+      padding: 15px 0;
+      margin: 5px 0;
+    }
+
+    .main-title {
+      font-family: var(--font-serif);
+      font-size: 110px;
+      line-height: 0.9;
+      font-weight: normal;
+      letter-spacing: 2px;
+      /* Simulating an outlined look if the font allows, else just elegant serif */
+    }
+
+    /* Upper Content Columns */
+    .upper-content {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 30px;
+      padding: 30px 50px;
+    }
+
+    .left-upper {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .band-title {
+      font-family: var(--font-serif);
+      font-size: 90px;
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .quote-box {
+      background-color: var(--beige-block);
+      padding: 20px;
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-style: italic;
+      line-height: 1.3;
+    }
+
+    .right-upper {
+      height: 380px;
+    }
+
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d0c8b6;
+      cursor: pointer; overflow: hidden; position: relative;
+      border-radius: 4px; /* Slight rounding based on image */
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(100%) contrast(1.1);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(17, 17, 17, 0.5);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 12px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Lower Content Columns */
+    .lower-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 0 50px;
+      flex-grow: 1;
+    }
+
+    .text-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .body-paragraph {
+      font-family: var(--font-serif);
+      font-size: 14.5px;
+      line-height: 1.5;
+      text-align: justify;
+      color: #333;
+    }
+
+    /* Footer */
+    .footer-section {
+      padding: 20px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .footer-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .bottom-margin-block {
+      background-color: var(--beige-block);
+      height: 40px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="top-margin-block"></div>
+
+    <div class="meta-row">
+      <div id="meta-left" data-editable="text">14 OCTOBER 2022</div>
+      <div id="meta-right" data-editable="text">BEING FUNNY IN A FOREIGN LANGUAGE</div>
+    </div>
+
+    <div class="thick-line"></div>
+
+    <div class="headline-block">
+      <div class="main-title" id="main-title" data-editable="text">ABOUT YOU</div>
+    </div>
+
+    <div class="thick-line"></div>
+
+    <div class="upper-content">
+      <div class="left-upper">
+        <div class="band-title" id="band-title" data-editable="text">THE<br>1975</div>
+        <div class="quote-box" id="quote-box" data-editable="text">
+          Do you think I have forgotten? About you?
+        </div>
+      </div>
+      <div class="right-upper">
+        <div class="image-upload-box" id="main-image-box" data-editable="image">
+          <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="main-image-img" class="image-preview" src="" alt="Photo">
+          </div>
+          <div class="placeholder-state">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+              <circle cx="12" cy="12" r="3.2"/>
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+            </svg>
+            <span style="font-family: var(--font-sans); font-size: 12px; letter-spacing: 1px;">UPLOAD PHOTO</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lower-content">
+      <div class="text-column">
+        <div class="body-paragraph" id="body-text-1" data-editable="text">
+          I know a place. It's somewhere I go when I need to remember your face. We get married in our heads. Something to do whilst we try to recall how we met.
+        </div>
+        <div class="body-paragraph" id="body-text-2" data-editable="text">
+          Do you think I have forgotten? Do you think I have forgotten? Do you think I have forgotten about you?
+        </div>
+        <div class="body-paragraph" id="body-text-3" data-editable="text">
+          You and I (Don't let go). We're alive (Don't let go). With nothing to do, I could lay and just look in your eyes. Wait (Don't let go). And pretend (Don't let go, oh). Hold on and hope that we'll find our way back in the end (In the end).
+        </div>
+        <div class="body-paragraph" id="body-text-4" data-editable="text">
+          Do you think I have forgotten? Do you think I have forgotten? Do you think I have forgotten? About you? Do you think I have forgotten? Do you think I have forgotten? Do you think I have forgotten? About you?
+        </div>
+      </div>
+      <div class="text-column">
+        <div class="body-paragraph" id="body-text-5" data-editable="text">
+          And there was something about you that now I can't remember. It's the same damn thing that made my heart surrender. And I'll miss you on a train, I'll miss you in the mornin'. I never know what to think about. I think about you (Don't let go). About you (Don't let go).
+        </div>
+        <div class="body-paragraph" id="body-text-6" data-editable="text">
+          Do you think I have forgotten? Do you think I have forgotten? Do you think I have forgotten About you? Do you think I have forgotten? Do you think I have forgotten? Do you think I have forgotten? About you?
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <div class="footer-meta">
+        <div id="footer-left" data-editable="text">@SERENITY</div>
+        <div id="footer-right" data-editable="text">page 5</div>
+      </div>
+      <div class="thick-line" style="width: 100%;"></div>
+    </div>
+
+    <div class="bottom-margin-block"></div>
+
+  </article>
+</body>
+</html>

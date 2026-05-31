@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Daily Bugle Template</title>
+  
+  <style>
+    :root {
+      --paper-bg: #fdfbf7;
+      --ink-color: #1a1a1a;
+      --bugle-red: #e62314;
+      --bugle-blue: #2a6ca9;
+      --font-serif: 'Times New Roman', Times, serif;
+      --font-sans: Arial, Helvetica, sans-serif;
+      --font-impact: Impact, Charcoal, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #e0e0e0;
+      font-family: var(--font-sans);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      padding: 20px 0;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 25px;
+      display: flex; flex-direction: column; position: relative;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(0, 0, 0, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(0, 0, 0, 0.08); border-radius: 2px; }
+
+    /* Top Red Bar */
+    .top-red-bar {
+      background: var(--bugle-red);
+      color: white;
+      text-align: center;
+      font-family: var(--font-impact);
+      font-size: 20px;
+      letter-spacing: 4px;
+      padding: 4px 0;
+      margin-bottom: 10px;
+      border: 2px solid var(--ink-color);
+    }
+
+    /* Masthead */
+    .masthead-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .masthead-box {
+      border: 2px solid var(--ink-color);
+      padding: 5px 10px;
+      text-align: center;
+      font-family: var(--font-serif);
+      font-weight: bold;
+    }
+    .masthead-box-left { font-size: 24px; line-height: 1; }
+    .masthead-box-right { font-size: 11px; line-height: 1.2; text-align: left; }
+    .stars { font-size: 14px; letter-spacing: 2px; }
+
+    .masthead-center {
+      text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 15px;
+      font-family: var(--font-serif);
+      font-size: 85px;
+      font-weight: bold;
+      letter-spacing: -2px;
+      line-height: 0.8;
+    }
+    .bugle-icon {
+      width: 60px; height: 40px;
+      position: relative;
+    }
+    .bugle-icon::before {
+      content: '';
+      position: absolute; left: 0; top: 10px; width: 40px; height: 20px;
+      background: var(--ink-color);
+      border-radius: 5px;
+    }
+    .bugle-icon::after {
+      content: '';
+      position: absolute; right: 0; top: 0;
+      border-left: 20px solid var(--ink-color);
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+    }
+
+    .sub-masthead {
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      border-bottom: 3px solid var(--ink-color);
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+
+    /* Headline */
+    .main-headline {
+      font-family: var(--font-impact);
+      font-size: 78px;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 0.9;
+      transform: scaleY(1.4);
+      margin: 25px 0 25px;
+      letter-spacing: -1px;
+    }
+
+    /* Content Layout */
+    .content-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 15px;
+      flex-grow: 1;
+      border: 3px solid var(--ink-color);
+      padding: 10px;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    
+    .sidebar-red-box {
+      background: var(--bugle-red);
+      color: white;
+      text-align: center;
+      font-family: var(--font-impact);
+      padding: 15px 5px;
+      font-size: 55px;
+      line-height: 0.9;
+      border: 2px solid var(--ink-color);
+    }
+
+    .sidebar-subtext {
+      background: white;
+      color: var(--bugle-red);
+      font-family: var(--font-impact);
+      font-size: 22px;
+      text-align: center;
+      padding: 5px;
+      border: 2px solid var(--ink-color);
+      margin-top: -12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .sidebar-image-box {
+      width: 100%; height: 200px;
+      background: #c0c0c0;
+      border: 2px solid var(--ink-color);
+      position: relative; overflow: hidden; cursor: pointer;
+    }
+
+    .sidebar-story-page {
+      background: var(--bugle-red);
+      color: white;
+      font-family: var(--font-impact);
+      font-size: 22px;
+      text-align: center;
+      padding: 5px;
+      border: 2px solid var(--ink-color);
+    }
+
+    .sidebar-blue-box {
+      background: var(--bugle-blue);
+      color: white;
+      text-align: center;
+      font-family: var(--font-impact);
+      padding: 20px 5px;
+      font-size: 30px;
+      line-height: 1;
+      border: 2px solid var(--ink-color);
+    }
+
+    .sidebar-sports {
+      background: white;
+      border: 2px solid var(--ink-color);
+      text-align: center;
+      padding: 5px;
+      font-family: var(--font-impact);
+    }
+    .sports-title { font-size: 24px; line-height: 1; }
+    .sports-sub { font-size: 14px; font-family: var(--font-sans); font-weight: bold; }
+
+    .sidebar-barcode {
+      flex-grow: 1;
+      border: 2px solid var(--ink-color);
+      background: repeating-linear-gradient(90deg, #000, #000 2px, #fff 2px, #fff 5px, #000 5px, #000 6px, #fff 6px, #fff 10px);
+      position: relative;
+    }
+    .barcode-numbers {
+      position: absolute; bottom: 2px; left: 0; right: 0;
+      background: white; text-align: center; font-family: monospace; font-size: 12px; font-weight: bold;
+    }
+
+    /* Main Right Content */
+    .main-image-box {
+      width: 100%; height: 100%;
+      background: #2b2b2b;
+      border: 2px solid var(--ink-color);
+      position: relative; overflow: hidden; cursor: pointer;
+    }
+    .image-file-input { display: none; }
+    .image-preview { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; z-index: 2;
+    }
+    [data-editable="image"]::after {
+      content: 'UPLOAD MAIN PHOTO'; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px; opacity: 0; transition: opacity 0.2s; z-index: 5;
+    }
+    [data-editable="image"]:hover::after { opacity: 1; }
+    [data-editable="image"].has-image .placeholder-state { display: none; }
+
+    /* Bottom Blue Bar */
+    .bottom-blue-bar {
+      background: var(--bugle-blue);
+      color: white;
+      text-align: center;
+      font-family: var(--font-impact);
+      font-size: 26px;
+      letter-spacing: 1px;
+      padding: 8px 0;
+      margin-top: 15px;
+      border: 2px solid var(--ink-color);
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; }
+      [data-editable="image"]::after, .image-file-input { display: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="top-red-bar" id="top-bar" data-editable="text">
+      EXCELSIOR
+    </div>
+
+    <div class="masthead-row">
+      <div class="masthead-box masthead-box-left" id="mh-left" data-editable="text">
+        <div class="stars">****</div>
+        FINAL
+      </div>
+      <div class="masthead-center">
+        <span id="mh-c1" data-editable="text">DAILY</span>
+        <div class="bugle-icon"></div>
+        <span id="mh-c2" data-editable="text">BUGLE</span>
+      </div>
+      <div class="masthead-box masthead-box-right" id="mh-right" data-editable="text">
+        <div class="stars">****</div>
+        SINCE 1897<br>
+        $1.00 (in NYC)<br>
+        $1.50 (outside city)
+      </div>
+    </div>
+
+    <div class="sub-masthead" id="sub-mh" data-editable="text">
+      NEW YORK'S FINEST DAILY NEWSPAPER
+    </div>
+
+    <div class="main-headline" id="main-hl" data-editable="text">
+      MYSTERIO STEALS GOLD VAULT
+    </div>
+
+    <div class="content-layout">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-red-box" id="sb-red" data-editable="text">
+          CRIME<br>ON THE<br>RISE!
+        </div>
+        <div class="sidebar-subtext" id="sb-sub" data-editable="text">
+          SPIDER-MAN TO BLAME
+        </div>
+        <div class="sidebar-image-box" id="sb-img" data-editable="image">
+          <input type="file" class="image-file-input" accept="image/*">
+          <img class="image-preview" src="" alt="Thumbnail">
+        </div>
+        <div class="sidebar-story-page" id="sb-story" data-editable="text">
+          STORY ON PAGE 6
+        </div>
+        
+        <div class="sidebar-blue-box" id="sb-blue" data-editable="text">
+          NEW YORK'S<br>MEGA<br>MILLIONS
+        </div>
+
+        <div class="sidebar-sports" id="sb-sports" data-editable="text">
+          <div class="sports-title">SPORTS & WEATHER</div>
+          <div class="sports-sub">FULL REPORT, PAGE 16</div>
+        </div>
+
+        <div class="sidebar-barcode">
+          <div class="barcode-numbers" id="barcode" data-editable="text">
+            4 094275 724175
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Image -->
+      <div class="main-image-box" id="main-img" data-editable="image">
+        <input type="file" class="image-file-input" accept="image/*">
+        <img class="image-preview" src="" alt="Hero Poster">
+        <div class="placeholder-state">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-blue-bar" id="footer" data-editable="text">
+      THE DAILY BUGLE ALWAYS GIVES YOU MORE * EXCLUSIVE STORY INSIDE!
+    </div>
+
+  </article>
+</body>
+</html>

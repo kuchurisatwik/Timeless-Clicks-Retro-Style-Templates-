@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vogue Cat B&W Template</title>
+  <style>
+    :root {
+      --paper-bg: #fff;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #eaeaea;
+      font-family: var(--font-serif);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(0, 0, 0, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(0, 0, 0, 0.1); border-radius: 2px; }
+
+    /* Background Image (Full Bleed) */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #f0f0f0;
+      cursor: pointer; overflow: hidden; position: absolute;
+      top: 0; left: 0; z-index: 1;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(100%) contrast(1.5) brightness(1.1);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD COVER PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.1);
+      color: #333; display: flex; align-items: center; justify-content: center;
+      font-family: sans-serif; font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Text Overlays Layer */
+    .text-layer {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      color: #111;
+    }
+    .text-layer [data-editable] {
+      pointer-events: auto;
+    }
+
+    /* Main Title */
+    .main-title-container {
+      position: absolute;
+      top: -10px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      z-index: 5;
+    }
+    .main-title {
+      font-family: var(--font-serif);
+      font-size: 260px;
+      line-height: 0.8;
+      letter-spacing: -2px;
+      transform: scaleY(1.15);
+    }
+
+    /* Left Block */
+    .left-block {
+      position: absolute;
+      top: 290px;
+      left: 30px;
+      text-align: center;
+    }
+    .text-sm {
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+    .text-md {
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: 2px;
+    }
+    .text-lg-tall {
+      font-family: var(--font-serif);
+      font-size: 75px;
+      line-height: 0.8;
+      transform: scaleY(1.6);
+      margin-top: 35px;
+      letter-spacing: -1px;
+    }
+    .text-lg-tall-2 {
+      font-family: var(--font-serif);
+      font-size: 75px;
+      line-height: 0.8;
+      transform: scaleY(1.6);
+      margin-top: 15px;
+      letter-spacing: -1px;
+    }
+
+    /* Bottom Left Vertical Text */
+    .vertical-look {
+      position: absolute;
+      bottom: 120px;
+      left: -20px;
+      font-family: var(--font-serif);
+      font-size: 80px;
+      letter-spacing: 5px;
+      transform: rotate(-90deg);
+      transform-origin: center center;
+    }
+
+    /* Barcode */
+    .barcode-container {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      width: 140px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 4px;
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+    }
+    .barcode-bars {
+      flex-grow: 1;
+      width: 100%;
+      background-image: repeating-linear-gradient(
+        to right,
+        #111 0, #111 2px, transparent 2px, transparent 4px,
+        #111 4px, #111 7px, transparent 7px, transparent 9px,
+        #111 9px, #111 10px, transparent 10px, transparent 13px
+      );
+    }
+    .barcode-text {
+      font-family: monospace;
+      font-size: 10px;
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Background Image -->
+    <div class="image-upload-box" id="main-image-box" data-editable="image">
+      <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+      <div class="image-preview-container">
+        <img id="main-image-img" class="image-preview" src="" alt="Cover Photo">
+      </div>
+      <div class="placeholder-state">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+        </svg>
+        <span style="font-family: sans-serif; font-size: 14px; letter-spacing: 2px;">UPLOAD COVER PHOTO</span>
+      </div>
+    </div>
+
+    <!-- Text Overlays -->
+    <div class="text-layer">
+      
+      <div class="main-title-container">
+        <div class="main-title" id="main-title" data-editable="text">VOGUE</div>
+      </div>
+
+      <div class="left-block">
+        <div class="text-sm" id="lb-1" data-editable="text">I AM</div>
+        <div class="text-sm" id="lb-2" data-editable="text">A</div>
+        <div class="text-md" id="lb-3" data-editable="text">STYLE</div>
+        <div class="text-md" id="lb-4" data-editable="text">ICON</div>
+        <div class="text-lg-tall" id="lb-5" data-editable="text">HOLY</div>
+        <div class="text-lg-tall-2" id="lb-6" data-editable="text">CHIC</div>
+      </div>
+
+      <div class="vertical-look" id="vl" data-editable="text">
+        LOOK
+      </div>
+
+      <div class="barcode-container">
+        <div class="barcode-bars"></div>
+        <div class="barcode-text" id="barcode-text" data-editable="text">9 780989 776486 &gt;</div>
+      </div>
+
+    </div>
+
+  </article>
+</body>
+</html>

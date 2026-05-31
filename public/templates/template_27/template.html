@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vogue Red & Yellow Template</title>
+  <style>
+    :root {
+      --paper-bg: #f4eee2;
+      --vogue-red: #9e141a;
+      --vogue-yellow: #fddb27;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #333;
+      font-family: var(--font-serif);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(255, 255, 255, 0.3); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(255, 255, 255, 0.5); border-radius: 2px; }
+
+    /* Background Image (Full Bleed) */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #f4eee2;
+      cursor: pointer; overflow: hidden; position: absolute;
+      top: 0; left: 0; z-index: 1;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD COVER PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.1);
+      color: #333; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Text Overlays Layer */
+    .text-layer {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .text-layer [data-editable] {
+      pointer-events: auto;
+    }
+
+    /* Main Title */
+    .main-title-container {
+      position: absolute;
+      top: -10px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      z-index: 5;
+    }
+    .main-title {
+      font-family: var(--font-serif);
+      font-size: 260px;
+      line-height: 0.8;
+      letter-spacing: -2px;
+      transform: scaleY(1.15);
+      color: var(--vogue-red);
+    }
+    .date-sub {
+      position: absolute;
+      top: 265px;
+      left: 40px;
+      font-family: sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--vogue-red);
+    }
+
+    /* Left Block */
+    .left-gossip-block {
+      position: absolute;
+      top: 320px;
+      left: 30px;
+      width: 250px;
+      color: var(--vogue-red);
+    }
+    .gossip-title {
+      font-size: 55px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+    .gossip-text {
+      font-family: serif; /* standard readable serif */
+      font-size: 11px;
+      line-height: 1.3;
+      text-align: justify;
+    }
+
+    /* Right Block */
+    .right-kuggi-block {
+      position: absolute;
+      top: 440px;
+      right: 30px;
+      width: 250px;
+      color: var(--vogue-red);
+      text-align: right;
+    }
+    .kuggi-title {
+      font-size: 55px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+    .kuggi-text {
+      font-family: serif;
+      font-size: 13px;
+      line-height: 1.3;
+      text-align: right;
+    }
+
+    /* Bottom Names (Yellow) */
+    .bottom-yellow-names {
+      position: absolute;
+      bottom: 70px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 15;
+    }
+    .yellow-name {
+      font-family: var(--font-serif);
+      font-size: 170px;
+      line-height: 0.8;
+      color: var(--vogue-yellow);
+      letter-spacing: -2px;
+      /* Text shadow for better visibility over backgrounds */
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    }
+    .yellow-name.second {
+      margin-top: 10px;
+    }
+
+    /* Barcode */
+    .barcode-container {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      width: 120px;
+      height: 65px;
+      background: #fff;
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+    }
+    .barcode-bars {
+      flex-grow: 1;
+      width: 100%;
+      background-image: repeating-linear-gradient(
+        to right,
+        #111 0, #111 2px, transparent 2px, transparent 4px,
+        #111 4px, #111 7px, transparent 7px, transparent 9px,
+        #111 9px, #111 10px, transparent 10px, transparent 13px
+      );
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Background Image -->
+    <div class="image-upload-box" id="main-image-box" data-editable="image">
+      <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+      <div class="image-preview-container">
+        <img id="main-image-img" class="image-preview" src="" alt="Cover Photo">
+      </div>
+      <div class="placeholder-state">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+        </svg>
+        <span style="font-family: sans-serif; font-size: 14px; letter-spacing: 2px;">UPLOAD COVER PHOTO</span>
+      </div>
+    </div>
+
+    <!-- Text Overlays -->
+    <div class="text-layer">
+      
+      <div class="main-title-container">
+        <div class="main-title" id="main-title" data-editable="text">VOGUE</div>
+      </div>
+      <div class="date-sub" id="date-sub" data-editable="text">APRIL 25</div>
+
+      <div class="left-gossip-block">
+        <div class="gossip-title" id="gossip-title" data-editable="text">GOSSIP</div>
+        <div class="gossip-text" id="gossip-text" data-editable="text">
+          In a shocking turn of events, Bollywood heartthrob Sidharth Malhotra has found himself entangled in a scandalous affair despite being married to Kiara Advani. Reports suggest that Sidharth has a huge crush on Saniya Sood and regrets marrying Kiara, blaming Saniya for not entering his life sooner. This revelation has left fans and industry insiders stunned, raising questions about the true nature of celebrity relationships and the repercussions it may have on their careers. For the full scoop, turn to the inner pages of magazine. Stay tuned for updates on this sensational saga unfolding in the heart of Bollywood!
+        </div>
+      </div>
+
+      <div class="right-kuggi-block">
+        <div class="kuggi-title" id="kuggi-title" data-editable="text">KUGGI</div>
+        <div class="kuggi-text" id="kuggi-text" data-editable="text">
+          Dekha tum ko jabse Bas dekha tum ko yaara Tum se koyi achcha hai Na tum se koyi pyara Yoon nazre na pheron tum Mere ho mere tum Keh do na, keh do na You are my sonia
+        </div>
+      </div>
+
+      <div class="bottom-yellow-names">
+        <div class="yellow-name" id="name-1" data-editable="text">SANIYA</div>
+        <div class="yellow-name second" id="name-2" data-editable="text">SOOD</div>
+      </div>
+
+      <div class="barcode-container">
+        <div class="barcode-bars"></div>
+      </div>
+
+    </div>
+
+  </article>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Bloom Daily Quote Template</title>
+  <style>
+    :root {
+      --paper-bg: #f4f4f4;
+      --ink-color: #2b2b2b;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-gothic: serif;
+      --font-sans: 'Impact', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #ddd;
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px 40px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    /* Paper Texture */
+    .poster-scale-container::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      opacity: 0.2;
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23noiseFilter)"/></svg>');
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; position: relative; z-index: 5; }
+    [data-editable="text"]:hover { background-color: rgba(43, 43, 43, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(43, 43, 43, 0.08); border-radius: 2px; }
+
+    /* Separators */
+    .sep-thin-thick { border-top: 1px solid var(--ink-color); border-bottom: 3px solid var(--ink-color); height: 7px; margin: 15px 0; position: relative; z-index: 5; }
+    .sep-thick-thin { border-top: 3px solid var(--ink-color); border-bottom: 1px solid var(--ink-color); height: 7px; margin: 15px 0; position: relative; z-index: 5; }
+    .sep-double-thin { border-top: 1px solid var(--ink-color); border-bottom: 1px solid var(--ink-color); height: 5px; margin: 15px 0; position: relative; z-index: 5; }
+
+    /* Top Header Box */
+    .top-header-box {
+      border: 2px solid var(--ink-color);
+      display: flex;
+      align-items: stretch;
+      position: relative; z-index: 5;
+    }
+    .th-side {
+      flex: 1;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      line-height: 1.4;
+    }
+    .th-center {
+      flex: 3;
+      border-left: 2px solid var(--ink-color);
+      border-right: 2px solid var(--ink-color);
+      text-align: center;
+      padding: 15px 10px 5px;
+      font-family: var(--font-gothic);
+      font-size: 65px;
+      line-height: 1;
+      transform: scaleY(1.1);
+    }
+
+    /* Main Title */
+    .main-title {
+      font-family: var(--font-sans);
+      font-size: 130px;
+      text-align: center;
+      line-height: 0.9;
+      letter-spacing: -2px;
+      transform: scaleY(1.2);
+      margin: 35px 0;
+      position: relative; z-index: 5;
+    }
+
+    /* Center Image Area */
+    .image-section {
+      width: 100%;
+      height: 380px; /* Adjust height to fit proportionally */
+      position: relative; z-index: 5;
+    }
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d0d0d0;
+      cursor: pointer; overflow: hidden; position: relative;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: sans-serif; font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+
+    /* Solid Black Box Below Image */
+    .solid-meta-bar {
+      background-color: var(--ink-color);
+      color: #fff;
+      text-align: center;
+      padding: 12px 20px;
+      font-family: var(--font-serif);
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 15px;
+      position: relative; z-index: 5;
+    }
+    .solid-meta-bar [data-editable="text"] { color: #fff; }
+
+    /* Bottom Columns */
+    .bottom-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-top: 20px;
+      position: relative; z-index: 5;
+    }
+    .col-text {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      line-height: 1.5;
+      text-align: justify;
+    }
+
+    /* Footer Black Box */
+    .footer-black-box {
+      background-color: var(--ink-color);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      padding: 15px 20px;
+      font-family: var(--font-sans);
+      font-size: 32px;
+      letter-spacing: 1px;
+      margin-top: auto;
+      position: relative; z-index: 5;
+    }
+    .footer-black-box [data-editable="text"] { color: #fff; }
+    .f-star {
+      font-family: var(--font-sans);
+      font-size: 30px;
+      line-height: 1;
+      transform: translateY(2px);
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      .poster-scale-container::before { opacity: 0.1; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Top Header Box -->
+    <div class="top-header-box">
+      <div class="th-side" id="th-left" data-editable="text">BREAKING<br>NEWS</div>
+      <div class="th-center" id="th-center" data-editable="text">Daily Quote</div>
+      <div class="th-side" id="th-right" data-editable="text">SPECIAL<br>EDITION</div>
+    </div>
+
+    <div class="sep-thin-thick"></div>
+
+    <!-- Main Title -->
+    <div class="main-title" id="main-title" data-editable="text">
+      BLOOM WHERE<br>YOU ARE PLANTED
+    </div>
+
+    <div class="sep-thick-thin"></div>
+
+    <!-- Center Image -->
+    <div class="image-section">
+      <div class="image-upload-box" id="main-image-box" data-editable="image">
+        <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+        <div class="image-preview-container">
+          <img id="main-image-img" class="image-preview" src="" alt="Bloom Photo">
+        </div>
+      </div>
+    </div>
+
+    <!-- Solid Meta Bar -->
+    <div class="solid-meta-bar" id="solid-meta" data-editable="text">
+      YOU HAVE THE POWER TO THRIVE AND BLOSSOM WHEREVER YOU ARE.
+    </div>
+
+    <!-- Bottom Columns -->
+    <div class="bottom-cols">
+      <div class="col-text" id="col-1" data-editable="text">
+        Bloom where you are planted is a beautiful mantra that reminds us to focus on our current circumstances and make the most out of them. Just like a flower that thrives in the soil it's planted in, we too can find ways to flourish and grow no matter where life has placed us.
+      </div>
+      <div class="col-text" id="col-2" data-editable="text">
+        It encourages us to embrace the present moment, recognising the potential for growth and opportunity that exists in every situation. By cultivating gratitude and resilience, we can bloom beautifully, adding colour and vibrancy to our lives and the world around us.
+      </div>
+    </div>
+
+    <!-- Footer Black Box -->
+    <div class="footer-black-box">
+      <div id="f1" data-editable="text">DAILY QUOTE</div>
+      <div class="f-star">✽</div>
+      <div id="f2" data-editable="text">DAILY QUOTE</div>
+      <div class="f-star">✽</div>
+      <div id="f3" data-editable="text">DAILY QUOTE</div>
+    </div>
+
+    <div class="sep-thick-thin" style="margin-top: 10px;"></div>
+
+  </article>
+</body>
+</html>

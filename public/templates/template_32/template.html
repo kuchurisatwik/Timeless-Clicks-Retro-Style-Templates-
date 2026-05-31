@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Birthday Post Template</title>
+  <style>
+    :root {
+      --paper-bg: #f8f6f3;
+      --ink-color: #1a1a1a;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+      --font-gothic: serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #eaeaea;
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px 40px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(26, 26, 26, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(26, 26, 26, 0.07); border-radius: 2px; }
+
+    /* Top Meta */
+    .top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-serif);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 0 5px 5px;
+    }
+    .ornament {
+      font-size: 24px;
+      color: var(--ink-color);
+    }
+    
+    /* Lines */
+    .line-thin {
+      height: 1.5px;
+      background-color: var(--ink-color);
+      margin-bottom: 5px;
+    }
+    .double-line-top {
+      border-top: 5px solid var(--ink-color);
+      border-bottom: 1.5px solid var(--ink-color);
+      height: 10px;
+      margin: 10px 0;
+    }
+    .double-line-bottom {
+      border-top: 1.5px solid var(--ink-color);
+      border-bottom: 5px solid var(--ink-color);
+      height: 10px;
+      margin: 10px 0;
+    }
+
+    /* Main Title */
+    .main-title {
+      text-align: center;
+      font-family: var(--font-gothic);
+      font-size: 100px;
+      line-height: 0.9;
+      margin-top: 5px;
+    }
+
+    /* Sub Headline */
+    .sub-headline {
+      text-align: center;
+      font-family: var(--font-serif);
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 10px 0;
+    }
+
+    /* Middle Layout */
+    .middle-content {
+      display: grid;
+      grid-template-columns: 0.35fr 1fr;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+    .left-col-text {
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: justify;
+    }
+    .left-col-bold {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.5;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    .main-image-container {
+      width: 100%;
+      height: 420px;
+      position: relative;
+    }
+    
+    /* Bottom Layout */
+    .bottom-content {
+      display: grid;
+      grid-template-columns: 0.3fr 1fr;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+    .small-image-container {
+      width: 100%;
+      height: 160px;
+      position: relative;
+    }
+
+    /* Shared Image Styles */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #e0e0e0;
+      cursor: pointer; overflow: hidden; position: absolute;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(26, 26, 26, 0.4);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Ticket Box */
+    .ticket-box {
+      border: 2px solid var(--ink-color);
+      border-radius: 8px;
+      display: flex;
+      position: relative;
+      background: var(--paper-bg);
+      align-items: center;
+    }
+    /* Ticket corners */
+    .ticket-box::before, .ticket-box::after {
+      content: ''; position: absolute; background: var(--paper-bg); width: 24px; height: 24px;
+      border: 2px solid var(--ink-color); border-radius: 50%;
+    }
+    .ticket-box::before { top: -12px; left: -12px; clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%); }
+    .ticket-box::after { bottom: -12px; right: -12px; clip-path: polygon(0 0, 50% 0, 50% 50%, 0 50%); }
+    .ticket-box-tl { position: absolute; top: -12px; right: -12px; background: var(--paper-bg); width: 24px; height: 24px; border: 2px solid var(--ink-color); border-radius: 50%; clip-path: polygon(0 50%, 50% 50%, 50% 100%, 0 100%); }
+    .ticket-box-bl { position: absolute; bottom: -12px; left: -12px; background: var(--paper-bg); width: 24px; height: 24px; border: 2px solid var(--ink-color); border-radius: 50%; clip-path: polygon(50% 0, 100% 0, 100% 50%, 50% 50%); }
+    
+    .ticket-left {
+      width: 25%;
+      text-align: center;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 2px dashed var(--ink-color);
+    }
+    .ticket-right {
+      width: 75%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .t-day { font-size: 55px; font-weight: 700; line-height: 1; margin-bottom: 5px; }
+    .t-month { font-size: 35px; font-weight: 700; line-height: 1; }
+    
+    .t-loc { font-size: 15px; font-weight: 600; line-height: 1.4; letter-spacing: 1px; margin-bottom: 15px; }
+    .t-time-row { font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px; }
+    .t-time-line { font-family: monospace; letter-spacing: -2px; }
+    .t-dress { font-size: 14px; font-weight: 600; letter-spacing: 1px; }
+
+    /* Footer Text */
+    .footer-text {
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: justify;
+      margin-top: 10px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="top-meta">
+      <div id="meta-left" data-editable="text">Special Edition</div>
+      <div class="ornament">❦</div>
+      <div id="meta-right" data-editable="text">New York</div>
+    </div>
+    
+    <div class="line-thin"></div>
+    <div class="main-title" id="main-title" data-editable="text">Birthday Post</div>
+    <div class="double-line-top"></div>
+    
+    <div class="sub-headline" id="sub-headline" data-editable="text">
+      ELENA GILBERT<br>TURNS TWENTY TWO
+    </div>
+    
+    <div class="double-line-bottom"></div>
+
+    <div class="middle-content">
+      <div class="left-col-text">
+        <div class="left-col-bold" id="lc-bold" data-editable="text">
+          EMBRACE EVERY<br>JOURNEY AHEAD,<br>TRUST IN YOUR<br>INNER STRENGTH.
+        </div>
+        <div id="lc-text" data-editable="text">
+          Unlock the doors of possibility with the key of self-belief. Embrace your inner strength and trust in your abilities to conquer challenges that come your way. With self-belief as your guiding light, you have the power to unlock doors leading to growth, success, and fulfillment. Believe in yourself, for you hold the key to a future filled with endless possibilities.
+        </div>
+      </div>
+      <div class="main-image-container">
+        <div class="image-upload-box" id="main-image-box" data-editable="image">
+          <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="main-image-img" class="image-preview" src="" alt="Birthday Photo">
+          </div>
+          <div class="placeholder-state">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.5; margin-bottom: 10px;">
+              <circle cx="12" cy="12" r="3.2"/>
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="line-thin"></div>
+
+    <div class="bottom-content">
+      <!-- Left: Small Image -->
+      <div class="small-image-container">
+        <div class="image-upload-box" id="sub-image-box" data-editable="image">
+          <input type="file" id="sub-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="sub-image-img" class="image-preview" src="" alt="Small Photo">
+          </div>
+          <div class="placeholder-state">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="opacity: 0.5;">
+              <circle cx="12" cy="12" r="3.2"/>
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Ticket Box -->
+      <div class="ticket-box">
+        <div class="ticket-box-tl"></div>
+        <div class="ticket-box-bl"></div>
+        <div class="ticket-left">
+          <div class="t-day" id="t-day" data-editable="text">22</div>
+          <div class="t-month" id="t-month" data-editable="text">NOV</div>
+        </div>
+        <div class="ticket-right">
+          <div class="t-loc" id="t-loc" data-editable="text">AT DEJA VU CLUB HONGKONG,<br>STREET 1234</div>
+          <div class="t-time-row">
+            <span id="t-time" data-editable="text">8 PM</span>
+            <span class="t-time-line">-----</span>
+            <span id="t-dayname" data-editable="text">SATURDAY</span>
+          </div>
+          <div class="t-dress" id="t-dress" data-editable="text">DRESS CODE: WEAR 90S ATTIRE</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="line-thin"></div>
+    
+    <div class="footer-text" id="footer-text" data-editable="text">
+      Unlock the doors of possibility with the key of self-belief. Embrace your inner strength and trust in your abilities to conquer challenges that come your way. With self-belief as your guiding light, you have the power to unlock doors leading to growth and fulfillment.
+    </div>
+
+  </article>
+</body>
+</html>

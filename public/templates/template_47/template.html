@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Read Below Story Newspaper Template</title>
+  <style>
+    :root {
+      --paper-bg: #f4efe9;
+      --ink-color: #2b2b2b;
+      --font-serif: 'Georgia', serif;
+      --font-sans: 'Impact', sans-serif;
+      --font-body: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #ddd;
+      font-family: var(--font-body);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    /* Paper Texture */
+    .poster-scale-container::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      opacity: 0.5;
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23noiseFilter)"/></svg>');
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; position: relative; z-index: 5; }
+    [data-editable="text"]:hover { background-color: rgba(43, 43, 43, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(43, 43, 43, 0.08); border-radius: 2px; }
+
+    /* Separators */
+    .sep-thin-thick { border-top: 1px solid var(--ink-color); border-bottom: 3px solid var(--ink-color); height: 8px; margin: 15px 0; position: relative; z-index: 5; }
+    .sep-thick-thin { border-top: 3px solid var(--ink-color); border-bottom: 1px solid var(--ink-color); height: 8px; margin: 15px 0; position: relative; z-index: 5; }
+    .sep-double-thick { border-top: 2px solid var(--ink-color); border-bottom: 2px solid var(--ink-color); height: 6px; margin: 15px 0; position: relative; z-index: 5; }
+    .sep-double-thin { border-top: 1px solid var(--ink-color); border-bottom: 1px solid var(--ink-color); height: 5px; margin: 15px 0; position: relative; z-index: 5; }
+
+    /* Top Header */
+    .top-header {
+      font-family: var(--font-sans);
+      font-size: 55px;
+      text-align: center;
+      letter-spacing: 2px;
+      margin-top: 10px;
+      line-height: 1;
+      position: relative; z-index: 5;
+    }
+
+    /* Main Title */
+    .main-title {
+      font-family: var(--font-sans);
+      font-size: 155px;
+      text-align: center;
+      line-height: 0.85;
+      letter-spacing: -2px;
+      transform: scaleY(1.3);
+      margin: 35px 0 25px;
+      position: relative; z-index: 5;
+    }
+
+    /* Meta Row */
+    .meta-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      font-family: var(--font-sans);
+      font-size: 18px;
+      letter-spacing: 1px;
+      position: relative; z-index: 5;
+    }
+    .asterisk { font-size: 24px; line-height: 1; transform: translateY(2px); }
+
+    /* Middle Grid Layout */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 20px;
+      flex-grow: 1;
+      margin-top: 10px;
+      position: relative; z-index: 5;
+    }
+
+    /* Box Styles */
+    .bordered-box {
+      border: 3px solid var(--ink-color);
+      padding: 15px;
+      text-align: center;
+      font-family: var(--font-sans);
+      font-size: 32px;
+      line-height: 1;
+      letter-spacing: -0.5px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .col-left { display: flex; flex-direction: column; gap: 15px; }
+    .col-right { display: flex; flex-direction: column; justify-content: flex-end; gap: 15px; }
+    
+    .body-text {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      line-height: 1.35;
+      text-align: justify;
+      font-style: italic;
+    }
+
+    /* Center Image Box */
+    .center-image-box {
+      border: 3px solid var(--ink-color);
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d0d0d0;
+      cursor: pointer; overflow: hidden; position: absolute; top: 0; left: 0;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: sans-serif; font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .center-preview { filter: grayscale(100%) contrast(1.1); }
+
+    /* Footer Block */
+    .footer-block {
+      background-color: var(--ink-color);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      position: relative; z-index: 5;
+    }
+    .footer-text {
+      font-family: var(--font-sans);
+      font-size: 32px;
+      letter-spacing: 1px;
+    }
+    .arrow-icon {
+      width: 30px; height: 30px;
+      fill: #fff;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      .poster-scale-container::before { opacity: 0.1; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Top Header -->
+    <div class="top-header" id="th-top" data-editable="text">
+      WHY I STARTED 2 SMALL<br>BUSINESSES AT 20 YEARS OLD
+    </div>
+
+    <div class="sep-thin-thick"></div>
+
+    <!-- Main Title -->
+    <div class="main-title" id="main-title" data-editable="text">
+      READ BELOW
+    </div>
+
+    <div class="sep-thick-thin"></div>
+
+    <!-- Meta Row -->
+    <div class="meta-row">
+      <span class="asterisk">✽</span>
+      <span id="mr-text" data-editable="text">MY STORY OF GOING AFTER A LIFE THAT GIVES ME HAPPINESS, FREEDOM & SUCCESS</span>
+      <span class="asterisk">✽</span>
+    </div>
+
+    <div class="sep-double-thick"></div>
+
+    <!-- Grid Layout -->
+    <div class="grid-layout">
+      
+      <!-- Left Column -->
+      <div class="col-left">
+        <div class="bordered-box" id="box-left" data-editable="text">
+          LAUNCHING<br>TODAY
+        </div>
+        <div class="body-text" id="body-left" data-editable="text">
+          at 20, i started not one, but 2 small businesses and honestly, it was all about chasing freedom, happiness, and building my own version of success. i've always loved animals, so pet sitting quickly became one of my greatest joys—nothing beats the unconditional love of furry friends. on the other side, my va business lets me pour my passion into helping other small business owners like myself thrive online. i get to dive into branding shoots, photography, content creation, and social media management—basically helping others show off their brilliance while making their lives easier.
+        </div>
+        <div class="sep-double-thin"></div>
+      </div>
+
+      <!-- Center Column -->
+      <div class="center-image-box">
+        <div class="image-upload-box" id="main-image-box" data-editable="image">
+          <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="main-image-img" class="image-preview center-preview" src="" alt="Story Photo">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-right">
+        <div class="body-text" id="body-right" data-editable="text">
+          starting these businesses was also my way of breaking free from the draining 9-to-5 life. i wanted flexibility, creativity, and purpose, and no i found all of that by creating my own path.<br><br>at the end of the day, it's about doing what i love, helping others, and building a life that feels good, every single day.
+        </div>
+        <div class="bordered-box" id="box-right" data-editable="text">
+          DON'T MISS<br>OUT & STAY<br>UPDATED
+        </div>
+        <div class="sep-double-thin"></div>
+      </div>
+
+    </div>
+
+    <div class="sep-double-thick" style="margin-top: 25px;"></div>
+
+    <!-- Footer Block -->
+    <div class="footer-block">
+      <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7 7h10v10l-2-2v-6H9z"/><path d="M17 7L7 17l1.4 1.4L18.4 8.4z"/></svg>
+      <div class="footer-text" id="footer-text" data-editable="text">YOUR NEW FAVE SOCIAL MEDIA MANAGER</div>
+      <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7 7h10v10l-2-2v-6H9z"/><path d="M17 7L7 17l1.4 1.4L18.4 8.4z"/></svg>
+    </div>
+
+  </article>
+</body>
+</html>

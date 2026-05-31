@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Bazaar Cover Template</title>
+  <style>
+    :root {
+      --paper-bg: #fff;
+      --brand-red: #e41d24;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #eaeaea;
+      font-family: var(--font-serif);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(255, 255, 255, 0.4); border-radius: 2px; }
+
+    /* Background Image (Full Bleed) */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d1d5d8;
+      cursor: pointer; overflow: hidden; position: absolute;
+      top: 0; left: 0; z-index: 1;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD COVER PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Text Overlays Layer */
+    .text-layer {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .text-layer [data-editable] {
+      pointer-events: auto;
+    }
+
+    /* Main Title */
+    .main-title-container {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      z-index: 5; /* So it can be behind the person's head if masked, but here it's on top */
+    }
+    .main-title {
+      font-family: var(--font-serif);
+      font-size: 260px;
+      color: var(--brand-red);
+      line-height: 0.8;
+      letter-spacing: -5px;
+      font-weight: normal;
+      transform: scaleY(1.15);
+      position: relative;
+    }
+    .main-title-sub {
+      position: absolute;
+      top: 25px;
+      left: 60%;
+      font-family: var(--font-serif);
+      font-size: 24px;
+      color: var(--brand-red);
+      letter-spacing: 1px;
+    }
+
+    /* Top Meta */
+    .top-meta {
+      position: absolute;
+      top: 240px;
+      width: 100%;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      color: #fff;
+      font-family: var(--font-serif);
+      font-size: 24px;
+      line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Left Text Blocks */
+    .left-block-1 {
+      position: absolute;
+      top: 320px;
+      left: 40px;
+      color: #fff;
+    }
+    .left-block-2 {
+      position: absolute;
+      top: 600px;
+      left: 40px;
+      color: #fff;
+    }
+
+    /* Right Text Block */
+    .right-block-1 {
+      position: absolute;
+      top: 320px;
+      right: 40px;
+      color: #fff;
+      text-align: right;
+    }
+
+    .title-large {
+      font-size: 110px;
+      line-height: 0.8;
+      letter-spacing: -2px;
+    }
+    .title-medium {
+      font-size: 65px;
+      line-height: 0.9;
+      letter-spacing: -1px;
+    }
+    .subtext {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      line-height: 1.3;
+      margin-top: 15px;
+      letter-spacing: 1px;
+    }
+
+    /* Bottom Text Block */
+    .bottom-block {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      text-align: center;
+      color: #111;
+    }
+    .bottom-title-large {
+      font-size: 140px;
+      line-height: 0.75;
+      letter-spacing: -3px;
+    }
+    .bottom-subtext {
+      font-family: var(--font-sans);
+      font-size: 22px;
+      margin-top: 20px;
+      letter-spacing: 1px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Background Image -->
+    <div class="image-upload-box" id="main-image-box" data-editable="image">
+      <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+      <div class="image-preview-container">
+        <img id="main-image-img" class="image-preview" src="" alt="Cover Photo">
+      </div>
+      <div class="placeholder-state">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+        </svg>
+        <span style="font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;">UPLOAD COVER PHOTO</span>
+      </div>
+    </div>
+
+    <!-- Text Overlays -->
+    <div class="text-layer">
+      
+      <div class="main-title-container">
+        <div class="main-title-sub" id="main-title-sub" data-editable="text">Harper's</div>
+        <div class="main-title" id="main-title" data-editable="text">BAZAAR</div>
+      </div>
+
+      <div class="top-meta">
+        <div id="meta-left" data-editable="text">KENDALL<br>JENNER</div>
+        <div id="meta-right" data-editable="text">SPECIAL COVER</div>
+      </div>
+
+      <div class="left-block-1">
+        <div class="title-large" id="lb1-1" data-editable="text">NEW</div>
+        <div class="title-medium" id="lb1-2" data-editable="text">SEASON</div>
+        <div class="title-medium" id="lb1-3" data-editable="text">PREVIEW</div>
+        <div class="subtext" id="lb1-sub" data-editable="text">Entering a new<br>season in latest style</div>
+      </div>
+
+      <div class="right-block-1">
+        <div class="title-medium" id="rb1-1" data-editable="text">FRESH</div>
+        <div class="title-medium" id="rb1-2" data-editable="text">SUMMER</div>
+        <div class="title-medium" id="rb1-3" data-editable="text">LOOKS</div>
+        <div class="subtext" id="rb1-sub" data-editable="text">Various beautiful looks<br>ready for the summer</div>
+      </div>
+
+      <div class="left-block-2">
+        <div class="title-medium" id="lb2-1" data-editable="text">BEST</div>
+        <div class="title-medium" id="lb2-2" data-editable="text">BEAUTY</div>
+        <div class="title-medium" id="lb2-3" data-editable="text">UPDATE</div>
+        <div class="subtext" id="lb2-sub" data-editable="text">Gorgeous makeup looks<br>for your summer party</div>
+      </div>
+
+      <div class="bottom-block">
+        <div style="padding-left: 200px;">
+          <div class="title-large" style="text-align: left;" id="bb-1" data-editable="text">NEW</div>
+        </div>
+        <div class="bottom-title-large" id="bb-2" data-editable="text">MODERN</div>
+        <div class="bottom-subtext" id="bb-sub" data-editable="text">THE CHIC FROM VARIOUS ERAS BLENDED INTO A NEW MODERN STYLE</div>
+      </div>
+
+    </div>
+
+  </article>
+</body>
+</html>

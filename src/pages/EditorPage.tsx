@@ -22,6 +22,7 @@ const EditorPage: React.FC = () => {
   }
   const historyRef = useRef<EditorState[]>([]);
   const historyIndexRef = useRef(-1);
+  const autoSaveTimeoutRef = useRef<number | null>(null);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [apiKey, setApiKey] = useState(() => localStorage.getItem('gemini_api_key') || '');
@@ -30,6 +31,8 @@ const EditorPage: React.FC = () => {
     try { return JSON.parse(localStorage.getItem('recent_prompts') || '[]'); } catch { return []; }
   });
   const [showPromptsPopup, setShowPromptsPopup] = useState(false);
+  const [selectedFontSize, setSelectedFontSize] = useState<number | null>(null);
+  const [selectedFontColor, setSelectedFontColor] = useState<string>('#000000');
 
   const zoomIn = () => setZoom(prev => Math.min(prev + 0.1, 1.5));
   const zoomOut = () => setZoom(prev => Math.max(prev - 0.1, 0.2));
@@ -38,6 +41,33 @@ const EditorPage: React.FC = () => {
   const updateUndoRedoUI = () => {
     setCanUndo(historyIndexRef.current > 0);
     setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
+  };
+
+  const saveTemplateToServer = () => {
+    if (autoSaveTimeoutRef.current) clearTimeout(autoSaveTimeoutRef.current);
+    autoSaveTimeoutRef.current = window.setTimeout(() => {
+      const iframeDoc = iframeRef.current?.contentDocument;
+      if (!iframeDoc) return;
+      const clone = iframeDoc.cloneNode(true) as Document;
+      const editorStyles = clone.getElementById('editor-styles');
+      if (editorStyles) editorStyles.remove();
+      const editableElements = clone.querySelectorAll('[data-editable="text"]');
+      editableElements.forEach(el => {
+        el.removeAttribute('contenteditable');
+        (el as HTMLElement).style.outline = '';
+        el.classList.remove('editor-selected');
+      });
+      const editableImages = clone.querySelectorAll('[data-editable="image"], img');
+      editableImages.forEach(el => {
+        el.classList.remove('editor-selected');
+      });
+      const htmlContent = "<!DOCTYPE html>\\n" + clone.documentElement.outerHTML;
+      fetch('/api/save-template', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ templateId, html: htmlContent })
+      }).catch(e => console.error("Auto-save failed", e));
+    }, 1000);
   };
 
   const saveState = () => {
@@ -71,6 +101,7 @@ const EditorPage: React.FC = () => {
     historyIndexRef.current = newHistory.length - 1;
     
     updateUndoRedoUI();
+    saveTemplateToServer();
   };
 
   const applyState = (state: EditorState) => {
@@ -188,6 +219,17 @@ const EditorPage: React.FC = () => {
       if (textBlock) {
         textBlock.classList.add('editor-selected');
         selectedElementRef.current = textBlock as HTMLElement;
+        const computed = iframeDoc.defaultView?.getComputedStyle(textBlock);
+        if (computed?.fontSize) {
+          setSelectedFontSize(parseFloat(computed.fontSize));
+        }
+        if (computed?.color) {
+          const rgb = computed.color.match(/\d+/g);
+          if (rgb && rgb.length >= 3) {
+            const hex = '#' + rgb.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('');
+            setSelectedFontColor(hex);
+          }
+        }
       } else if (imageContainer || isImage) {
         const imgTarget = (imageContainer || target) as HTMLElement;
         imgTarget.classList.add('editor-selected');
@@ -202,8 +244,12 @@ const EditorPage: React.FC = () => {
         } else {
           fileInputRef.current?.click();
         }
+        setSelectedFontSize(null);
+        setSelectedFontColor('#000000');
       } else {
         selectedElementRef.current = null;
+        setSelectedFontSize(null);
+        setSelectedFontColor('#000000');
       }
     });
 
@@ -572,7 +618,7 @@ const EditorPage: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: '16px',
-        overflowY: 'hidden'
+        overflowY: 'auto'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
           <button className="btn btn-secondary" onClick={() => navigate('/')} style={{ padding: '8px 12px' }}>
@@ -681,72 +727,175 @@ const EditorPage: React.FC = () => {
             </button>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Typography</label>
-            <select 
-              className="glass-panel"
-              onChange={(e) => {
-                const font = e.target.value;
-                if (!font) return;
-                
-                const iframeDoc = iframeRef.current?.contentDocument;
-                if (!iframeDoc) return;
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <label style={{ fontSize: '0.82rem', fontWeight: 500, color: 'rgba(148,163,184,0.85)', letterSpacing: '0.03em' }}>Typography</label>
 
-                if (selectedElementRef.current) {
-                  selectedElementRef.current.style.fontFamily = font;
-                } else {
-                  // Apply to ALL text elements if nothing is selected
-                  const textElements = iframeDoc.querySelectorAll('[data-editable="text"]');
-                  textElements.forEach(el => {
-                    (el as HTMLElement).style.fontFamily = font;
-                  });
-                  
-                  // Also update common CSS variables just in case
-                  iframeDoc.documentElement.style.setProperty('--font-headline', font);
-                  iframeDoc.documentElement.style.setProperty('--font-sans', font);
-                  iframeDoc.documentElement.style.setProperty('--font-serif', font);
-                  iframeDoc.documentElement.style.setProperty('--font-gothic', font);
-                }
-                
-                // Allow browser to render new font then auto-fit and save
-                setTimeout(() => {
-                  autoFitText(iframeDoc);
-                  saveState();
-                }, 100);
-                
-                e.target.value = "";
-              }}
-              style={{
-                width: '100%',
-                padding: '8px 10px',
-                border: '1px solid var(--border-color)',
-                borderRadius: '8px',
-                background: 'rgba(0,0,0,0.2)',
-                color: 'white',
-                fontSize: '0.85rem',
-                outline: 'none',
-                cursor: 'pointer'
-              }}
-            >
-              <option value="" style={{ background: '#1e293b', color: '#f8fafc' }}>Apply a custom font...</option>
-              <optgroup label="Serif & Blackletter" style={{ background: '#0f172a', color: '#94a3b8' }}>
-                <option value="'Chomsky', serif" style={{ background: '#1e293b', color: '#f8fafc' }}>Chomsky</option>
-                <option value="'ChunkFive', serif" style={{ background: '#1e293b', color: '#f8fafc' }}>ChunkFive</option>
-                <option value="'Walbaum Fraktur', serif" style={{ background: '#1e293b', color: '#f8fafc' }}>Walbaum Fraktur</option>
-                <option value="'Gastronomy', serif" style={{ background: '#1e293b', color: '#f8fafc' }}>Gastronomy</option>
-              </optgroup>
-              <optgroup label="Sans Serif" style={{ background: '#0f172a', color: '#94a3b8' }}>
-                <option value="'Built Titling', sans-serif" style={{ background: '#1e293b', color: '#f8fafc' }}>Built Titling</option>
-                <option value="'RadioNewsman', sans-serif" style={{ background: '#1e293b', color: '#f8fafc' }}>RadioNewsman</option>
-                <option value="'Spiky Chain', sans-serif" style={{ background: '#1e293b', color: '#f8fafc' }}>Spiky Chain</option>
-              </optgroup>
-              <optgroup label="Decorative & Grunge" style={{ background: '#0f172a', color: '#94a3b8' }}>
-                <option value="'23 Seconds To Midnight', cursive" style={{ background: '#1e293b', color: '#f8fafc' }}>23 Seconds To Midnight</option>
-                <option value="'Eroded', cursive" style={{ background: '#1e293b', color: '#f8fafc' }}>Eroded</option>
-                <option value="'Reality Stone', cursive" style={{ background: '#1e293b', color: '#f8fafc' }}>Reality Stone</option>
-                <option value="'Soulside Betrayed', cursive" style={{ background: '#1e293b', color: '#f8fafc' }}>Soulside Betrayed</option>
-              </optgroup>
-            </select>
+            {/* Hint when nothing selected */}
+            {selectedFontSize === null && (
+              <div style={{
+                padding: '10px 14px',
+                borderRadius: '12px',
+                background: 'rgba(59,130,246,0.06)',
+                border: '1px dashed rgba(59,130,246,0.2)',
+                color: 'rgba(148,163,184,0.7)',
+                fontSize: '0.78rem',
+                textAlign: 'center',
+                lineHeight: 1.5,
+                fontWeight: 400
+              }}>
+                Click a text element on the poster to edit its size &amp; color
+              </div>
+            )}
+
+            {/* Size row — pill shape */}
+            <div style={{
+              display: 'flex', alignItems: 'center',
+              background: 'rgba(255,255,255,0.04)',
+              borderRadius: '14px',
+              border: '1px solid rgba(255,255,255,0.08)',
+              padding: '3px',
+              opacity: selectedFontSize === null ? 0.35 : 1,
+              pointerEvents: selectedFontSize === null ? 'none' : 'auto',
+              transition: 'opacity 0.3s ease'
+            }}>
+              <button
+                onClick={() => {
+                  if (selectedElementRef.current && selectedFontSize !== null) {
+                    const next = Math.max(1, selectedFontSize - 1);
+                    setSelectedFontSize(next);
+                    selectedElementRef.current.style.fontSize = `${next}px`;
+                    saveState();
+                  }
+                }}
+                style={{
+                  width: '30px', height: '30px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: 'none', borderRadius: '11px',
+                  background: 'transparent', color: 'rgba(255,255,255,0.5)',
+                  cursor: 'pointer', fontSize: '1rem', fontWeight: 300,
+                  flexShrink: 0, transition: 'all 0.15s'
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <input
+                type="number"
+                className="glass-panel"
+                value={selectedFontSize || ''}
+                placeholder="—"
+                disabled={selectedFontSize === null}
+                onChange={(e) => {
+                  const newSize = parseFloat(e.target.value);
+                  setSelectedFontSize(newSize);
+                  if (selectedElementRef.current && !isNaN(newSize)) {
+                    selectedElementRef.current.style.fontSize = `${newSize}px`;
+                    saveState();
+                  }
+                }}
+                style={{
+                  flex: 1,
+                  padding: '5px 4px',
+                  border: 'none',
+                  borderRadius: '10px',
+                  background: 'transparent',
+                  color: 'rgba(255,255,255,0.9)',
+                  fontSize: '0.82rem',
+                  fontWeight: 400,
+                  outline: 'none',
+                  textAlign: 'center',
+                  minWidth: 0
+                }}
+              />
+              <span style={{ color: 'rgba(148,163,184,0.45)', fontSize: '0.72rem', fontWeight: 400, flexShrink: 0, marginRight: '4px' }}>px</span>
+              <button
+                onClick={() => {
+                  if (selectedElementRef.current && selectedFontSize !== null) {
+                    const next = selectedFontSize + 1;
+                    setSelectedFontSize(next);
+                    selectedElementRef.current.style.fontSize = `${next}px`;
+                    saveState();
+                  }
+                }}
+                style={{
+                  width: '30px', height: '30px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: 'none', borderRadius: '11px',
+                  background: 'transparent', color: 'rgba(255,255,255,0.5)',
+                  cursor: 'pointer', fontSize: '1rem', fontWeight: 300,
+                  flexShrink: 0, transition: 'all 0.15s'
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+
+            {/* Color row */}
+            <div style={{ opacity: selectedFontSize === null ? 0.35 : 1, pointerEvents: selectedFontSize === null ? 'none' : 'auto', transition: 'opacity 0.3s ease' }}>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                <span style={{ fontSize: '0.78rem', fontWeight: 400, color: 'rgba(148,163,184,0.7)' }}>Color</span>
+                <span style={{ fontSize: '0.7rem', color: 'rgba(148,163,184,0.4)', marginLeft: 'auto', fontFamily: 'monospace', fontWeight: 400, letterSpacing: '0.04em' }}>{selectedFontColor.toUpperCase()}</span>
+              </div>
+              <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+                {['#000000','#ffffff','#e62429','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899','#6b7280','#92400e'].map(c => (
+                  <button
+                    key={c}
+                    title={c}
+                    onClick={() => {
+                      setSelectedFontColor(c);
+                      if (selectedElementRef.current) {
+                        selectedElementRef.current.style.color = c;
+                        saveState();
+                      }
+                    }}
+                    style={{
+                      width: '22px', height: '22px',
+                      borderRadius: '50%',
+                      border: selectedFontColor === c ? '2px solid rgba(96,165,250,0.7)' : '1.5px solid rgba(255,255,255,0.1)',
+                      background: c,
+                      cursor: 'pointer',
+                      boxShadow: selectedFontColor === c ? '0 0 0 2px rgba(96,165,250,0.25)' : 'none',
+                      transition: 'all 0.2s ease',
+                      flexShrink: 0,
+                      transform: selectedFontColor === c ? 'scale(1.15)' : 'scale(1)',
+                      ...(c === '#ffffff' ? { boxShadow: selectedFontColor === c ? '0 0 0 2px rgba(96,165,250,0.25), inset 0 0 0 1px rgba(0,0,0,0.1)' : 'inset 0 0 0 1px rgba(0,0,0,0.1)' } : {})
+                    }}
+                  />
+                ))}
+                {/* Custom color picker trigger */}
+                <div style={{ position: 'relative', width: '22px', height: '22px', flexShrink: 0 }}>
+                  <input
+                    type="color"
+                    value={selectedFontColor}
+                    onChange={(e) => {
+                      const newColor = e.target.value;
+                      setSelectedFontColor(newColor);
+                      if (selectedElementRef.current) {
+                        selectedElementRef.current.style.color = newColor;
+                        saveState();
+                      }
+                    }}
+                    style={{
+                      position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                      opacity: 0, cursor: 'pointer'
+                    }}
+                  />
+                  <div style={{
+                    width: '22px', height: '22px', borderRadius: '50%',
+                    border: '1.5px solid rgba(255,255,255,0.1)',
+                    background: 'conic-gradient(from 0deg, #f87171, #fbbf24, #34d399, #60a5fa, #a78bfa, #f472b6, #f87171)',
+                    pointerEvents: 'none',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    opacity: 0.75, transition: 'opacity 0.2s'
+                  }}>
+                    <span style={{ fontSize: '10px', color: '#fff', textShadow: '0 0 4px rgba(0,0,0,0.6)', fontWeight: 400 }}>+</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>

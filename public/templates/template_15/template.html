@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Birthday Times 16th</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --paper-bg: radial-gradient(circle at center, #d8d0b5 0%, #baad8a 100%);
+      --paper-bg-fallback: #c9bc9e;
+      --ink-color: #1a1a1a;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+      --font-gothic: serif;
+      --font-script: 'Great Vibes', cursive;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--paper-bg-fallback);
+      background-image: var(--paper-bg);
+      font-family: var(--font-sans);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 50px 60px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(26, 26, 26, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(26, 26, 26, 0.07); border-radius: 2px; }
+
+    /* Highlight Label Style */
+    .highlight-label {
+      background-color: var(--ink-color);
+      color: #fff;
+      font-family: var(--font-sans);
+      text-transform: uppercase;
+      padding: 8px 15px;
+      display: inline-block;
+      font-size: 22px;
+      letter-spacing: 2px;
+      line-height: 1.2;
+      position: absolute;
+      z-index: 10;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .highlight-label:hover {
+      background-color: #333;
+    }
+
+    /* Top Section */
+    .title-section {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding-top: 20px;
+    }
+
+    .main-title {
+      font-family: var(--font-gothic);
+      font-size: 85px;
+      line-height: 1;
+      letter-spacing: 2px;
+    }
+
+    .label-top {
+      top: -10px;
+      right: 20px;
+      transform: rotate(3deg);
+    }
+
+    /* Image Section */
+    .image-container {
+      width: 100%;
+      height: 700px;
+      border: 2px solid var(--ink-color);
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #c9c3b1;
+      cursor: pointer; overflow: hidden; position: absolute;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: sepia(0.3) contrast(1.15) grayscale(20%);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(26, 26, 26, 0.4);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Overlay texts on image */
+    .label-middle {
+      bottom: -15px;
+      left: -20px;
+      transform: rotate(-4deg);
+    }
+
+    .script-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-10deg);
+      font-family: var(--font-script);
+      font-size: 100px;
+      color: #fff;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+      z-index: 6;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .script-overlay.editable-wrapper {
+      pointer-events: auto;
+    }
+
+    /* Bottom Section */
+    .bottom-section {
+      position: relative;
+      flex-grow: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+
+    .label-bottom {
+      bottom: 20px;
+      right: 10px;
+      transform: rotate(-2deg);
+      font-size: 20px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="title-section">
+      <div class="main-title" id="main-title" data-editable="text">The Birthday Times</div>
+      <div class="highlight-label label-top" id="label-top" data-editable="text">yesterday November 15 2025</div>
+    </div>
+
+    <div class="image-container">
+      <div class="image-upload-box" id="main-image-box" data-editable="image">
+        <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+        <div class="image-preview-container">
+          <img id="main-image-img" class="image-preview" src="" alt="Photo">
+        </div>
+        <div class="placeholder-state">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+          </svg>
+          <span style="font-family: var(--font-sans); font-size: 16px; letter-spacing: 2px;">UPLOAD PHOTO</span>
+        </div>
+      </div>
+      
+      <div class="script-overlay editable-wrapper" id="script-overlay" data-editable="text">
+        say hello to my 16
+      </div>
+
+      <div class="highlight-label label-middle" id="label-middle" data-editable="text">hiba IS TURNING 16th</div>
+    </div>
+
+    <div class="bottom-section">
+      <div class="highlight-label label-bottom" id="label-bottom" data-editable="text">It's my birthday! happy birthday to me</div>
+    </div>
+
+  </article>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Hero or Menace Template</title>
+  
+  <style>
+    :root {
+      --paper-bg: #eae3cd;
+      --ink-color: #1a1a1a;
+      --bugle-red: #d1303c;
+      --font-serif: 'Times New Roman', Times, serif;
+      --font-sans: Arial, Helvetica, sans-serif;
+      --font-impact: Impact, Charcoal, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #a0a0a0;
+      font-family: var(--font-sans);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      padding: 20px 0;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      padding: 30px;
+      display: flex; flex-direction: column; position: relative;
+      /* Add slight vignette to simulate aged paper */
+      background-image: radial-gradient(circle, rgba(255,255,255,0) 50%, rgba(0,0,0,0.05) 100%);
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(0, 0, 0, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(0, 0, 0, 0.08); border-radius: 2px; }
+
+    /* Top Boxes */
+    .top-boxes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+    .top-box {
+      border: 3px solid var(--ink-color);
+      text-align: center;
+      display: flex; flex-direction: column;
+      background: var(--paper-bg);
+    }
+    .box-title {
+      font-family: var(--font-impact);
+      font-size: 26px;
+      line-height: 1;
+      padding-top: 5px;
+    }
+    .box-sub {
+      font-family: var(--font-impact);
+      font-size: 32px;
+      line-height: 1;
+      padding-bottom: 5px;
+    }
+    .box-footer {
+      background: var(--ink-color);
+      color: white;
+      font-family: var(--font-sans);
+      font-weight: bold;
+      font-size: 14px;
+      padding: 2px 0;
+    }
+
+    /* Subheader above Masthead */
+    .pre-masthead {
+      font-family: var(--font-sans);
+      font-weight: bold;
+      font-size: 10px;
+      border-bottom: 3px solid var(--ink-color);
+      padding-bottom: 2px;
+      margin-bottom: 4px;
+    }
+
+    /* Red Masthead */
+    .masthead-container {
+      background: var(--bugle-red);
+      border-top: 5px solid var(--ink-color);
+      border-bottom: 5px solid var(--ink-color);
+      padding: 5px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+    .masthead-text {
+      font-family: var(--font-impact);
+      font-size: 100px;
+      font-style: italic;
+      color: white;
+      letter-spacing: -2px;
+      line-height: 0.85;
+      text-shadow: 3px 3px 0 var(--ink-color), -1px -1px 0 var(--ink-color), 1px -1px 0 var(--ink-color), -1px 1px 0 var(--ink-color), 1px 1px 0 var(--ink-color);
+    }
+    .bugle-icon {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px var(--ink-color);
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.3) 5px, rgba(255,255,255,0.3) 8px);
+    }
+    .bugle-icon::after {
+      content: 'B';
+      font-family: var(--font-impact);
+      font-style: italic;
+      font-size: 50px;
+      color: white;
+      text-shadow: 2px 2px 0 var(--ink-color);
+    }
+
+    /* Post Masthead Info */
+    .post-masthead {
+      display: flex; justify-content: space-between;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: bold;
+      margin-top: 4px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid var(--ink-color);
+      padding-bottom: 2px;
+    }
+
+    /* Main Image Area */
+    .main-image-area {
+      flex-grow: 1;
+      border: 3px solid var(--ink-color);
+      padding: 4px;
+      position: relative;
+      display: flex; flex-direction: column;
+    }
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #2b2b2b;
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden; cursor: pointer;
+    }
+    .image-file-input { display: none; }
+    .image-preview { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.9; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; z-index: 2;
+    }
+    [data-editable="image"]::after {
+      content: 'UPLOAD ACTION SHOT'; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px; opacity: 0; transition: opacity 0.2s; z-index: 5;
+    }
+    [data-editable="image"]:hover::after { opacity: 1; }
+    [data-editable="image"].has-image .placeholder-state { display: none; }
+
+    /* Overlay Headline */
+    .overlay-headline {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      pointer-events: none; /* Let clicks pass through to image, except on text itself */
+    }
+    .overlay-headline [data-editable="text"] { pointer-events: auto; }
+
+    .hl-small {
+      font-family: var(--font-serif);
+      font-size: 60px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 3px 3px 0 var(--ink-color), -2px -2px 0 var(--ink-color), 2px -2px 0 var(--ink-color), -2px 2px 0 var(--ink-color), 2px 2px 0 var(--ink-color);
+      line-height: 1;
+      margin-bottom: -10px;
+      letter-spacing: -1px;
+    }
+    .hl-huge {
+      font-family: var(--font-impact);
+      font-size: 150px;
+      color: var(--paper-bg);
+      text-transform: uppercase;
+      line-height: 0.85;
+      letter-spacing: -2px;
+      text-shadow: 4px 4px 0 var(--ink-color), -2px -2px 0 var(--ink-color), 2px -2px 0 var(--ink-color), -2px 2px 0 var(--ink-color), 2px 2px 0 var(--ink-color);
+    }
+    .hl-mid {
+      font-family: var(--font-impact);
+      font-size: 50px;
+      color: var(--paper-bg);
+      text-transform: uppercase;
+      line-height: 0.8;
+      margin-left: 100px;
+      text-shadow: 3px 3px 0 var(--ink-color), -1.5px -1.5px 0 var(--ink-color), 1.5px -1.5px 0 var(--ink-color), -1.5px 1.5px 0 var(--ink-color), 1.5px 1.5px 0 var(--ink-color);
+    }
+
+    /* Bottom Red Bar */
+    .bottom-red-bar {
+      background: var(--bugle-red);
+      color: white;
+      text-align: center;
+      font-family: var(--font-sans);
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      padding: 10px 0;
+      margin-top: 15px;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; background-image: none !important; background-color: #fff !important; }
+      [data-editable="image"]::after, .image-file-input { display: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="top-boxes">
+      <div class="top-box">
+        <div class="box-title" id="t1-title" data-editable="text">DOWN TO THE WIRE</div>
+        <div class="box-sub" id="t1-sub" data-editable="text">Yankees Win in 14th</div>
+        <div class="box-footer" id="t1-foot" data-editable="text">SEE SPORTS</div>
+      </div>
+      <div class="top-box">
+        <div class="box-title" id="t2-title" data-editable="text">CUT THE CHEESE</div>
+        <div class="box-sub" id="t2-sub" data-editable="text">French Say Tariffs Stink</div>
+        <div class="box-footer" id="t2-foot" data-editable="text">PAGE 2</div>
+      </div>
+    </div>
+
+    <div class="pre-masthead" id="pre-mh" data-editable="text">
+      New York's Favorite Newspaper Since 1932
+    </div>
+
+    <div class="masthead-container">
+      <div class="masthead-text" id="mh-left" data-editable="text">DAILY</div>
+      <div class="bugle-icon"></div>
+      <div class="masthead-text" id="mh-right" data-editable="text">BUGLE</div>
+    </div>
+
+    <div class="post-masthead">
+      <span id="post-left" data-editable="text">MORNING FINAL, 2001/Cloudy/Weather: Page 38</span>
+      <span id="post-right" data-editable="text">www.dailybugle.com 50&cent;</span>
+    </div>
+
+    <div class="main-image-area">
+      <div class="image-upload-box" id="main-img" data-editable="image">
+        <input type="file" class="image-file-input" accept="image/*">
+        <img class="image-preview" src="" alt="Hero Image">
+        <div class="placeholder-state">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+        </div>
+      </div>
+
+      <div class="overlay-headline">
+        <div class="hl-small" id="hl-1" data-editable="text">Spider-Man:</div>
+        <div class="hl-huge" id="hl-2" data-editable="text">HERO</div>
+        <div class="hl-mid" id="hl-3" data-editable="text">OR</div>
+        <div class="hl-huge" id="hl-4" data-editable="text">MENACE?</div>
+      </div>
+    </div>
+
+    <div class="bottom-red-bar" id="footer" data-editable="text">
+      BANK ROBBERIES ON THE RISE: PAGE 14
+    </div>
+
+  </article>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Wedding Post Save The Date Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --paper-bg: #f2efe9;
+      --ink-color: #333;
+      --font-serif: 'Playfair Display', serif;
+      --font-gothic: serif;
+      --font-script: 'Great Vibes', cursive;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #ddd;
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px 40px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    /* Subtle paper texture using CSS gradients */
+    .poster-scale-container::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      opacity: 0.4;
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23noiseFilter)"/></svg>');
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; position: relative; z-index: 5; }
+    [data-editable="text"]:hover { background-color: rgba(51, 51, 51, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(51, 51, 51, 0.08); border-radius: 2px; }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      border: 1px solid var(--ink-color);
+      align-items: stretch;
+      margin-bottom: 10px;
+      position: relative; z-index: 5;
+    }
+    .th-side {
+      flex: 1;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+    .th-center {
+      flex: 3;
+      border-left: 1px solid var(--ink-color);
+      border-right: 1px solid var(--ink-color);
+      text-align: center;
+      padding: 15px;
+      font-family: var(--font-gothic);
+      font-size: 55px;
+      line-height: 1;
+    }
+
+    /* Meta Row */
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 3px solid var(--ink-color);
+      border-bottom: 1px solid var(--ink-color);
+      padding: 12px 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative; z-index: 5;
+    }
+    .meta-row::before {
+      content: "";
+      position: absolute; top: 3px; left: 0; right: 0;
+      border-top: 1px solid var(--ink-color);
+    }
+    .mr-icon {
+      font-style: normal;
+      font-size: 18px;
+    }
+
+    /* Main Title: SAVE the DATE */
+    .main-title {
+      text-align: center;
+      margin: 25px 0 20px;
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 20px;
+      position: relative; z-index: 5;
+    }
+    .mt-caps {
+      font-family: var(--font-serif);
+      font-size: 110px;
+      letter-spacing: 2px;
+      transform: scaleY(1.3);
+      line-height: 0.8;
+    }
+    .mt-script {
+      font-family: var(--font-script);
+      font-size: 70px;
+      margin: 0 -10px;
+    }
+
+    /* Center Image Area */
+    .image-section {
+      width: 100%;
+      height: 480px; /* Adjust height to fit proportionally */
+      border-top: 3px solid var(--ink-color);
+      border-bottom: 3px solid var(--ink-color);
+      padding: 15px 0;
+      position: relative; z-index: 5;
+    }
+    .image-section::before { content: ""; position: absolute; top: 3px; left: 0; right: 0; border-top: 1px solid var(--ink-color); }
+    .image-section::after { content: ""; position: absolute; bottom: 3px; left: 0; right: 0; border-bottom: 1px solid var(--ink-color); }
+    
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d0d0d0;
+      cursor: pointer; overflow: hidden; position: relative;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: sans-serif; font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+
+    /* Bottom Section */
+    .bottom-section {
+      text-align: center;
+      margin-top: 30px;
+      position: relative; z-index: 5;
+      display: flex; flex-direction: column;
+      flex-grow: 1;
+      justify-content: center;
+    }
+    
+    .names {
+      font-family: var(--font-serif);
+      font-size: 70px;
+      letter-spacing: 2px;
+      transform: scaleY(1.2);
+      line-height: 0.9;
+      margin-bottom: 30px;
+    }
+    .names-script {
+      font-family: var(--font-script);
+      font-size: 75px;
+      line-height: 0.7;
+    }
+
+    .footer-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: auto;
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      .poster-scale-container::before { opacity: 0.2; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="th-side" id="th-left" data-editable="text">SPECIAL<br>EDITION</div>
+      <div class="th-center" id="th-center" data-editable="text">Wedding Post</div>
+      <div class="th-side" id="th-right" data-editable="text">SPECIAL<br>EDITION</div>
+    </div>
+
+    <!-- Meta Row -->
+    <div class="meta-row">
+      <div id="mr-left" data-editable="text">REDDING, CA</div>
+      <div class="mr-icon">⊛</div>
+      <div class="mr-icon">⊛</div>
+      <div id="mr-right" data-editable="text">SEPTEMBER 26TH 2025</div>
+    </div>
+
+    <!-- Main Title -->
+    <div class="main-title">
+      <span class="mt-caps" id="mt-1" data-editable="text">SAVE</span>
+      <span class="mt-script" id="mt-2" data-editable="text">the</span>
+      <span class="mt-caps" id="mt-3" data-editable="text">DATE</span>
+    </div>
+
+    <!-- Center Image -->
+    <div class="image-section">
+      <div class="image-upload-box" id="main-image-box" data-editable="image">
+        <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+        <div class="image-preview-container">
+          <img id="main-image-img" class="image-preview" src="" alt="Save The Date Photo">
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="bottom-section">
+      <div>
+        <div class="names" id="bot-names" data-editable="text">LIV & BRADEN</div>
+        <div class="names-script" id="bot-script" data-editable="text">are getting married</div>
+      </div>
+      
+      <div class="footer-meta">
+        <div id="fm-left" data-editable="text">September 26th 2026</div>
+        <div id="fm-right" data-editable="text">Redding, California</div>
+      </div>
+    </div>
+
+  </article>
+</body>
+</html>

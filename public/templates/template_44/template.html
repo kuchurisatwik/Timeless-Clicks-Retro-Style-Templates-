@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Deazur Magazine Cover Template</title>
+  <style>
+    :root {
+      --font-serif: 'Playfair Display', 'Bodoni MT', serif;
+      --font-sans: 'Helvetica Neue', 'Arial', sans-serif;
+      --color-brand: #3e2417; /* Dark brown */
+      --color-gold: #8c7349;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #ddd;
+      font-family: var(--font-sans);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: #f0f0f0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(255, 255, 255, 0.4); border-radius: 2px; }
+
+    /* Background Image */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d0d0d0;
+      cursor: pointer; overflow: hidden; position: absolute;
+      top: 0; left: 0; z-index: 1;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD BACKGROUND PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 18px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+
+    /* Foreground Overlays Container */
+    .overlays {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 10;
+      pointer-events: none; /* Let clicks pass through */
+    }
+    .overlays [data-editable="text"] {
+      pointer-events: auto; /* Enable editing on text */
+      color: var(--color-brand);
+    }
+
+    /* --- TOP HEADER --- */
+    .top-header {
+      position: absolute;
+      top: 25px; left: 0; width: 100%;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .website {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: -5px;
+    }
+    .magazine-title {
+      font-family: var(--font-serif);
+      font-size: 185px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      transform: scaleY(1.1);
+      line-height: 1;
+    }
+    .sub-title {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      letter-spacing: 8px;
+      margin-top: 5px;
+    }
+    .mini-tags {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      letter-spacing: 8px;
+      margin-top: 15px;
+      word-spacing: 15px;
+    }
+    .vol-number {
+      position: absolute;
+      top: 135px; right: 35px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* --- LEFT COLUMN --- */
+    .left-column {
+      position: absolute;
+      top: 280px; left: 35px;
+      width: 250px;
+      display: flex; flex-direction: column; gap: 40px;
+    }
+    .left-block {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .left-h1 {
+      font-family: var(--font-serif);
+      font-size: 50px;
+      line-height: 0.9;
+    }
+    .left-h1-sub {
+      font-family: var(--font-serif);
+      font-size: 40px;
+      line-height: 0.9;
+      color: var(--color-gold) !important;
+    }
+    .left-p {
+      font-size: 12px;
+      line-height: 1.5;
+      letter-spacing: 1px;
+      font-weight: 500;
+      margin-top: 5px;
+    }
+    .left-h2 {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .line-sep {
+      width: 30px; height: 1px; background-color: var(--color-brand);
+      margin-top: 10px;
+    }
+
+    /* --- RIGHT COLUMN --- */
+    .right-column {
+      position: absolute;
+      top: 280px; right: 35px;
+      width: 200px;
+      display: flex; flex-direction: column; align-items: flex-end; text-align: right; gap: 60px;
+    }
+    .right-h1-num {
+      font-family: var(--font-serif);
+      font-size: 65px;
+      line-height: 0.9;
+    }
+    .right-h1-text {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      line-height: 0.95;
+      margin-top: 5px;
+    }
+    .right-p {
+      font-size: 12px;
+      line-height: 1.5;
+      letter-spacing: 1px;
+      font-weight: 500;
+      margin-top: 15px;
+    }
+
+    /* Floating Circle */
+    .floating-circle {
+      position: absolute;
+      top: 540px; right: 25px;
+      width: 140px; height: 140px;
+      background-color: var(--color-brand);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 15px;
+      pointer-events: auto;
+    }
+    .floating-circle [data-editable="text"] {
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      line-height: 1.6;
+      letter-spacing: 1px;
+      font-weight: 500;
+    }
+
+    /* Right Bottom Text */
+    .right-bottom-block {
+      position: absolute;
+      top: 750px; right: 35px;
+      width: 180px;
+      text-align: right;
+    }
+    .right-h2 {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .right-bottom-block .line-sep { margin-left: auto; margin-top: 15px; }
+
+    /* --- BOTTOM OVERLAY --- */
+    .bottom-section {
+      position: absolute;
+      bottom: 60px; left: 0; width: 100%;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .bottom-section [data-editable="text"] { color: #fff; }
+    
+    .main-bottom-title {
+      font-family: var(--font-serif);
+      font-size: 85px;
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+    .sub-bottom-title {
+      font-family: var(--font-serif);
+      font-size: 40px;
+      letter-spacing: 15px;
+      margin-top: -10px;
+      margin-bottom: 20px;
+      color: #dcdcdc !important;
+    }
+    .bottom-tagline {
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: 500;
+    }
+
+    /* Barcode Area */
+    .barcode-area {
+      position: absolute;
+      bottom: 30px; left: 35px;
+      pointer-events: auto;
+    }
+    .barcode-category {
+      font-family: var(--font-sans);
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+    .barcode-img {
+      width: 120px; height: 50px;
+      background: repeating-linear-gradient(
+        to right,
+        #fff, #fff 2px, #000 2px, #000 4px,
+        #fff 4px, #fff 5px, #000 5px, #000 8px,
+        #fff 8px, #fff 10px, #000 10px, #000 11px
+      );
+      position: relative;
+      background-color: #fff;
+    }
+    .barcode-img::after {
+      content: "2705   2026   0026";
+      position: absolute;
+      bottom: 0; left: 0; width: 100%;
+      background: #fff;
+      font-family: monospace;
+      font-size: 9px;
+      text-align: center;
+      line-height: 12px;
+      color: #000;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Background Image -->
+    <div class="image-upload-box" id="main-image-box" data-editable="image">
+      <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+      <div class="image-preview-container">
+        <img id="main-image-img" class="image-preview" src="" alt="Magazine Cover Photo">
+      </div>
+    </div>
+
+    <!-- Foreground Overlays -->
+    <div class="overlays">
+      
+      <!-- Top Header -->
+      <div class="top-header">
+        <div class="website" id="t-web" data-editable="text">DEAZUR.COM</div>
+        <div class="magazine-title" id="t-title" data-editable="text">Deazur</div>
+        <div class="sub-title" id="t-sub" data-editable="text">VISUAL TRENDS & AESTHETICS</div>
+        <div class="mini-tags" id="t-tags" data-editable="text">discover save create</div>
+      </div>
+      <div class="vol-number" id="t-vol" data-editable="text">VOL. 26 / MAY 2026</div>
+
+      <!-- Left Column -->
+      <div class="left-column">
+        <div class="left-block">
+          <div class="left-h1" id="l1-h1" data-editable="text">BOLD</div>
+          <div class="left-h1-sub" id="l1-h2" data-editable="text">BY DESIGN</div>
+          <div class="left-p" id="l1-p" data-editable="text">OUTFITS THAT TURN<br>EVERYDAY MOMENTS<br>INTO STATEMENT<br>STYLE.</div>
+          <div class="line-sep"></div>
+        </div>
+
+        <div class="left-block">
+          <div class="left-h2" id="l2-h1" data-editable="text">SHAPES<br>THAT SPEAK</div>
+          <div class="left-p" id="l2-p" data-editable="text">OVERSIZED,<br>STRUCTURED &<br>UNAPOLOGETIC.</div>
+          <div class="line-sep"></div>
+        </div>
+
+        <div class="left-block">
+          <div class="left-h2" id="l3-h1" data-editable="text" style="color: #6e6459;">POWER<br>IN DETAIL</div>
+          <div class="left-p" id="l3-p" data-editable="text" style="color: #6e6459;">ACCESSORIES THAT<br>DEFINE THE LOOK,<br>NOT FOLLOW IT.</div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-column">
+        <div class="left-block" style="align-items: flex-end;">
+          <div class="right-h1-num" id="r1-num" data-editable="text">26</div>
+          <div class="right-h1-text" id="r1-text" data-editable="text">FASHION<br>IDEAS</div>
+          <div class="right-p" id="r1-p" data-editable="text">TO ELEVATE YOUR<br>AESTHETIC<br>GAME.</div>
+        </div>
+      </div>
+
+      <!-- Floating Circle -->
+      <div class="floating-circle">
+        <div id="circ-text" data-editable="text">STYLE ISN'T<br>ABOUT FITTING IN.<br>IT'S ABOUT<br>STANDING OUT.</div>
+      </div>
+
+      <!-- Right Bottom Text -->
+      <div class="right-bottom-block">
+        <div class="right-h2" id="rb-h2" data-editable="text">CITY MOOD</div>
+        <div class="left-p" id="rb-p" data-editable="text">MODERN LOOKS<br>FOR REAL LIFE,<br>CURATED<br>WITH INTENTION.</div>
+        <div class="line-sep"></div>
+      </div>
+
+      <!-- Bottom Overlay -->
+      <div class="bottom-section">
+        <div class="main-bottom-title" id="b-title1" data-editable="text">STATEMENT</div>
+        <div class="sub-bottom-title" id="b-title2" data-editable="text">EVERY DAY</div>
+        <div class="bottom-tagline" id="b-tag" data-editable="text">BOLD FASHION. REAL CONFIDENCE.</div>
+      </div>
+
+      <!-- Barcode -->
+      <div class="barcode-area">
+        <div class="barcode-category" id="bc-text" data-editable="text">STYLE / AESTHETICS / CULTURE</div>
+        <div class="barcode-img"></div>
+      </div>
+
+    </div>
+
+  </article>
+</body>
+</html>

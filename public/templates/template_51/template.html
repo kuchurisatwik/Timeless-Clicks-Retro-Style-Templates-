@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Avengers Review Template</title>
+  
+  <style>
+    :root {
+      --paper-bg: #ffffff;
+      --ink-color: #000000;
+      --font-serif: 'Times New Roman', Times, serif;
+      --font-sans: Arial, Helvetica, sans-serif;
+      --font-impact: Impact, Charcoal, sans-serif;
+      --font-gothic: 'Georgia', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #e0e0e0;
+      font-family: var(--font-sans);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      padding: 20px 0;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 30px 40px;
+      display: flex; flex-direction: column; position: relative;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(0, 0, 0, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(0, 0, 0, 0.08); border-radius: 2px; }
+
+    /* Masthead */
+    .masthead-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+    .masthead-text {
+      font-family: var(--font-gothic);
+      font-size: 80px;
+      font-weight: bold;
+      letter-spacing: -2px;
+      text-transform: capitalize;
+    }
+    .globe-icon {
+      width: 80px; height: 80px;
+      border: 3px solid var(--ink-color);
+      border-radius: 50%;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      background: repeating-linear-gradient(0deg, transparent, transparent 8px, #000 8px, #000 10px);
+    }
+    .globe-icon::after {
+      content: 'DAILY PLANET';
+      position: absolute;
+      background: var(--paper-bg);
+      padding: 2px 5px;
+      font-size: 10px;
+      font-weight: bold;
+      border: 2px solid var(--ink-color);
+      border-radius: 10px;
+      transform: rotate(-10deg) translateY(-30px);
+    }
+
+    /* Special Edition Badge */
+    .special-edition {
+      text-align: center;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .special-edition-text {
+      display: inline-block;
+      background: var(--paper-bg);
+      padding: 0 15px;
+      font-size: 20px;
+      font-weight: bold;
+      position: relative;
+      z-index: 2;
+    }
+    .special-edition::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 12px;
+      background: #ccc;
+      z-index: 1;
+      transform: translateY(-50%);
+    }
+
+    /* Headline */
+    .headline {
+      font-family: var(--font-impact);
+      font-size: 140px;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 0.9;
+      letter-spacing: -2px;
+      transform: scaleY(1.2);
+      margin: 15px 0 25px;
+    }
+    .sub-headline {
+      font-family: var(--font-serif);
+      font-size: 50px;
+      font-weight: bold;
+      font-style: italic;
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 3px solid var(--ink-color);
+      padding-bottom: 10px;
+    }
+
+    /* Two Columns */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 30px;
+      flex-grow: 1;
+    }
+
+    /* Left Column */
+    .left-col {
+      display: flex; flex-direction: column;
+    }
+    .byline-box {
+      border-top: 2px solid var(--ink-color);
+      border-bottom: 2px solid var(--ink-color);
+      padding: 10px 0;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .byline-name {
+      font-size: 22px;
+      font-weight: bold;
+      font-family: var(--font-sans);
+    }
+    .byline-handle {
+      font-size: 20px;
+      font-weight: bold;
+      font-style: italic;
+    }
+    .article-text {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.4;
+      text-align: justify;
+      flex-grow: 1;
+    }
+    .continued-text {
+      font-family: var(--font-sans);
+      font-size: 20px;
+      font-weight: bold;
+      font-style: italic;
+      margin-top: 15px;
+    }
+
+    /* Right Column Image */
+    .right-col {
+      display: flex; flex-direction: column;
+    }
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d0d0d0;
+      position: relative; overflow: hidden; cursor: pointer;
+    }
+    .image-file-input { display: none; }
+    .image-preview { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; z-index: 2;
+    }
+    [data-editable="image"]::after {
+      content: 'UPLOAD MOVIE POSTER'; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px; opacity: 0; transition: opacity 0.2s; z-index: 5;
+    }
+    [data-editable="image"]:hover::after { opacity: 1; }
+    [data-editable="image"].has-image .placeholder-state { display: none; }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; }
+      [data-editable="image"]::after, .image-file-input { display: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="masthead-container">
+      <div class="masthead-text" id="masthead-left" data-editable="text">Daily</div>
+      <div class="globe-icon"></div>
+      <div class="masthead-text" id="masthead-right" data-editable="text">Planet</div>
+    </div>
+
+    <div class="special-edition">
+      <div class="special-edition-text" id="special-edition" data-editable="text">SPECIAL EDITION</div>
+    </div>
+
+    <div class="headline" id="main-headline" data-editable="text">
+      AVENGERS
+    </div>
+
+    <div class="sub-headline" id="sub-headline" data-editable="text">
+      AGE of ULTRON REVIEW
+    </div>
+
+    <div class="content-grid">
+      <div class="left-col">
+        <div class="byline-box">
+          <div class="byline-name" id="author" data-editable="text">By Matt K. Leppo</div>
+          <div class="byline-handle" id="handle" data-editable="text">@Mattlep97</div>
+        </div>
+        <div class="article-text" id="article-body" data-editable="text">
+          Avengers Age of Ultron, the cherry on top of the MCU's first 2 phases. Well let's start with the villain Ultron. Ultron by all means is menacing. This man robot AI thing is bloody insane. The first scene where he is shown talking to Jarvis through what was small pixels accessing files, was insane. James Spader absolutely kills the role and he takes Ultron's wit from the comics and throws it right in our fanboy faces on the big screen. What Ultron brought to the MCU was a different type of villain. It wasn't just some dude who thinks he's a god killing humans because he's strong, no, this anger and hatred reached far deeper than that. He knew he was strong. He knew that he was stronger. He saw all of the "destruction" The Avengers caused. His rage grew as the film went further. His main focus through the movie was simply evolution. He said (I am paraphrasing of course) "I was designed to save the world."
+          <br><br>
+          Ultron believes in evolution. Just like the comics and main motivations of other villains, such as Magneto and Loki, he believes that he is essentially more evolved than the human race.
+          <br><br>
+          That Artificial intelligence is the next step in evolution. Even Vision
+        </div>
+        <div class="continued-text" id="continued" data-editable="text">Continued on Page 2</div>
+      </div>
+
+      <div class="right-col">
+        <div class="image-upload-box" id="poster-img" data-editable="image">
+          <input type="file" class="image-file-input" accept="image/*">
+          <img class="image-preview" src="" alt="Movie Poster">
+          <div class="placeholder-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </article>
+</body>
+</html>

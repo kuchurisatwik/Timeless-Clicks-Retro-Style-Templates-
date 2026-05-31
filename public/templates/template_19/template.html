@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vogue Cover Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --paper-bg: #fff;
+      --brand-red: #e41d24;
+      --ink-color: #111111;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+      --font-script: 'Great Vibes', cursive;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #eaeaea;
+      font-family: var(--font-sans);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(255, 255, 255, 0.4); border-radius: 2px; }
+
+    /* Background Image (Full Bleed) */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #f1f1f1;
+      cursor: pointer; overflow: hidden; position: absolute;
+      top: 0; left: 0; z-index: 1;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD COVER PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.1);
+      color: #333; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Text Overlays Layer */
+    .text-layer {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 10;
+      pointer-events: none; /* Let clicks pass to background unless clicking text */
+    }
+    .text-layer [data-editable] {
+      pointer-events: auto; /* Re-enable clicks on text */
+    }
+
+    /* Main Title */
+    .main-title-container {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+    }
+    .main-title {
+      font-family: var(--font-serif);
+      font-size: 240px;
+      color: var(--brand-red);
+      line-height: 0.8;
+      letter-spacing: -2px;
+      font-weight: 700;
+      transform: scaleY(1.1);
+    }
+    .main-title-sub {
+      position: absolute;
+      top: 90px;
+      left: 35.5%; /* Position inside the 'O' */
+      font-family: var(--font-sans);
+      font-size: 18px;
+      color: var(--brand-red);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      letter-spacing: 2px;
+    }
+
+    /* Left Side Text */
+    .left-text-group-1 {
+      position: absolute;
+      top: 320px;
+      left: 30px;
+      width: 300px;
+    }
+    .left-red-text {
+      color: var(--brand-red);
+      font-size: 55px;
+      line-height: 0.9;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .left-black-text {
+      color: var(--ink-color);
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    .left-text-group-2 {
+      position: absolute;
+      bottom: 120px;
+      left: 30px;
+      width: 250px;
+    }
+    .plus-sign {
+      color: var(--brand-red);
+      font-size: 80px;
+      line-height: 0.7;
+      margin: 5px 0;
+      font-weight: 700;
+    }
+
+    /* Right Side Text */
+    .right-text-group {
+      position: absolute;
+      top: 380px;
+      right: 30px;
+      width: 320px;
+      text-align: right;
+    }
+    .right-name-1 {
+      color: var(--brand-red);
+      font-size: 70px;
+      line-height: 0.8;
+      font-weight: 600;
+      letter-spacing: -1px;
+    }
+    .right-name-2 {
+      color: var(--brand-red);
+      font-size: 32px;
+      line-height: 1;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .right-headline {
+      color: var(--ink-color);
+      font-size: 60px;
+      line-height: 0.85;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 15px;
+    }
+    .right-subheadline {
+      color: var(--ink-color);
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+
+    .signature-text {
+      position: absolute;
+      bottom: 220px;
+      right: 50px;
+      font-family: var(--font-script);
+      font-size: 50px;
+      color: var(--ink-color);
+      transform: rotate(-5deg);
+    }
+
+    .barcode-container {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      width: 180px;
+      height: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(255,255,255,0.7);
+      padding: 5px;
+    }
+    .barcode-bars {
+      flex-grow: 1;
+      width: 100%;
+      background-image: repeating-linear-gradient(
+        to right,
+        #000 0, #000 3px, transparent 3px, transparent 6px,
+        #000 6px, #000 8px, transparent 8px, transparent 10px,
+        #000 10px, #000 15px, transparent 15px, transparent 18px
+      );
+    }
+    .barcode-text {
+      font-family: monospace;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+    .barcode-isbn {
+      font-family: monospace;
+      font-size: 10px;
+      margin-bottom: 2px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Background Image -->
+    <div class="image-upload-box" id="main-image-box" data-editable="image">
+      <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+      <div class="image-preview-container">
+        <img id="main-image-img" class="image-preview" src="" alt="Cover Photo">
+      </div>
+      <div class="placeholder-state">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+        </svg>
+        <span style="font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;">UPLOAD COVER PHOTO</span>
+      </div>
+    </div>
+
+    <!-- Text Overlays -->
+    <div class="text-layer">
+      
+      <div class="main-title-container">
+        <div class="main-title" id="main-title" data-editable="text">VOGUE</div>
+        <div class="main-title-sub" id="main-title-sub" data-editable="text">DEUTSCH</div>
+      </div>
+
+      <div class="left-text-group-1">
+        <div class="left-red-text" id="left-red-1" data-editable="text">FASHION<br>TAKES<br>FLIGHT</div>
+        <div class="left-black-text" id="left-black-1" data-editable="text">THE DESIGNERS<br>WHO MAKE<br>YOU DREAM</div>
+      </div>
+
+      <div class="left-text-group-2">
+        <div class="left-black-text" id="left-black-2" data-editable="text" style="font-size: 22px;">MODE<br>VON COSY<br>BIS PARTY</div>
+        <div class="plus-sign" id="plus-sign" data-editable="text">+</div>
+        <div class="left-black-text" id="left-black-3" data-editable="text" style="font-size: 22px;">WEIHNACHTS-<br>WUNSCHE</div>
+      </div>
+
+      <div class="right-text-group">
+        <div class="right-name-1" id="right-name-1" data-editable="text">KENDALL</div>
+        <div class="right-name-2" id="right-name-2" data-editable="text">JENNER</div>
+        <div class="right-headline" id="right-headline" data-editable="text">GETS<br>CANDID</div>
+        <div class="right-subheadline" id="right-sub-1" data-editable="text">I HAVE LITERALLY<br>NOTHING TO HIDE</div>
+        <div class="right-subheadline" id="right-sub-2" data-editable="text" style="margin-top: 10px;">VAPE NATION<br>THE NEW HEALTH<br>CONTROVERSY</div>
+      </div>
+
+      <div class="signature-text" id="signature" data-editable="text">rohan gunar</div>
+
+      <div class="barcode-container">
+        <div class="barcode-isbn" id="barcode-isbn" data-editable="text">ISBN 978-0-9897764-8-6</div>
+        <div class="barcode-bars"></div>
+        <div class="barcode-text" id="barcode-text" data-editable="text">9 780989 776486 &gt;</div>
+      </div>
+
+    </div>
+
+  </article>
+</body>
+</html>

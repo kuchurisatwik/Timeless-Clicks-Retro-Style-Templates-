@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Superman Spotlight Template</title>
+  
+  <style>
+    :root {
+      --paper-bg: #ffffff;
+      --ink-color: #000000;
+      --font-serif: 'Times New Roman', Times, serif;
+      --font-sans: Arial, Helvetica, sans-serif;
+      --font-impact: Impact, Charcoal, sans-serif;
+      --font-gothic: 'Georgia', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #e0e0e0;
+      font-family: var(--font-sans);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      padding: 20px 0;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 30px 40px;
+      display: flex; flex-direction: column; position: relative;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(0, 0, 0, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(0, 0, 0, 0.08); border-radius: 2px; }
+
+    /* Masthead */
+    .masthead-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 2px;
+    }
+    .masthead-text {
+      font-family: var(--font-gothic);
+      font-size: 85px;
+      font-weight: bold;
+      letter-spacing: -2px;
+      text-transform: capitalize;
+    }
+    .globe-icon {
+      width: 85px; height: 85px;
+      border: 3px solid var(--ink-color);
+      border-radius: 50%;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      background: repeating-linear-gradient(0deg, transparent, transparent 8px, #000 8px, #000 10px);
+    }
+    .globe-icon::after {
+      content: 'DAILY PLANET';
+      position: absolute;
+      background: var(--paper-bg);
+      padding: 2px 5px;
+      font-size: 10px;
+      font-weight: bold;
+      border: 2px solid var(--ink-color);
+      border-radius: 10px;
+      transform: rotate(-10deg) translateY(-30px);
+    }
+
+    .metropolis-sub {
+      text-align: center;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    /* Meta Row */
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      border-top: 3px solid var(--ink-color);
+      border-bottom: 3px solid var(--ink-color);
+      padding: 5px 0;
+      font-family: var(--font-serif);
+      font-weight: bold;
+      font-style: italic;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    /* Main Headlines */
+    .headline-top {
+      font-family: var(--font-impact);
+      font-size: 65px;
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: 0px;
+      margin-bottom: 5px;
+    }
+    .headline-main {
+      font-family: var(--font-impact);
+      font-size: 160px;
+      text-transform: uppercase;
+      line-height: 0.8;
+      transform: scaleY(1.2);
+      letter-spacing: -3px;
+      margin-bottom: 25px;
+    }
+
+    /* Content Area */
+    .content-area {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      flex-grow: 1;
+      border-top: 6px solid var(--ink-color);
+      padding-top: 15px;
+    }
+
+    /* Left Column */
+    .left-col {
+      display: flex; flex-direction: column; gap: 15px;
+    }
+    .image-upload-box {
+      width: 100%; height: 500px;
+      background-color: #2b2b2b;
+      position: relative; overflow: hidden; cursor: pointer;
+    }
+    .image-file-input { display: none; }
+    .image-preview { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; z-index: 2;
+    }
+    [data-editable="image"]::after {
+      content: 'UPLOAD HERO PHOTO'; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px; opacity: 0; transition: opacity 0.2s; z-index: 5;
+    }
+    [data-editable="image"]:hover::after { opacity: 1; }
+    [data-editable="image"].has-image .placeholder-state { display: none; }
+
+    .image-caption {
+      font-family: var(--font-sans);
+      font-size: 20px;
+      font-weight: bold;
+      line-height: 1.2;
+    }
+
+    /* Right Column */
+    .right-col {
+      display: flex; flex-direction: column;
+    }
+    .side-headline {
+      font-family: var(--font-serif);
+      font-size: 34px;
+      font-weight: bold;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 10px;
+      border-bottom: 2px solid var(--ink-color);
+      padding-bottom: 10px;
+    }
+    .byline {
+      text-align: center;
+      font-family: var(--font-sans);
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+    .article-text {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      line-height: 1.35;
+      text-align: justify;
+      flex-grow: 1;
+    }
+    .continued {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: bold;
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; }
+      [data-editable="image"]::after, .image-file-input { display: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="masthead-container">
+      <div class="masthead-text" id="mh-left" data-editable="text">Daily</div>
+      <div class="globe-icon"></div>
+      <div class="masthead-text" id="mh-right" data-editable="text">Planet</div>
+    </div>
+    
+    <div class="metropolis-sub" id="sub-meta" data-editable="text">
+      Metropolis' Greatest Newspaper
+    </div>
+
+    <div class="meta-row">
+      <span id="meta-left" data-editable="text">@benz_daily</span>
+      <span id="meta-center" data-editable="text">November 23, 2014</span>
+      <span id="meta-right" data-editable="text">75 Cents</span>
+    </div>
+
+    <div class="headline-top" id="hl-top" data-editable="text">
+      BEING KNOWN AS
+    </div>
+    <div class="headline-main" id="hl-main" data-editable="text">
+      SUPERMAN
+    </div>
+
+    <div class="content-area">
+      <div class="left-col">
+        <div class="image-upload-box" id="hero-img" data-editable="image">
+          <input type="file" class="image-file-input" accept="image/*">
+          <img class="image-preview" src="" alt="Hero Image">
+          <div class="placeholder-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+          </div>
+        </div>
+        <div class="image-caption" id="caption" data-editable="text">
+          (Above) A picture of Metropolis' alien Superhero Superman hovering over downtown Gotham City.
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="side-headline" id="side-hl" data-editable="text">
+          SPOTTED IN<br>GOTHAM CITY!
+        </div>
+        <div class="byline" id="byline" data-editable="text">
+          By Clark Kent<br>Daily Planet
+        </div>
+        <div class="article-text" id="article-body" data-editable="text">
+          Gotham City- Yesterday afternoon, Gothamites looked up to the sky, not to catch a glimpse of the Dark Knight, but to stare in awe at the Kryptonian from Metropolis. So many Kryptonians have been known to cause so much death and destruction, that many citizens of Gotham were concerned and sought shelter in nearby storefronts. A majority of the city were ecstatic to see Superman, one witness stated "He's like a glimmer of light in our dark city.". Some curious onlookers even took many snapshots of the hero, others took selfies. While a crowd gathered below, Superman hovered above twirling slowly over the center of Gotham. One can assume he was using his famed X-ray vision to search for something, or someone. Being in Gotham on business myself, I followed Superman to Gotham Harbor. Our alien savior entered what appeared to be an empty warehouse. I peeked through a window to see what I occurred inside. Alien Space ships were lined in rows and Military vehicles were parked in the front of the warehouse. Army personnel were standing around a table arguing with Superman. I now knew why Metropolis' savior was here in
+        </div>
+        <div class="continued" id="cont-text" data-editable="text">
+          Continued on Page 2
+        </div>
+      </div>
+    </div>
+
+  </article>
+</body>
+</html>

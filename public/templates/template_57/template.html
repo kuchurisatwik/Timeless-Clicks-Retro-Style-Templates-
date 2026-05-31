@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>ENOUGH Template</title>
+  
+  <style>
+    :root {
+      --paper-bg: #eae3cd;
+      --ink-color: #1a1a1a;
+      --bugle-red: #d1303c;
+      --font-serif: 'Times New Roman', Times, serif;
+      --font-sans: Arial, Helvetica, sans-serif;
+      --font-impact: Impact, Charcoal, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #a0a0a0;
+      font-family: var(--font-sans);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      padding: 20px 0;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      padding: 30px;
+      display: flex; flex-direction: column; position: relative;
+      background-image: radial-gradient(circle, rgba(255,255,255,0) 50%, rgba(0,0,0,0.05) 100%);
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(0, 0, 0, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(0, 0, 0, 0.08); border-radius: 2px; }
+
+    /* Top Boxes */
+    .top-boxes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+    .top-box {
+      border: 3px solid var(--ink-color);
+      text-align: center;
+      display: flex; flex-direction: column;
+      background: var(--paper-bg);
+    }
+    .box-title {
+      font-family: var(--font-impact);
+      font-size: 26px;
+      line-height: 1;
+      padding-top: 5px;
+    }
+    .box-sub {
+      font-family: var(--font-impact);
+      font-size: 32px;
+      line-height: 1;
+      padding-bottom: 5px;
+    }
+    .box-footer {
+      background: var(--ink-color);
+      color: white;
+      font-family: var(--font-sans);
+      font-weight: bold;
+      font-size: 14px;
+      padding: 2px 0;
+    }
+
+    /* Subheader above Masthead */
+    .pre-masthead {
+      font-family: var(--font-sans);
+      font-weight: bold;
+      font-size: 10px;
+      border-bottom: 3px solid var(--ink-color);
+      padding-bottom: 2px;
+      margin-bottom: 4px;
+    }
+
+    /* Red Masthead */
+    .masthead-container {
+      background: var(--bugle-red);
+      border-top: 5px solid var(--ink-color);
+      border-bottom: 5px solid var(--ink-color);
+      padding: 5px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+    .masthead-text {
+      font-family: var(--font-impact);
+      font-size: 100px;
+      font-style: italic;
+      color: white;
+      letter-spacing: -2px;
+      line-height: 0.85;
+      text-shadow: 3px 3px 0 var(--ink-color), -1px -1px 0 var(--ink-color), 1px -1px 0 var(--ink-color), -1px 1px 0 var(--ink-color), 1px 1px 0 var(--ink-color);
+    }
+    .bugle-icon {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px var(--ink-color);
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.3) 5px, rgba(255,255,255,0.3) 8px);
+    }
+    .bugle-icon::after {
+      content: 'B';
+      font-family: var(--font-impact);
+      font-style: italic;
+      font-size: 50px;
+      color: white;
+      text-shadow: 2px 2px 0 var(--ink-color);
+    }
+
+    /* Post Masthead Info */
+    .post-masthead {
+      display: flex; justify-content: space-between;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: bold;
+      margin-top: 4px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid var(--ink-color);
+      padding-bottom: 2px;
+    }
+
+    /* Huge Headline */
+    .huge-headline {
+      font-family: var(--font-impact);
+      font-size: 180px;
+      line-height: 0.8;
+      text-transform: uppercase;
+      text-align: center;
+      transform: scaleY(1.3);
+      margin-top: 25px;
+      margin-bottom: 30px;
+      letter-spacing: -3px;
+    }
+
+    /* Main Image Area */
+    .main-image-area {
+      flex-grow: 1;
+      border: 3px solid var(--ink-color);
+      padding: 4px;
+      position: relative;
+      display: flex; flex-direction: column;
+    }
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #2b2b2b;
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden; cursor: pointer;
+    }
+    .image-file-input { display: none; }
+    .image-preview { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.95; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; z-index: 2;
+    }
+    [data-editable="image"]::after {
+      content: 'UPLOAD HERO SHOT'; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px; opacity: 0; transition: opacity 0.2s; z-index: 5;
+    }
+    [data-editable="image"]:hover::after { opacity: 1; }
+    [data-editable="image"].has-image .placeholder-state { display: none; }
+
+    /* Overlay Text */
+    .overlay-text {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 10;
+      font-family: var(--font-impact);
+      font-size: 55px;
+      line-height: 1;
+      color: white;
+      text-shadow: 2px 2px 0 var(--ink-color), -2px -2px 0 var(--ink-color), 2px -2px 0 var(--ink-color), -2px 2px 0 var(--ink-color);
+      max-width: 400px;
+      letter-spacing: -1px;
+    }
+    
+    .photo-credit {
+      position: absolute;
+      bottom: 2px;
+      left: 6px;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: bold;
+      color: white;
+      z-index: 10;
+    }
+
+    .special-edition-badge {
+      position: absolute;
+      bottom: 40px;
+      right: -40px;
+      background: var(--bugle-red);
+      color: white;
+      font-family: var(--font-sans);
+      font-weight: 900;
+      font-size: 32px;
+      padding: 5px 60px;
+      transform: rotate(-45deg);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      z-index: 11;
+      border: 3px solid white;
+    }
+
+    /* Bottom Red Bar */
+    .bottom-red-bar {
+      background: var(--bugle-red);
+      color: white;
+      text-align: center;
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      padding: 10px 0;
+      margin-top: 15px;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; background-image: none !important; background-color: #fff !important; }
+      [data-editable="image"]::after, .image-file-input { display: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="top-boxes">
+      <div class="top-box">
+        <div class="box-title" id="t1-title" data-editable="text">New Clues Foreshadow</div>
+        <div class="box-sub" id="t1-sub" data-editable="text">SPIDEY, GOBLIN ATTACKS</div>
+        <div class="box-footer" id="t1-foot" data-editable="text">PAGE 3</div>
+      </div>
+      <div class="top-box">
+        <div class="box-title" id="t2-title" data-editable="text">Police: New Leads In Solving</div>
+        <div class="box-sub" id="t2-sub" data-editable="text">SPIDER-MAN CRIME SPREE</div>
+        <div class="box-footer" id="t2-foot" data-editable="text">PAGE 8</div>
+      </div>
+    </div>
+
+    <div class="pre-masthead" id="pre-mh" data-editable="text">
+      New York's Favorite Newspaper Since 1932
+    </div>
+
+    <div class="masthead-container">
+      <div class="masthead-text" id="mh-left" data-editable="text">DAILY</div>
+      <div class="bugle-icon"></div>
+      <div class="masthead-text" id="mh-right" data-editable="text">BUGLE</div>
+    </div>
+
+    <div class="post-masthead">
+      <span id="post-left" data-editable="text">MORNING EDITION/Partly Cloudy/Weather: Page 28</span>
+      <span id="post-right" data-editable="text">www.dailybugle.com 50&cent;</span>
+    </div>
+
+    <div class="huge-headline" id="main-headline" data-editable="text">
+      ENOUGH!
+    </div>
+
+    <div class="main-image-area">
+      <div class="image-upload-box" id="main-img" data-editable="image">
+        <input type="file" class="image-file-input" accept="image/*">
+        <img class="image-preview" src="" alt="Hero Image">
+        <div class="placeholder-state">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+        </div>
+      </div>
+
+      <div class="overlay-text" id="overlay" data-editable="text">
+        Citizens Call for<br>Wall-Crawler's<br>Arrest
+      </div>
+      
+      <div class="photo-credit" id="credit" data-editable="text">
+        PHOTO BY PETER PARKER
+      </div>
+      
+      <div class="special-edition-badge" id="badge" data-editable="text">
+        SPECIAL EDITION
+      </div>
+    </div>
+
+    <div class="bottom-red-bar" id="footer" data-editable="text">
+      INSIDE: EXCLUSIVE BUGLE PICS CAPTURE SPIDER-MAN'S MISDEEDS
+    </div>
+
+  </article>
+</body>
+</html>

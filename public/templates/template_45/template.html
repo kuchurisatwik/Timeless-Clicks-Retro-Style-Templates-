@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Daily Quote Newspaper Template</title>
+  <style>
+    :root {
+      --paper-bg: #f2efe9;
+      --ink-color: #333333;
+      --font-serif: 'Georgia', serif;
+      --font-gothic: serif;
+      --font-sans: 'Impact', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #ddd;
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px 40px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    /* Paper Texture */
+    .poster-scale-container::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      opacity: 0.4;
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23noiseFilter)"/></svg>');
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; position: relative; z-index: 5; }
+    [data-editable="text"]:hover { background-color: rgba(51, 51, 51, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(51, 51, 51, 0.08); border-radius: 2px; }
+
+    /* Separators */
+    .sep-thin-thick { border-top: 1px solid var(--ink-color); border-bottom: 4px solid var(--ink-color); height: 9px; margin: 15px 0; position: relative; z-index: 5; }
+    .sep-thick-thin { border-top: 4px solid var(--ink-color); border-bottom: 1px solid var(--ink-color); height: 9px; margin: 15px 0; position: relative; z-index: 5; }
+    .sep-double-thin { border-top: 1px solid var(--ink-color); border-bottom: 1px solid var(--ink-color); height: 5px; margin: 15px 0; position: relative; z-index: 5; }
+
+    /* Top Most Line */
+    .top-tiny-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      position: relative; z-index: 5;
+    }
+    .tth-line { flex: 1; height: 1px; background-color: var(--ink-color); }
+    .tth-text { font-family: var(--font-serif); font-size: 14px; letter-spacing: 2px; }
+
+    /* Top Header Row */
+    .top-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      position: relative; z-index: 5;
+    }
+    .thr-side {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 16px;
+      letter-spacing: 2px;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .thr-center {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .thr-title {
+      font-family: var(--font-gothic);
+      font-size: 65px;
+      line-height: 1;
+      transform: scaleY(1.1);
+    }
+    .thr-star { font-size: 30px; line-height: 1; }
+
+    /* Solid Meta Bar */
+    .meta-bar {
+      background-color: var(--ink-color);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 16px;
+      letter-spacing: 1px;
+      position: relative; z-index: 5;
+    }
+    .meta-bar [data-editable="text"] { color: #fff; }
+
+    /* Main Title */
+    .main-title {
+      font-family: var(--font-sans);
+      font-size: 150px;
+      text-align: center;
+      letter-spacing: -2px;
+      transform: scaleY(1.3);
+      line-height: 0.9;
+      margin: 40px 0 35px;
+      position: relative; z-index: 5;
+    }
+
+    /* Center Image Box */
+    .center-image-box {
+      width: 100%;
+      height: 400px;
+      position: relative;
+      z-index: 5;
+    }
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d0d0d0;
+      cursor: pointer; overflow: hidden; position: absolute; top: 0; left: 0;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      filter: grayscale(100%);
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: sans-serif; font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+
+    /* Solid Meta Bar 2 */
+    .meta-bar-2 {
+      background-color: var(--ink-color);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 12px 15px;
+      font-family: var(--font-sans);
+      font-size: 32px;
+      letter-spacing: 1px;
+      position: relative; z-index: 5;
+      margin-top: 20px;
+    }
+    .meta-bar-2 [data-editable="text"] { color: #fff; }
+    .mb2-star { font-size: 30px; font-family: var(--font-serif); }
+
+    /* Bottom 3 Columns */
+    .bottom-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+      position: relative; z-index: 5;
+    }
+    .col-text {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 14.5px;
+      line-height: 1.4;
+      text-align: justify;
+    }
+    
+    .drop-cap-box {
+      float: left;
+      border: 2px solid var(--ink-color);
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
+    .drop-cap {
+      font-family: var(--font-gothic);
+      font-size: 40px;
+      line-height: 1;
+      font-style: normal;
+    }
+
+    .center-quote-box {
+      border: 2px solid var(--ink-color);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .quote-icon {
+      font-size: 60px;
+      font-family: var(--font-sans);
+      line-height: 0.5;
+      margin-bottom: 20px;
+      color: var(--ink-color);
+    }
+    .center-quote-text {
+      font-family: var(--font-sans);
+      font-size: 36px;
+      line-height: 1;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      .poster-scale-container::before { opacity: 0.2; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Top Tiny Header -->
+    <div class="top-tiny-header">
+      <div class="tth-line"></div>
+      <div class="tth-text" id="tth" data-editable="text">SPECIAL EDITION</div>
+      <div class="tth-line"></div>
+    </div>
+
+    <!-- Top Header Row -->
+    <div class="top-header-row">
+      <div class="thr-side" id="thr-l" data-editable="text">BREAKING<br>NEWS</div>
+      <div class="thr-center">
+        <div class="thr-star">✽</div>
+        <div class="thr-title" id="thr-c" data-editable="text">Daily Quote</div>
+        <div class="thr-star">✽</div>
+      </div>
+      <div class="thr-side" id="thr-r" data-editable="text">BREAKING<br>NEWS</div>
+    </div>
+
+    <div class="sep-thin-thick"></div>
+
+    <!-- Solid Meta Bar 1 -->
+    <div class="meta-bar">
+      <div id="mb1-l" data-editable="text">VOL. 10, NO. 4</div>
+      <div id="mb1-c" data-editable="text">SPECIAL EDITION</div>
+      <div id="mb1-r" data-editable="text">10 APRIL 2025</div>
+    </div>
+
+    <!-- Main Title -->
+    <div class="main-title" id="main-title" data-editable="text">
+      MANIFESTATIONS
+    </div>
+
+    <!-- Center Image -->
+    <div class="center-image-box">
+      <div class="image-upload-box" id="main-image-box" data-editable="image">
+        <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+        <div class="image-preview-container">
+          <img id="main-image-img" class="image-preview" src="" alt="Manifestation Photo">
+        </div>
+      </div>
+    </div>
+
+    <!-- Solid Meta Bar 2 -->
+    <div class="meta-bar-2">
+      <div class="mb2-star">✽</div>
+      <div id="mb2-text" data-editable="text">WHAT YOU BELIEVE IS WHAT YOU BECOME</div>
+      <div class="mb2-star">✽</div>
+    </div>
+
+    <!-- Bottom Columns -->
+    <div class="bottom-cols">
+      
+      <!-- Left Column -->
+      <div class="col-text" id="col-1-text" data-editable="text">
+        <div class="drop-cap-box">
+          <span class="drop-cap">M</span>
+        </div>
+        anifestation is the profound concept that what you believe is what you become. It's the idea that your thoughts, beliefs, and shape your reality and influence your path in life. When you hold a vision of who you want to be and genuinely believe in that vision, you align your actions, decisions, and energy towards realizing it. This process transforms your aspirations into tangible outcomes, as your mindset and focus drive you to achieve your goals.
+      </div>
+
+      <!-- Center Column -->
+      <div class="center-quote-box">
+        <div class="quote-icon">"</div>
+        <div class="center-quote-text" id="col-2-text" data-editable="text">MANIFEST YOUR<br>DREAM LIFE.</div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-text" id="col-3-text" data-editable="text">
+        Embracing this principle empowers you to harness the power of your beliefs, guiding you to manifest your true potential and create the life you envision. It encourages a proactive mindset where you set goals and cultivate the inner conviction needed to achieve them. By aligning your thoughts and actions with your desired outcomes, you foster resilience and motivation, transforming obstacles into opportunities. This alignment of belief and action fuels personal growth, allowing you to evolve and realize your dreams.
+      </div>
+
+    </div>
+
+    <div class="sep-double-thin" style="margin-top: 20px;"></div>
+
+  </article>
+</body>
+</html>

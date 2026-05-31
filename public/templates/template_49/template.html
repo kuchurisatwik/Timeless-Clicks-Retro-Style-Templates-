@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Graduation News Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --paper-bg: #f4f4f4;
+      --ink-color: #2b2b2b;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-display: 'Playfair Display', serif;
+      --font-gothic: serif;
+      --font-script: 'Great Vibes', cursive;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #ddd;
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px 40px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    /* Paper Texture */
+    .poster-scale-container::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      opacity: 0.3;
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23noiseFilter)"/></svg>');
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; position: relative; z-index: 5; }
+    [data-editable="text"]:hover { background-color: rgba(43, 43, 43, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(43, 43, 43, 0.08); border-radius: 2px; }
+
+    /* Beveled Box Style */
+    .beveled-box {
+      border: 2px solid var(--ink-color);
+      position: relative;
+      background-color: transparent;
+      z-index: 5;
+    }
+    .beveled-box::before {
+      content: "";
+      position: absolute;
+      top: 1px; left: 1px; right: 1px; bottom: 1px;
+      border: 1px solid var(--ink-color);
+      pointer-events: none;
+    }
+
+    /* Top Header Box Area */
+    .top-header-area {
+      border: 2px solid var(--ink-color);
+      padding: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      margin-bottom: 8px;
+      position: relative; z-index: 5;
+    }
+    .top-header-area::before { content: ""; position: absolute; top: 1px; left: 1px; right: 1px; bottom: 1px; border: 1px solid var(--ink-color); pointer-events: none; }
+    
+    .header-box-dark {
+      width: 130px;
+      background-color: var(--ink-color);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8px;
+      font-style: italic;
+      font-size: 13px;
+      letter-spacing: 1px;
+      position: relative; z-index: 6;
+      border: 1px solid #fff;
+    }
+    .header-box-dark [data-editable="text"] { color: #fff; }
+    
+    .header-center {
+      flex: 1;
+      display: flex; justify-content: center; align-items: center; gap: 15px;
+      font-size: 55px; font-family: var(--font-gothic); line-height: 1;
+      transform: scaleY(1.1);
+    }
+    .hc-star { font-size: 24px; font-family: var(--font-serif); }
+
+    /* Meta Bar Solid */
+    .meta-bar {
+      background-color: var(--ink-color);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 15px;
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      position: relative; z-index: 5;
+      margin-bottom: 25px;
+    }
+    .meta-bar [data-editable="text"] { color: #fff; }
+
+    /* Main Title Area */
+    .title-area {
+      text-align: center;
+      position: relative; z-index: 5;
+      margin-bottom: 25px;
+    }
+    .script-name {
+      font-family: var(--font-script);
+      font-size: 90px;
+      line-height: 0.6;
+      position: relative;
+      z-index: 6;
+    }
+    .main-title {
+      font-family: var(--font-display);
+      font-size: 130px;
+      letter-spacing: -2px;
+      transform: scaleY(1.3);
+      line-height: 0.9;
+    }
+
+    /* Solid Sub-Banner */
+    .solid-sub-banner {
+      background-color: var(--ink-color);
+      color: #fff;
+      text-align: center;
+      padding: 10px 15px;
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      position: relative; z-index: 5;
+      margin-bottom: 15px;
+      border-top: 3px solid var(--ink-color);
+      border-bottom: 3px solid var(--ink-color);
+    }
+    .solid-sub-banner::before { content: ""; position: absolute; top: 1px; left: 0; right: 0; border-top: 1px solid #fff; }
+    .solid-sub-banner::after { content: ""; position: absolute; bottom: 1px; left: 0; right: 0; border-bottom: 1px solid #fff; }
+    .solid-sub-banner [data-editable="text"] { color: #fff; }
+
+    /* Grid Layout */
+    .layout-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      flex-grow: 1;
+      position: relative; z-index: 5;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 15px;
+      flex-grow: 1;
+    }
+    .col-left, .col-right {
+      display: flex; flex-direction: column; gap: 15px;
+    }
+    
+    .small-box {
+      width: 100%; height: 110px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 24px; font-weight: 700; line-height: 1.1; letter-spacing: 1px;
+    }
+    .text-box {
+      flex-grow: 1;
+      padding: 15px;
+      text-align: justify;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* Image Box styles */
+    .center-image-box {
+      width: 100%; height: 100%;
+    }
+    
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d0d0d0;
+      cursor: pointer; overflow: hidden; position: absolute; top: 0; left: 0;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      filter: grayscale(100%);
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: sans-serif; font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+
+    /* Footer Black Box */
+    .footer-black-box {
+      background-color: var(--ink-color);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      padding: 15px 20px;
+      font-style: italic;
+      font-size: 16px;
+      letter-spacing: 2px;
+      font-weight: 600;
+      margin-top: auto;
+      position: relative; z-index: 5;
+    }
+    .footer-black-box [data-editable="text"] { color: #fff; }
+    .fb-star { font-size: 20px; font-style: normal; }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      .poster-scale-container::before { opacity: 0.1; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Top Header -->
+    <div class="top-header-area">
+      <div class="header-box-dark">
+        <span id="th-left" data-editable="text">BREAKING<br>NEWS</span>
+      </div>
+      <div class="header-center">
+        <span class="hc-star">✽</span>
+        <span id="th-center" data-editable="text">Graduation News</span>
+        <span class="hc-star">✽</span>
+      </div>
+      <div class="header-box-dark">
+        <span id="th-right" data-editable="text">SPECIAL<br>EDITION</span>
+      </div>
+    </div>
+
+    <!-- Meta Bar -->
+    <div class="meta-bar">
+      <div id="mb-left" data-editable="text">VOL. 10, NO. 4</div>
+      <div id="mb-center" data-editable="text">GRADUATION CELEBRATION</div>
+      <div id="mb-right" data-editable="text">10 APRIL 2025</div>
+    </div>
+
+    <!-- Main Title Area -->
+    <div class="title-area">
+      <div class="script-name" id="title-name" data-editable="text">Claudia Alves</div>
+      <div class="main-title" id="main-title" data-editable="text">YOU DID IT!</div>
+    </div>
+
+    <!-- Solid Sub Banner -->
+    <div class="solid-sub-banner" id="sub-banner" data-editable="text">
+      CHEERS TO THE NEW GRADUATE, BEST WISHES FOR YOUR FUTURE!
+    </div>
+
+    <!-- Layout Container -->
+    <div class="layout-container">
+      
+      <!-- Main 3-col Grid -->
+      <div class="main-grid">
+        
+        <!-- Left Column -->
+        <div class="col-left">
+          <div class="beveled-box small-box" id="sb-left" data-editable="text">
+            CONGRATS!<br>CONGRATS!<br>CONGRATS!
+          </div>
+          <div class="beveled-box text-box" id="text-left" data-editable="text">
+            Today marks a significant milestone in your journey, and we are proud of all you have accomplished. Your dedication and hard work have brought you to this remarkable point, and you are now ready to seize the exciting new opportunities that lie ahead.
+          </div>
+        </div>
+
+        <!-- Center Column -->
+        <div class="beveled-box center-image-box">
+          <div class="image-upload-box" id="img-center" data-editable="image">
+            <input type="file" class="image-file-input" accept="image/*">
+            <div class="image-preview-container"><img class="image-preview" src="" alt="Graduate Photo"></div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-right">
+          <div class="beveled-box text-box" id="text-right" data-editable="text">
+            Take a little moment to celebrate your success and reflect on all the memories and experiences that have shaped you into the incredible person you are today. You've earned this moment, and we are thrilled to share it with you.<br><br>Cheers to the bright future ahead of you, filled with incredible opportunities.
+          </div>
+          <div class="beveled-box small-box" id="sb-right" data-editable="text">
+            CONGRATS!<br>CONGRATS!<br>CONGRATS!
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer Black Box -->
+    <div class="beveled-box footer-black-box" style="margin-top: 15px; padding: 10px;">
+      <div id="f1" data-editable="text">CONGRATS!</div>
+      <div class="fb-star">✽</div>
+      <div id="f2" data-editable="text">YOU DID IT!</div>
+      <div class="fb-star">✽</div>
+      <div id="f3" data-editable="text">CONGRATS!</div>
+    </div>
+
+  </article>
+</body>
+</html>

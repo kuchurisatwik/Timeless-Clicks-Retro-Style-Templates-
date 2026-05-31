@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Fashion Magazine Template</title>
+  <style>
+    :root {
+      --paper-bg: #ffffff;
+      --ink-color: #1a1a1a;
+      --gray-bg: #e2e2e2;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--paper-bg);
+      font-family: var(--font-sans);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 40px;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(26, 26, 26, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(26, 26, 26, 0.07); border-radius: 2px; }
+
+    /* Header */
+    .header-section {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    .vol-text {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      height: 90px;
+      margin-right: 40px;
+      letter-spacing: 2px;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-title {
+      font-family: var(--font-serif);
+      font-size: 115px;
+      line-height: 0.85;
+      letter-spacing: -2px;
+      font-weight: 600;
+    }
+
+    .sub-title {
+      font-family: var(--font-sans);
+      font-size: 20px;
+      letter-spacing: 16px;
+      text-transform: uppercase;
+      margin-top: 10px;
+      margin-left: 5px;
+    }
+
+    /* Main Content */
+    .content-area {
+      position: relative;
+      height: calc(100% - 130px);
+    }
+
+    /* Left Sidebar Items */
+    .barcode {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 110px;
+      height: 220px;
+      background-image: repeating-linear-gradient(
+        to right,
+        #000 0,
+        #000 3px,
+        #fff 3px,
+        #fff 6px,
+        #000 6px,
+        #000 8px,
+        #fff 8px,
+        #fff 11px,
+        #000 11px,
+        #000 16px,
+        #fff 16px,
+        #fff 22px
+      );
+      border-bottom: 1px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .barcode-text {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      letter-spacing: 4px;
+      background: #fff;
+      padding: 5px 0 0 0;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      align-self: flex-end;
+      margin-left: auto;
+      height: 100%;
+      text-align: left;
+      padding-top: 10px;
+    }
+
+    .interview-block {
+      position: absolute;
+      top: 320px;
+      left: 0;
+      width: 250px;
+    }
+    .interview-label {
+      font-family: var(--font-sans);
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    .interview-name {
+      font-family: var(--font-serif);
+      font-size: 78px;
+      line-height: 0.95;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .website-text {
+      position: absolute;
+      bottom: 60px;
+      left: 20px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      letter-spacing: 2px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    /* Image Container */
+    .image-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 520px;
+      height: 100%;
+      background-color: var(--gray-bg);
+      z-index: 1;
+    }
+
+    .image-upload-box {
+      width: 100%; height: 100%;
+      cursor: pointer; overflow: hidden; position: relative;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(100%) contrast(1.1);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(26, 26, 26, 0.5);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 12px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Overlay Block */
+    .black-stripe {
+      position: absolute;
+      top: 40px;
+      right: -40px; /* Bleed off edge */
+      width: 250px;
+      height: 30px;
+      background-color: #000;
+      z-index: 3;
+    }
+
+    .overlay-text-block {
+      position: absolute;
+      bottom: 50px;
+      right: -10px;
+      z-index: 4;
+      text-align: right;
+      color: #fff;
+      mix-blend-mode: difference; /* Gives a cool effect over black/white images, or we can just use white */
+    }
+    .overlay-text-1 {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      letter-spacing: 2px;
+      margin-bottom: -10px;
+    }
+    .overlay-text-2 {
+      font-family: var(--font-serif);
+      font-size: 80px;
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: 4px;
+    }
+    .overlay-text-3 {
+      font-family: var(--font-serif);
+      font-size: 80px;
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: 4px;
+      color: transparent;
+      -webkit-text-stroke: 2px #fff; /* Outlined text */
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="header-section">
+      <div class="vol-text" id="vol-text" data-editable="text">Volume 1</div>
+      <div class="title-block">
+        <div class="main-title" id="main-title" data-editable="text">FASHION</div>
+        <div class="sub-title" id="sub-title" data-editable="text">M A G A Z I N E</div>
+      </div>
+    </div>
+
+    <div class="content-area">
+      <!-- Left sidebar items -->
+      <div class="barcode">
+        <div class="barcode-text" id="barcode-text" data-editable="text">10000 00000</div>
+      </div>
+
+      <div class="interview-block">
+        <div class="interview-label" id="interview-label" data-editable="text">Interview</div>
+        <div class="interview-name" id="interview-name" data-editable="text">NOH<br>JI HYE</div>
+      </div>
+
+      <div class="website-text" id="website-text" data-editable="text">www.s_chiena.com</div>
+
+      <!-- Right image area -->
+      <div class="image-container">
+        <div class="black-stripe"></div>
+
+        <div class="image-upload-box" id="main-image-box" data-editable="image">
+          <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="main-image-img" class="image-preview" src="" alt="Cover Photo">
+          </div>
+          <div class="placeholder-state">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+              <circle cx="12" cy="12" r="3.2"/>
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+            </svg>
+            <span style="font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;">UPLOAD PHOTO</span>
+          </div>
+        </div>
+
+        <div class="overlay-text-block">
+          <div class="overlay-text-1" id="overlay-1" data-editable="text">MINIMAL</div>
+          <div class="overlay-text-2" id="overlay-2" data-editable="text">FRESH</div>
+          <div class="overlay-text-3" id="overlay-3" data-editable="text">LOOK</div>
+        </div>
+      </div>
+    </div>
+
+  </article>
+</body>
+</html>

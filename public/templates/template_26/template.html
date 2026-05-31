@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Newspaper Wedding Invitation Template</title>
+  <style>
+    :root {
+      --paper-bg: #f8f6f3;
+      --ink-color: #1a1a1a;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+      --font-gothic: serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #eaeaea;
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 40px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(26, 26, 26, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(26, 26, 26, 0.07); border-radius: 2px; }
+
+    /* Top Meta */
+    .top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 0 10px 5px;
+    }
+    .ornament {
+      font-size: 24px;
+      color: var(--ink-color);
+    }
+    
+    /* Lines */
+    .line-thin {
+      height: 2px;
+      background-color: var(--ink-color);
+      margin-bottom: 5px;
+    }
+    .double-line-top {
+      border-top: 5px solid var(--ink-color);
+      border-bottom: 1.5px solid var(--ink-color);
+      height: 12px;
+      margin: 15px 0;
+    }
+    .double-line-bottom {
+      border-top: 1.5px solid var(--ink-color);
+      border-bottom: 5px solid var(--ink-color);
+      height: 12px;
+      margin: 15px 0;
+    }
+
+    /* Main Title */
+    .main-title {
+      text-align: center;
+      font-family: var(--font-gothic);
+      font-size: 85px;
+      line-height: 0.9;
+      margin-top: 10px;
+    }
+
+    /* Sub Headline */
+    .sub-headline {
+      text-align: center;
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* Image Sections */
+    .main-image-container {
+      width: 100%;
+      height: 420px;
+      position: relative;
+    }
+    .bottom-cols {
+      display: grid;
+      grid-template-columns: 1fr 0.6fr 1fr;
+      gap: 20px;
+      flex-grow: 1;
+      margin-top: 15px;
+    }
+    .small-image-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #e0e0e0;
+      cursor: pointer; overflow: hidden; position: absolute;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(100%) contrast(1.1);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(26, 26, 26, 0.4);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Middle Box */
+    .date-box-wrapper {
+      border: 3px solid var(--ink-color);
+      border-radius: 8px; /* Notched corner simulation requires fancy css, using simple rounded for template */
+      position: relative;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    /* Add corner cutouts using pseudo elements */
+    .date-box-wrapper::before, .date-box-wrapper::after {
+      content: ''; position: absolute; background: var(--paper-bg); width: 20px; height: 20px;
+      border: 3px solid var(--ink-color); border-radius: 50%;
+    }
+    .date-box-wrapper::before { top: -10px; left: -10px; clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%); }
+    .date-box-wrapper::after { bottom: -10px; right: -10px; clip-path: polygon(0 0, 50% 0, 50% 50%, 0 50%); }
+    .date-box-tl { position: absolute; top: -10px; right: -10px; background: var(--paper-bg); width: 20px; height: 20px; border: 3px solid var(--ink-color); border-radius: 50%; clip-path: polygon(0 50%, 50% 50%, 50% 100%, 0 100%); }
+    .date-box-bl { position: absolute; bottom: -10px; left: -10px; background: var(--paper-bg); width: 20px; height: 20px; border: 3px solid var(--ink-color); border-radius: 50%; clip-path: polygon(50% 0, 100% 0, 100% 50%, 50% 50%); }
+    
+    .date-day { font-size: 50px; font-weight: 700; line-height: 1; }
+    .date-month { font-size: 40px; font-weight: 700; line-height: 1; margin-bottom: 10px; }
+    .address-text { font-size: 13px; line-height: 1.4; font-weight: 600; margin-bottom: 10px; }
+    .dashed-line { width: 80%; border-top: 2px dashed var(--ink-color); margin: 10px 0; }
+    .time-text { font-size: 26px; font-weight: 700; }
+
+    /* Right Column */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      border-left: 1.5px solid var(--ink-color);
+      padding-left: 20px;
+    }
+    .save-the-date-header {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-align: center;
+      border-top: 1.5px solid var(--ink-color);
+      border-bottom: 1.5px solid var(--ink-color);
+      padding: 10px 0;
+      margin-bottom: 15px;
+    }
+    .body-text {
+      font-size: 15px;
+      line-height: 1.7;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="top-meta">
+      <div id="meta-left" data-editable="text">Special Edition</div>
+      <div class="ornament">❦</div>
+      <div id="meta-right" data-editable="text">New York</div>
+    </div>
+    
+    <div class="line-thin"></div>
+    <div class="main-title" id="main-title" data-editable="text">The Wedding Post</div>
+    <div class="double-line-top"></div>
+    
+    <div class="sub-headline" id="sub-headline" data-editable="text">
+      THE WEDDING OF ANDREA & AARON
+    </div>
+    
+    <div class="double-line-bottom"></div>
+
+    <div class="main-image-container">
+      <div class="image-upload-box" id="main-image-box" data-editable="image">
+        <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+        <div class="image-preview-container">
+          <img id="main-image-img" class="image-preview" src="" alt="Couple Photo">
+        </div>
+        <div class="placeholder-state">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.5; margin-bottom: 10px;">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <div class="line-thin" style="margin-top: 15px;"></div>
+
+    <div class="bottom-cols">
+      <!-- Left: Small Image -->
+      <div class="small-image-container">
+        <div class="image-upload-box" id="sub-image-box" data-editable="image">
+          <input type="file" id="sub-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="sub-image-img" class="image-preview" src="" alt="Couple Photo">
+          </div>
+          <div class="placeholder-state">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="opacity: 0.5;">
+              <circle cx="12" cy="12" r="3.2"/>
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle: Date Box -->
+      <div class="date-box-wrapper">
+        <div class="date-box-tl"></div>
+        <div class="date-box-bl"></div>
+        <div class="date-day" id="date-day" data-editable="text">22</div>
+        <div class="date-month" id="date-month" data-editable="text">NOV</div>
+        <div class="address-text" id="address" data-editable="text">123<br>Anywhere St.,<br>Any City</div>
+        <div class="dashed-line"></div>
+        <div class="time-text" id="time" data-editable="text">8 PM</div>
+      </div>
+
+      <!-- Right: Save the Date Text -->
+      <div class="right-col">
+        <div class="save-the-date-header" id="save-date-header" data-editable="text">SAVE THE DATE</div>
+        <div class="body-text" id="body-text" data-editable="text">
+          Andrea & Aaron are tying the knot!<br><br>
+          Please save the date and join us as we celebrate our love story. Formal invitation to follow.<br><br>
+          We can't wait to share this special moment with you!
+        </div>
+      </div>
+    </div>
+
+  </article>
+</body>
+</html>

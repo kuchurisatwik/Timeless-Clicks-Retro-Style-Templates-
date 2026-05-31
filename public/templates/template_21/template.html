@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vogue Cover B&W Template</title>
+  <style>
+    :root {
+      --paper-bg: #111;
+      --font-serif: serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #333;
+      font-family: var(--font-serif);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(255, 255, 255, 0.15); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(255, 255, 255, 0.3); border-radius: 2px; }
+
+    /* Background Image (Full Bleed) */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #222;
+      cursor: pointer; overflow: hidden; position: absolute;
+      top: 0; left: 0; z-index: 1;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(100%) contrast(1.2);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD COVER PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: sans-serif; font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #aaa; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Text Overlays Layer */
+    .text-layer {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      color: #fff;
+    }
+    .text-layer [data-editable] {
+      pointer-events: auto;
+    }
+
+    /* Main Title */
+    .main-title-container {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      z-index: 5;
+    }
+    .main-title {
+      font-family: var(--font-serif);
+      font-size: 260px;
+      line-height: 0.8;
+      letter-spacing: -2px;
+      transform: scaleY(1.1);
+    }
+
+    /* Top Right Text Block */
+    .top-right-block {
+      position: absolute;
+      top: 260px;
+      right: 40px;
+      text-align: center;
+    }
+    .date-num { font-size: 45px; line-height: 1; margin-bottom: 5px; }
+    .date-month { font-size: 30px; letter-spacing: 2px; line-height: 1; margin-bottom: 10px; }
+    .stage-coach { font-size: 55px; line-height: 0.9; letter-spacing: -1px; }
+
+    /* Left Middle Quote */
+    .left-quote-block {
+      position: absolute;
+      top: 480px;
+      left: 30px;
+      width: 180px;
+    }
+    .left-quote-text {
+      font-size: 24px;
+      line-height: 1.2;
+      margin-bottom: 15px;
+    }
+    .left-quote-bold {
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    /* Right Middle Quote */
+    .right-quote-block {
+      position: absolute;
+      top: 500px;
+      right: 30px;
+      width: 160px;
+      text-align: left;
+    }
+    .right-quote-text {
+      font-size: 26px;
+      line-height: 1.1;
+    }
+
+    /* Bottom Left Name */
+    .bottom-left-name {
+      position: absolute;
+      bottom: 40px;
+      left: 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .name-line {
+      font-size: 155px;
+      line-height: 0.85;
+      letter-spacing: -2px;
+    }
+    
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Background Image -->
+    <div class="image-upload-box" id="main-image-box" data-editable="image">
+      <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+      <div class="image-preview-container">
+        <img id="main-image-img" class="image-preview" src="" alt="Cover Photo">
+      </div>
+      <div class="placeholder-state">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+        </svg>
+        <span style="font-family: sans-serif; font-size: 14px; letter-spacing: 2px;">UPLOAD COVER PHOTO</span>
+      </div>
+    </div>
+
+    <!-- Text Overlays -->
+    <div class="text-layer">
+      
+      <div class="main-title-container">
+        <div class="main-title" id="main-title" data-editable="text">VOGUE</div>
+      </div>
+
+      <div class="top-right-block">
+        <div class="date-num" id="tr-1" data-editable="text">25</div>
+        <div class="date-month" id="tr-2" data-editable="text">APRIL</div>
+        <div class="stage-coach" id="tr-3" data-editable="text">STAGE<br>COACH</div>
+      </div>
+
+      <div class="left-quote-block">
+        <div class="left-quote-text" id="lq-1" data-editable="text">
+          Is this the best<br>performance<br>you've ever<br>seen?
+        </div>
+        <div class="left-quote-bold" id="lq-2" data-editable="text">Absolutely.</div>
+      </div>
+
+      <div class="right-quote-block">
+        <div class="right-quote-text" id="rq-1" data-editable="text">
+          "I kissed<br>Morgan<br>Wallen. I<br>guess<br>kissing me<br>kind of went<br>to his head"
+        </div>
+      </div>
+
+      <div class="bottom-left-name">
+        <div class="name-line" id="bl-1" data-editable="text">LANA</div>
+        <div class="name-line" id="bl-2" data-editable="text">DEL</div>
+        <div class="name-line" id="bl-3" data-editable="text">REY</div>
+      </div>
+
+    </div>
+
+  </article>
+</body>
+</html>

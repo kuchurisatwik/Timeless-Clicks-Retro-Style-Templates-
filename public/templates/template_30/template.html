@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vertical Split Brand Template</title>
+  <style>
+    :root {
+      --font-sans: sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #333;
+      font-family: Arial, Helvetica, sans-serif; /* Clean geometric sans for brand */
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      margin: 0 auto;
+      display: flex;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(128, 128, 128, 0.2); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(128, 128, 128, 0.4); border-radius: 2px; }
+
+    /* Left Side (White) */
+    .left-side {
+      width: 38%;
+      height: 100%;
+      background-color: #fff;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Right Side (Image) */
+    .right-side {
+      width: 62%;
+      height: 100%;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Background Image */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #222;
+      cursor: pointer; overflow: hidden; position: absolute;
+      top: 0; left: 0;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(100%) contrast(1.2);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 16px; letter-spacing: 2px; font-weight: bold;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #aaa; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Top Left Name Text */
+    .top-left-name {
+      position: absolute;
+      top: 120px;
+      right: 15px; /* Align near the split line */
+      text-align: right;
+      color: #000;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 1px;
+    }
+
+    /* Vertical Brand Text */
+    .vertical-brand-container {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 20;
+    }
+    
+    .vertical-word {
+      position: absolute;
+      bottom: 220px; /* Distance from bottom */
+      transform: rotate(-90deg);
+      transform-origin: bottom left;
+      font-size: 165px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      pointer-events: auto; /* make editable */
+      white-space: nowrap;
+    }
+
+    /* First word (Black on left side) */
+    .word-1 {
+      left: 105px; /* Adjust based on font size and desired distance from center */
+      color: #000;
+    }
+
+    /* Second word (White on right side) */
+    .word-2 {
+      left: 310px; /* Positioned on the right side of the split line */
+      color: #fff;
+    }
+
+    /* Bottom Right Text */
+    .bottom-right-text {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      z-index: 20;
+      pointer-events: auto;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <!-- Left White Side -->
+    <div class="left-side">
+      <div class="top-left-name" id="tl-name" data-editable="text">
+        Jeon<br>Jungkook
+      </div>
+    </div>
+
+    <!-- Right Image Side -->
+    <div class="right-side">
+      <div class="image-upload-box" id="main-image-box" data-editable="image">
+        <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+        <div class="image-preview-container">
+          <img id="main-image-img" class="image-preview" src="" alt="Model Photo">
+        </div>
+        <div class="placeholder-state">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Absolute Overlays -->
+    <div class="vertical-brand-container">
+      <div class="vertical-word word-1" id="brand-1" data-editable="text">Calvin</div>
+      <div class="vertical-word word-2" id="brand-2" data-editable="text">Klein</div>
+    </div>
+
+    <div class="bottom-right-text" id="br-text" data-editable="text">
+      EMBAJADOR
+    </div>
+
+  </article>
+</body>
+</html>

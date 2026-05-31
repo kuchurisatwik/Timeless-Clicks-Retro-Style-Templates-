@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Times Newspaper Birthday Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --paper-bg: radial-gradient(circle at center, #f4f3f0 0%, #ebe8df 100%);
+      --paper-bg-fallback: #eeebe2;
+      --ink-color: #2e2d2b;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+      --font-gothic: serif;
+      --font-script: 'Great Vibes', cursive;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--paper-bg-fallback);
+      background-image: var(--paper-bg);
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px 40px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] {
+      outline: none; cursor: text; transition: background-color 0.2s ease;
+    }
+    [data-editable="text"]:hover { background-color: rgba(46, 45, 43, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(46, 45, 43, 0.07); border-radius: 2px; }
+
+    /* Dividers */
+    .divider-line {
+      width: 100%;
+      height: 1px;
+      background-color: var(--ink-color);
+      margin: 8px 0;
+    }
+
+    /* Top Row */
+    .top-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+    }
+    .meta-text {
+      font-family: var(--font-serif);
+      font-size: 13px;
+      font-style: italic;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .site-title {
+      font-family: var(--font-gothic);
+      font-size: 44px;
+      line-height: 1;
+      letter-spacing: 1px;
+    }
+
+    /* Second Row */
+    .sub-meta-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-family: var(--font-serif);
+      font-size: 18px;
+    }
+
+    /* Headline Section */
+    .headline-section {
+      text-align: center;
+      position: relative;
+      padding: 20px 0 10px 0;
+      margin-bottom: 20px;
+    }
+    .main-headline {
+      font-family: var(--font-serif);
+      font-size: 88px;
+      line-height: 0.9;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      transform: scaleY(1.05);
+      display: inline-block;
+      width: 100%;
+    }
+    .script-overlay {
+      position: absolute;
+      font-family: var(--font-script);
+      font-size: 110px;
+      line-height: 1;
+      color: var(--ink-color);
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-5deg);
+      text-shadow: 2px 2px 0px var(--paper-bg-fallback), -2px -2px 0px var(--paper-bg-fallback), 2px -2px 0px var(--paper-bg-fallback), -2px 2px 0px var(--paper-bg-fallback);
+      white-space: nowrap;
+      z-index: 10;
+    }
+
+    /* Text Paragraphs */
+    .paragraph-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      padding: 0 5px 25px 5px;
+      position: relative;
+      z-index: 5;
+    }
+    .body-text-block {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: justify;
+      color: #3b3a37;
+    }
+
+    /* Image Section */
+    .image-container {
+      flex-grow: 1;
+      margin-bottom: 12px;
+      width: 100%;
+      border: 1px solid var(--ink-color);
+      position: relative;
+    }
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #dfdcd3;
+      cursor: pointer; overflow: hidden; position: absolute;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: contrast(1.05) brightness(0.95);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(46, 45, 43, 0.7);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 12px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Footer Row */
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0 10px 0;
+      font-family: var(--font-serif);
+      font-size: 20px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="top-meta-row">
+      <div class="meta-text" id="meta-left" data-editable="text">SPECIAL<br>EDITION</div>
+      <div class="site-title" id="site-title" data-editable="text">Times Newspaper</div>
+      <div class="meta-text" style="text-align: right;" id="meta-right" data-editable="text">SPECIAL<br>EDITION</div>
+    </div>
+    
+    <div class="divider-line"></div>
+
+    <div class="sub-meta-row">
+      <div id="sub-meta-left" data-editable="text">Rebecca</div>
+      <div id="sub-meta-right" data-editable="text">8th August 2025</div>
+    </div>
+
+    <div class="divider-line"></div>
+
+    <div class="headline-section">
+      <div class="main-headline" id="main-headline" data-editable="text">HAPPY BIRTHDAY</div>
+      <div class="script-overlay" id="script-overlay" data-editable="text">to you</div>
+    </div>
+
+    <div class="paragraph-columns">
+      <div class="body-text-block" id="body-text-1" data-editable="text">
+        From the little moments that bring you joy to the big milestones you've worked so hard for, today is all about celebrating you! No matter how many birthdays come and go, I hope you always know how deeply loved and truly appreciated you are. You make every single year brighter just by being yourself.
+      </div>
+      <div class="body-text-block" id="body-text-2" data-editable="text">
+        No matter what this year brings, I know you'll make it amazing in your own way. Through every challenge, every new adventure, and every unexpected twist, I'm grateful to celebrate you today. Some days are truly special, and your birthday is one of them&mdash;filled with joy, love, and unforgettable moments.
+      </div>
+    </div>
+
+    <div class="image-container">
+      <div class="image-upload-box" id="main-image-box" data-editable="image">
+        <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+        <div class="image-preview-container">
+          <img id="main-image-img" class="image-preview" src="" alt="Main Photo">
+        </div>
+        <div class="placeholder-state">
+          <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+          </svg>
+          <span style="font-family: var(--font-sans); font-size: 12px; letter-spacing: 1px;">UPLOAD PHOTO</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider-line" style="margin-bottom: 4px;"></div>
+
+    <div class="footer-row">
+      <div id="footer-left" data-editable="text">Thank you</div>
+      <div id="footer-right" data-editable="text">for everything.</div>
+    </div>
+    
+    <div class="divider-line" style="margin-top: 0; border-width: 2px;"></div>
+
+  </article>
+</body>
+</html>

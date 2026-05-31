@@ -1,15 +1,39 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const templates = [
-  'template_01',
-  'template_02',
-  'template_03',
-  'template_04',
-  'template_05',
-  'template_06',
-  'template_07',
-  'template_08',
+const templateCategories = [
+  {
+    name: 'All Templates',
+    templates: Array.from({ length: 59 }, (_, i) => `template_${String(i + 1).padStart(2, '0')}`)
+  },
+  {
+    name: 'Birthday',
+    templates: ['template_09', 'template_11', 'template_13', 'template_14', 'template_15', 'template_31', 'template_32']
+  },
+  {
+    name: 'Wedding & Romance',
+    templates: ['template_28', 'template_38', 'template_40']
+  },
+  {
+    name: 'Magazine & Fashion',
+    templates: ['template_12', 'template_19', 'template_20', 'template_21', 'template_22', 'template_24', 'template_25', 'template_27', 'template_39', 'template_43', 'template_44']
+  },
+  {
+    name: 'Newspaper & Editorial',
+    templates: ['template_01', 'template_02', 'template_03', 'template_04', 'template_05', 'template_06', 'template_07', 'template_08', 'template_10', 'template_16', 'template_17', 'template_18', 'template_23', 'template_26', 'template_29', 'template_30', 'template_33', 'template_34', 'template_35', 'template_36', 'template_37', 'template_41', 'template_42', 'template_47']
+  },
+  {
+    name: 'Quotes & Motivation',
+    templates: ['template_45', 'template_46']
+  },
+  {
+    name: 'Graduation',
+    templates: ['template_48', 'template_49']
+  },
+  {
+    name: 'Comics & Superheroes',
+    templates: ['template_50', 'template_51', 'template_52', 'template_53', 'template_54', 'template_55', 'template_56', 'template_57', 'template_58', 'template_59']
+  }
 ];
 
 const CARD_GAP = 36;
@@ -26,9 +50,12 @@ const TemplatesPage: React.FC = () => {
   const [scrollX, setScrollX] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
+  const [activeCategory, setActiveCategory] = useState('All Templates');
+
+  const activeTemplates = templateCategories.find(c => c.name === activeCategory)?.templates || templateCategories[0].templates;
 
   // Derived card dimensions: fit height to container, width from A4 ratio
-  const cardHeight = Math.max(200, containerHeight - 80); // 80px for vertical padding
+  const cardHeight = Math.max(200, containerHeight - 120); // 120px for vertical padding
   const cardWidth = Math.round(cardHeight * A4_RATIO);
 
   // Measure container on mount / resize
@@ -44,26 +71,32 @@ const TemplatesPage: React.FC = () => {
     return () => window.removeEventListener('resize', measure);
   }, []);
 
-  // Center the track initially so middle cards are visible
+  // Center the track initially so middle cards are visible, and reset on category change
   useEffect(() => {
     if (containerWidth > 0 && cardWidth > 0) {
-      const totalTrackWidth = templates.length * (cardWidth + CARD_GAP) - CARD_GAP;
-      const initialOffset = (totalTrackWidth - containerWidth) / 2;
-      setScrollX(-initialOffset);
+      const totalTrackWidth = activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+      // Center them if possible, otherwise left align if there's very few
+      if (totalTrackWidth <= containerWidth) {
+        setScrollX((containerWidth - totalTrackWidth) / 2); // Center within view
+      } else {
+        const initialOffset = (totalTrackWidth - containerWidth) / 2;
+        setScrollX(-initialOffset);
+      }
     }
-  }, [containerWidth, cardWidth]);
+  }, [containerWidth, cardWidth, activeCategory, activeTemplates.length]);
 
   // Handle horizontal scroll via mouse wheel
   const handleWheel = useCallback((e: React.WheelEvent) => {
     e.preventDefault();
     const delta = e.deltaY !== 0 ? e.deltaY : e.deltaX;
     setScrollX(prev => {
-      const totalTrackWidth = templates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+      const totalTrackWidth = activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+      if (totalTrackWidth <= containerWidth) return (containerWidth - totalTrackWidth) / 2;
       const minX = -(totalTrackWidth - containerWidth);
       const maxX = 0;
       return Math.max(minX, Math.min(maxX, prev - delta));
     });
-  }, [containerWidth, cardWidth]);
+  }, [containerWidth, cardWidth, activeTemplates.length]);
 
   // Drag to scroll
   const isDragging = useRef(false);
@@ -71,6 +104,9 @@ const TemplatesPage: React.FC = () => {
   const dragStartScroll = useRef(0);
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    const totalTrackWidth = activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+    if (totalTrackWidth <= containerWidth) return; // Disable drag if it all fits
+
     isDragging.current = true;
     dragStartX.current = e.clientX;
     dragStartScroll.current = scrollX;
@@ -80,7 +116,9 @@ const TemplatesPage: React.FC = () => {
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging.current) return;
     const dx = e.clientX - dragStartX.current;
-    const totalTrackWidth = templates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+    const totalTrackWidth = activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+    if (totalTrackWidth <= containerWidth) return;
+    
     const minX = -(totalTrackWidth - containerWidth);
     const maxX = 0;
     setScrollX(Math.max(minX, Math.min(maxX, dragStartScroll.current + dx)));
@@ -94,7 +132,8 @@ const TemplatesPage: React.FC = () => {
   const scrollByCard = (direction: 'left' | 'right') => {
     const step = cardWidth + CARD_GAP;
     setScrollX(prev => {
-      const totalTrackWidth = templates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+      const totalTrackWidth = activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+      if (totalTrackWidth <= containerWidth) return (containerWidth - totalTrackWidth) / 2;
       const minX = -(totalTrackWidth - containerWidth);
       const maxX = 0;
       const next = direction === 'left' ? prev + step : prev - step;
@@ -104,6 +143,9 @@ const TemplatesPage: React.FC = () => {
 
   // Compute overlay opacity per card based on distance from center
   const getOverlayOpacity = (index: number): number => {
+    const totalTrackWidth = activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+    if (totalTrackWidth <= containerWidth) return 0; // Don't darken if everything fits on screen
+
     const cardCenter = index * (cardWidth + CARD_GAP) + cardWidth / 2 + scrollX;
     const viewCenter = containerWidth / 2;
     const distFromCenter = Math.abs(cardCenter - viewCenter);
@@ -121,6 +163,8 @@ const TemplatesPage: React.FC = () => {
     return t * t * 0.85;
   };
 
+  const showArrows = (activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP) > containerWidth;
+
   return (
     <div style={{
       height: '100vh',
@@ -129,13 +173,56 @@ const TemplatesPage: React.FC = () => {
       overflow: 'hidden',
       background: 'radial-gradient(ellipse at center, #1e293b 0%, #0f172a 70%)',
     }}>
-      <header style={{ padding: '32px 40px 20px', textAlign: 'center', flexShrink: 0 }}>
+      <header style={{ padding: '32px 40px 10px', textAlign: 'center', flexShrink: 0 }}>
         <h1 className="logo-title">
           Timeless Clicks
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', margin: 0 }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', margin: 0, marginBottom: '24px' }}>
           Select a template to start generating
         </p>
+
+        {/* Categories Tab Bar */}
+        <div style={{
+          display: 'flex',
+          gap: '12px',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          maxWidth: '900px',
+          margin: '0 auto'
+        }}>
+          {templateCategories.map(cat => (
+            <button
+              key={cat.name}
+              onClick={() => setActiveCategory(cat.name)}
+              style={{
+                background: activeCategory === cat.name ? 'rgba(59,130,246,0.8)' : 'rgba(255,255,255,0.05)',
+                color: activeCategory === cat.name ? '#fff' : 'var(--text-secondary)',
+                border: `1px solid ${activeCategory === cat.name ? 'rgba(96,165,250,0.5)' : 'rgba(255,255,255,0.1)'}`,
+                padding: '8px 16px',
+                borderRadius: '24px',
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                backdropFilter: 'blur(4px)',
+                fontWeight: activeCategory === cat.name ? 600 : 400
+              }}
+              onMouseEnter={e => {
+                if (activeCategory !== cat.name) {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                  e.currentTarget.style.color = '#fff';
+                }
+              }}
+              onMouseLeave={e => {
+                if (activeCategory !== cat.name) {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.color = 'var(--text-secondary)';
+                }
+              }}
+            >
+              {cat.name} ({cat.templates.length})
+            </button>
+          ))}
+        </div>
       </header>
 
       {/* Carousel container */}
@@ -145,7 +232,7 @@ const TemplatesPage: React.FC = () => {
           flex: 1,
           position: 'relative',
           overflow: 'hidden',
-          cursor: isDragging.current ? 'grabbing' : 'grab',
+          cursor: showArrows ? (isDragging.current ? 'grabbing' : 'grab') : 'default',
         }}
         onWheel={handleWheel}
         onPointerDown={handlePointerDown}
@@ -154,89 +241,95 @@ const TemplatesPage: React.FC = () => {
         onPointerLeave={handlePointerUp}
       >
         {/* Edge gradient overlays (purely decorative, over the entire viewport) */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          zIndex: 2,
-          background: 'linear-gradient(to right, rgba(15,23,42,0.95) 0%, transparent 25%, transparent 75%, rgba(15,23,42,0.95) 100%)',
-        }} />
+        {showArrows && (
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            zIndex: 2,
+            background: 'linear-gradient(to right, rgba(15,23,42,0.95) 0%, transparent 25%, transparent 75%, rgba(15,23,42,0.95) 100%)',
+          }} />
+        )}
 
         {/* Left arrow */}
-        <button
-          onClick={() => scrollByCard('left')}
-          style={{
-            position: 'absolute',
-            left: '24px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            zIndex: 5,
-            width: '52px',
-            height: '52px',
-            borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.15)',
-            background: 'rgba(30,41,59,0.7)',
-            backdropFilter: 'blur(8px)',
-            color: '#f8fafc',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(59,130,246,0.5)';
-            e.currentTarget.style.borderColor = 'rgba(96,165,250,0.5)';
-            e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(30,41,59,0.7)';
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
-            e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-          }}
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </button>
+        {showArrows && (
+          <button
+            onClick={() => scrollByCard('left')}
+            style={{
+              position: 'absolute',
+              left: '24px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 5,
+              width: '52px',
+              height: '52px',
+              borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'rgba(30,41,59,0.7)',
+              backdropFilter: 'blur(8px)',
+              color: '#f8fafc',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(59,130,246,0.5)';
+              e.currentTarget.style.borderColor = 'rgba(96,165,250,0.5)';
+              e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(30,41,59,0.7)';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
+              e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+        )}
 
         {/* Right arrow */}
-        <button
-          onClick={() => scrollByCard('right')}
-          style={{
-            position: 'absolute',
-            right: '24px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            zIndex: 5,
-            width: '52px',
-            height: '52px',
-            borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.15)',
-            background: 'rgba(30,41,59,0.7)',
-            backdropFilter: 'blur(8px)',
-            color: '#f8fafc',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(59,130,246,0.5)';
-            e.currentTarget.style.borderColor = 'rgba(96,165,250,0.5)';
-            e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(30,41,59,0.7)';
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
-            e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-          }}
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
+        {showArrows && (
+          <button
+            onClick={() => scrollByCard('right')}
+            style={{
+              position: 'absolute',
+              right: '24px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 5,
+              width: '52px',
+              height: '52px',
+              borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'rgba(30,41,59,0.7)',
+              backdropFilter: 'blur(8px)',
+              color: '#f8fafc',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(59,130,246,0.5)';
+              e.currentTarget.style.borderColor = 'rgba(96,165,250,0.5)';
+              e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(30,41,59,0.7)';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
+              e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        )}
 
         {/* Card track */}
         <div
@@ -251,7 +344,7 @@ const TemplatesPage: React.FC = () => {
             alignItems: 'center',
           }}
         >
-          {templates.map((id, index) => {
+          {activeTemplates.map((id, index) => {
             const overlay = getOverlayOpacity(index);
             const scale = 1 - overlay * 0.08; // slightly shrink darkened cards
 
@@ -327,7 +420,7 @@ const TemplatesPage: React.FC = () => {
                       {id.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </h3>
                     <p style={{ margin: '3px 0 0 0', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-                      Editorial Layout
+                      {activeCategory === 'All Templates' ? 'Template Layout' : activeCategory}
                     </p>
                   </div>
                 </div>
@@ -353,7 +446,7 @@ const TemplatesPage: React.FC = () => {
         padding: '16px 0 32px',
         color: 'var(--text-secondary)',
         fontSize: '0.85rem',
-        opacity: 0.6,
+        opacity: showArrows ? 0.6 : 0, // hide hint if no scroll
       }}>
         ← Scroll or drag to browse →
       </div>

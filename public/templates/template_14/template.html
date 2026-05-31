@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Queen's Birthday Canva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --paper-bg: radial-gradient(circle at center, #f8f6f0 0%, #edeae1 100%);
+      --paper-bg-fallback: #f2f0e8;
+      --ink-color: #2b2a28;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+      --font-gothic: serif;
+      --font-script: 'Great Vibes', cursive;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--paper-bg-fallback);
+      background-image: var(--paper-bg);
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 35px 45px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(43, 42, 40, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(43, 42, 40, 0.07); border-radius: 2px; }
+
+    /* Top Section */
+    .top-header-box {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr 1fr;
+      align-items: center;
+      padding: 10px 0 5px 0;
+    }
+
+    .header-side {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      line-height: 1.5;
+    }
+    .header-side.left { text-align: left; }
+    .header-side.right { text-align: right; }
+    
+    .header-center {
+      text-align: center;
+      font-family: var(--font-gothic);
+      font-size: 56px;
+      line-height: 1;
+    }
+
+    .double-line-divider {
+      border-top: 1.5px solid var(--ink-color);
+      border-bottom: 4px solid var(--ink-color);
+      height: 4px;
+      margin-bottom: 8px;
+    }
+    .single-line-divider {
+      border-bottom: 1.5px solid var(--ink-color);
+      margin: 8px 0;
+    }
+
+    /* Sub Meta Row */
+    .sub-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      letter-spacing: 2px;
+      padding: 0 15px;
+    }
+
+    /* Titles Section */
+    .titles-section {
+      text-align: center;
+      position: relative;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+    .script-title {
+      font-family: var(--font-script);
+      font-size: 80px;
+      line-height: 0.6;
+      font-weight: normal;
+      position: relative;
+      z-index: 2;
+      color: var(--ink-color);
+      transform: rotate(-3deg);
+    }
+    .bold-title {
+      font-family: var(--font-sans);
+      font-size: 115px;
+      line-height: 0.85;
+      font-weight: 700;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+      transform: scaleY(1.1);
+      margin-top: 5px;
+    }
+
+    /* Image Section */
+    .image-container {
+      width: 100%;
+      height: 480px;
+      margin-bottom: 25px;
+      border: 1px solid var(--ink-color);
+      position: relative;
+    }
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #dfdbd2;
+      cursor: pointer; overflow: hidden; position: absolute;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(80%) contrast(1.1) sepia(0.2);
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(43, 42, 40, 0.6);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: #777; z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+
+    /* Content Columns */
+    .content-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      flex-grow: 1;
+    }
+    .text-column {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .quote-text {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .body-text-block {
+      font-family: var(--font-serif);
+      font-size: 15.5px;
+      line-height: 1.5;
+      color: #3b3a38;
+      text-align: justify;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="top-header-box">
+      <div class="header-side left" id="meta-left" data-editable="text">
+        123 CENTRAL PARK<br>
+        NEW YORK 567
+      </div>
+      <div class="header-center" id="site-title" data-editable="text">
+        BREAKING NEWS
+      </div>
+      <div class="header-side right" id="meta-right" data-editable="text">
+        SATURDAY,<br>
+        19 JULY 2025
+      </div>
+    </div>
+
+    <div class="double-line-divider"></div>
+
+    <div class="sub-meta-row">
+      <div id="sub-meta-1" data-editable="text">CENTRAL PARK</div>
+      <div id="sub-meta-2" data-editable="text">JULY 19TH</div>
+      <div id="sub-meta-3" data-editable="text">7:00 O'CLOCK PM</div>
+    </div>
+
+    <div class="single-line-divider"></div>
+
+    <div class="titles-section">
+      <div class="script-title" id="script-title" data-editable="text">It's the queen's</div>
+      <div class="bold-title" id="main-title" data-editable="text">BIRTHDAY!</div>
+    </div>
+
+    <div class="image-container">
+      <div class="image-upload-box" id="main-image-box" data-editable="image">
+        <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+        <div class="image-preview-container">
+          <img id="main-image-img" class="image-preview" src="" alt="Queen Photo">
+        </div>
+        <div class="placeholder-state">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.5; margin-bottom: 10px;">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+          </svg>
+          <span style="font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;">UPLOAD PHOTO</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-columns">
+      <div class="text-column">
+        <div class="quote-text" id="quote-text" data-editable="text">
+          "A YEAR OLDER,<br>A YEAR BOLDER!"
+        </div>
+        <div class="body-text-block" id="body-text-1" data-editable="text">
+          Join us to celebrate Emma's 25th birthday with laughter, music, good vibes, and unforgettable memories. Let's make it magical! Let's raise a toast to 25 fabulous years of Emma! Don't miss out &mdash; it won't be the same without you!
+        </div>
+        <div class="body-text-block" id="body-text-2" data-editable="text">
+          Venue located at 123 Central Park, Upper East Side, New York 94568
+        </div>
+      </div>
+
+      <div class="text-column">
+        <div class="body-text-block" id="body-text-3" data-editable="text">
+          Bring your enthusiasm and festive spirit! we hope you can make it and celebrate with us. The night will be filled with surprises, amazing food, and a playlist that guarantees we won't stop dancing until dawn. 
+        </div>
+        <div class="body-text-block" id="body-text-4" data-editable="text">
+          Please RSVP by July 10th so we can ensure everything is perfect. We are looking forward to creating more beautiful moments with all the people who mean the most.
+        </div>
+      </div>
+    </div>
+
+  </article>
+</body>
+</html>

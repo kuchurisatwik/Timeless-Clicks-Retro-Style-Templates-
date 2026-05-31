@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>The 1975 Layered Collage Template 2</title>
+  <style>
+    :root {
+      --paper-bg: #f5f5f5;
+      --ink-color: #222;
+      --font-serif: serif;
+      --font-sans: sans-serif;
+      --font-display: 'Arial Black', Impact, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #ddd;
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; position: relative; z-index: 105; }
+    [data-editable="text"]:hover { background-color: rgba(34, 34, 34, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(34, 34, 34, 0.08); border-radius: 2px; }
+
+    /* Header Area */
+    .header-area { padding: 20px 30px 10px; }
+    
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .th-side {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+    .th-center {
+      font-family: var(--font-display);
+      font-size: 55px;
+      font-style: italic;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    /* Meta Row */
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1.5px solid var(--ink-color);
+      border-bottom: 1.5px solid var(--ink-color);
+      padding: 10px 5px;
+      font-family: var(--font-serif);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mr-center { letter-spacing: 2px; }
+
+    /* Main Title */
+    .main-title {
+      font-family: var(--font-serif);
+      font-size: 100px;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 5px;
+      margin: 20px 0;
+      line-height: 1;
+    }
+
+    /* Middle Section (Collage) */
+    .collage-section {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      margin-bottom: 20px;
+    }
+
+    /* Background Image */
+    .bg-image-container {
+      width: 100%; height: 420px;
+      position: absolute; top: 0; left: 0;
+      border-top: 1.5px solid var(--ink-color);
+      border-bottom: 1.5px solid var(--ink-color);
+    }
+    
+    /* Shared Image Styles */
+    .image-upload-box {
+      width: 100%; height: 100%;
+      background-color: #d0d0d0;
+      cursor: pointer; overflow: hidden; position: absolute;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+
+    .bg-image-preview { filter: grayscale(100%) contrast(1.2); }
+
+    /* The Tilted Poster */
+    .tilted-poster {
+      position: absolute;
+      top: -10px;
+      left: 15px;
+      width: 580px;
+      height: 620px;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      box-shadow: -5px 10px 20px rgba(0,0,0,0.3);
+      transform: rotate(-3deg);
+      z-index: 10;
+      padding: 15px;
+      display: flex; flex-direction: column;
+    }
+    .tp-header {
+      display: flex; justify-content: space-between;
+      font-family: sans-serif; font-weight: 800; font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .tp-image-area {
+      width: 100%; height: 400px;
+      position: relative; margin-bottom: 10px;
+    }
+    .tp-image-preview { filter: grayscale(100%) contrast(1.1); }
+    .tp-footer {
+      display: flex; justify-content: space-between;
+    }
+    .tp-title-box {
+      font-family: sans-serif; font-weight: 800;
+    }
+    .tp-main-text { font-size: 32px; letter-spacing: -1px; margin-bottom: 5px; line-height: 1;}
+    .tp-tracklist { font-size: 11px; line-height: 1.2; }
+    
+    /* Top Right Tilted Image (The new element) */
+    .top-tilted-image {
+      position: absolute;
+      top: 100px;
+      right: 120px;
+      width: 480px;
+      height: 620px;
+      background: #fff;
+      padding: 10px;
+      box-shadow: 2px 15px 30px rgba(0,0,0,0.3);
+      transform: rotate(6deg);
+      z-index: 18;
+    }
+    
+    /* Small elements over the tilted poster */
+    .small-food-img {
+      position: absolute;
+      bottom: 15px;
+      right: 170px;
+      width: 180px;
+      height: 180px;
+      box-shadow: 2px 5px 10px rgba(0,0,0,0.4);
+      z-index: 15;
+      transform: rotate(2deg);
+      border: 3px solid #fff;
+    }
+    .small-food-preview { filter: grayscale(100%); }
+
+    .camera-graphic {
+      position: absolute;
+      bottom: -40px;
+      left: 30px;
+      width: 160px;
+      height: 120px;
+      z-index: 20;
+      transform: rotate(15deg);
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="20" width="80" height="50" rx="5" fill="%23222"/><rect x="25" y="10" width="30" height="15" rx="3" fill="%23222"/><circle cx="50" cy="45" r="20" fill="%23444"/><circle cx="50" cy="45" r="15" fill="%23111"/><circle cx="55" cy="40" r="3" fill="%23fff"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* Absolute text on the right side of collage */
+    .right-side-text {
+      position: absolute;
+      bottom: -20px;
+      right: 30px;
+      font-family: sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      z-index: 5;
+    }
+
+    /* Bottom Text Area */
+    .bottom-area {
+      padding: 0 30px 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      flex-grow: 1;
+    }
+    .col-text {
+      font-family: sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      text-align: justify;
+      color: #333;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+    
+    <div class="header-area">
+      <div class="top-header">
+        <div class="th-side" id="th-left" data-editable="text">SPECIAL<br>EDITION</div>
+        <div class="th-center" id="th-center" data-editable="text">The 1975</div>
+        <div class="th-side" id="th-right" data-editable="text">DAILY<br>REPORT</div>
+      </div>
+
+      <div class="meta-row">
+        <div id="mr-left" data-editable="text">DIRTY HIT RECORDS</div>
+        <div class="mr-center" id="mr-center" data-editable="text">BEING FUNNY IN A FOREIGN LANGUAGE</div>
+        <div id="mr-right" data-editable="text">14 OKT 2022</div>
+      </div>
+
+      <div class="main-title" id="main-title" data-editable="text">ABOUT YOU</div>
+    </div>
+
+    <div class="collage-section">
+      <!-- Background Image -->
+      <div class="bg-image-container">
+        <div class="image-upload-box" id="bg-image-box" data-editable="image">
+          <input type="file" id="bg-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="bg-image-img" class="image-preview bg-image-preview" src="" alt="Background">
+          </div>
+        </div>
+      </div>
+
+      <div class="right-side-text" id="rs-text" data-editable="text">ABOUT YOU?"</div>
+
+      <!-- Tilted Poster -->
+      <div class="tilted-poster">
+        <div class="tp-header">
+          <span id="tp-h-left" data-editable="text">BEING FUNNY IN A FOREIGN LANGUAGE</span>
+          <span id="tp-h-right" data-editable="text">14 OCTOBER 2022</span>
+        </div>
+        <div class="tp-image-area">
+          <div class="image-upload-box" id="tp-image-box" data-editable="image">
+            <input type="file" id="tp-image-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="tp-image-img" class="image-preview tp-image-preview" src="" alt="Main Poster Image">
+            </div>
+          </div>
+        </div>
+        <div class="tp-footer">
+          <div class="tp-title-box">
+            <div class="tp-main-text" id="tp-mt" data-editable="text">THE 1975</div>
+            <div class="tp-tracklist" id="tp-tl" data-editable="text">
+              1. THE 1975<br>
+              2. HAPPINESS<br>
+              3. LOOKING FOR SOMEBODY<br>
+              4. PART OF THE BAND<br>
+              5. OH CAROLINE<br>
+              6. I'M IN LOVE WITH YOU<br>
+              7. ALL I NEED TO HEAR<br>
+              8. WINTERING<br>
+              9. HUMAN TOO<br>
+              10. ABOUT YOU<br>
+              11. WHEN WE ARE TOGETHER
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Small Food Image -->
+      <div class="small-food-img">
+        <div class="image-upload-box" id="food-image-box" data-editable="image">
+          <input type="file" id="food-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="food-image-img" class="image-preview small-food-preview" src="" alt="Detail Image">
+          </div>
+        </div>
+      </div>
+
+      <!-- New Tilted Image on top -->
+      <div class="top-tilted-image">
+        <div class="image-upload-box" id="top-tilted-box" data-editable="image">
+          <input type="file" id="top-tilted-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="top-tilted-img" class="image-preview bg-image-preview" src="" alt="Top Tilted Image">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Camera Graphic Overlay -->
+      <div class="camera-graphic"></div>
+    </div>
+
+    <!-- Bottom Text Area -->
+    <div class="bottom-area">
+      <div class="col-text" id="col-1" data-editable="text">
+        forgotten? Do you think I have forgotten? About you? (Don't let go) were there something 'bout you that I could lay and just look in your eyes. Wait, and pretend (don't let go).
+      </div>
+      <div class="col-text" id="col-2" data-editable="text">
+        forgotten? Do you think I have forgotten? Do you think I have forgotten, about you? There was something 'bout you that now I can't remember.
+      </div>
+      <div class="col-text" id="col-3" data-editable="text">
+        s the same damn thing made my heart flutter. And I miss you again, I miss you in the morning. I never know what to think about. I think about you. About you (so don't let go). Do you think I have forgotten. About you? (Don't let go). About you. About you. Do you think I have forgotten, about you?
+      </div>
+    </div>
+
+  </article>
+</body>
+</html>
