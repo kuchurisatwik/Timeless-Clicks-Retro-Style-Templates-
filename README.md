@@ -42,6 +42,9 @@ You will also need a **Google Gemini API Key** to use the AI features. You can g
 
 5. **Open your web browser** and go to the local address provided in the terminal (usually `http://localhost:5173`).
 
+![Timeless Clicks Templates](assets/screenshot-1.png)
+
+![Timeless Clicks Editor](assets/screenshot-2.png)
 ## How to Use the Editor
 
 ### 1. Set Up the AI (One-time setup)
