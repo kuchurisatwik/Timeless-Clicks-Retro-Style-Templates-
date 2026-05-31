@@ -1,0 +1,99 @@
+/* Custom Fonts Integration */
+
+@font-face {
+  font-family: '23 Seconds To Midnight';
+  src: url('/fonts/23-seconds-to-midnight/23 seconds to midnight.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Built Titling';
+  src: url('/fonts/built-titling/built titling bd.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Built Titling';
+  src: url('/fonts/built-titling/built titling rg.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Chomsky';
+  src: url('/fonts/chomsky/Chomsky.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ChunkFive Print';
+  src: url('/fonts/chunkfive/Chunk Five Print.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ChunkFive';
+  src: url('/fonts/chunkfive/Chunk.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Eroded';
+  src: url('/fonts/eroded-personal-use/ERODED PERSONAL USE.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gastronomy';
+  src: url('/fonts/gastronomy/Gastronomy-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'RadioNewsman';
+  src: url('/fonts/radio-newsman/RadioNewsman.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Reality Stone';
+  src: url('/fonts/reality-stone-personal-use/Reality Stone.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Soulside Betrayed';
+  src: url('/fonts/soulside-betrayed/Soulside Betrayed.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Spiky Chain';
+  src: url('/fonts/spiky-chain/Spiky Chain.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Walbaum Fraktur';
+  src: url('/fonts/walbaum-fraktur/Walbaum-Fraktur.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Walbaum Fraktur';
+  src: url('/fonts/walbaum-fraktur/Walbaum-Fraktur-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}

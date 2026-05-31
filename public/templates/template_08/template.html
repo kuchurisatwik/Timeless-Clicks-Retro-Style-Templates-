@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Newspaper Poster Template 8</title>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  
+  <style>
+    :root {
+      --paper-bg-fallback: #ebdccb;
+      --ink-color: #242220; 
+      --dark-block-bg: #332f2c; 
+      --font-serif: 'Gastronomy', serif;
+      --font-sans: 'Built Titling', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #d8d3c5;
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      
+      display: flex; justify-content: center;
+      
+      
+      overflow-x: hidden;
+    }
+
+    
+
+    .poster-scale-container {
+      width: 794px;
+      height: 1123px; overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      background-color: var(--paper-bg-fallback);
+      border: 1px solid #beb6a8;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 38px 44px;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      position: relative;
+      
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] {
+      outline: none;
+      cursor: text;
+      transition: background-color 0.2s ease;
+    }
+
+    [data-editable="text"]:hover {
+      background-color: rgba(36, 34, 32, 0.05);
+      border-radius: 2px;
+    }
+
+    [data-editable="text"]:focus {
+      background-color: rgba(36, 34, 32, 0.08);
+      border-radius: 2px;
+    }
+
+    .divider-thin {
+      width: 100%;
+      height: 1px;
+      background-color: var(--ink-color);
+      margin: 4px 0;
+    }
+
+    .divider-double-thick-thin {
+      box-sizing: content-box;
+      height: 5px;
+      border-top: 2.5px solid var(--ink-color);
+      border-bottom: 1px solid var(--ink-color);
+      width: 100%;
+      margin: 6px 0;
+    }
+
+    .header-section {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .top-special-line {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 4px;
+    }
+
+    .special-line-part {
+      flex-grow: 1;
+      height: 1px;
+      background-color: var(--ink-color);
+    }
+
+    .special-line-text {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      padding: 0 16px;
+      line-height: 1;
+    }
+
+    .masthead-title {
+      font-family: var(--font-serif);
+      font-size: 76px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 2px;
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin: 8px 0;
+    }
+
+    .body-grid-section {
+      display: grid;
+      grid-template-columns: 2.5fr 1fr;
+      gap: 20px;
+      align-items: stretch;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border-right: 1px solid var(--ink-color);
+      padding-right: 20px;
+    }
+
+    .left-col .image-upload-box {
+      flex-grow: 1;
+      height: 0;
+      min-height: 500px;
+      margin-bottom: 12px;
+    }
+
+    .left-headline {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      margin: 8px 0 10px 0;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+
+    .left-paragraph-box {
+      font-family: var(--font-serif);
+      font-size: 14.5px;
+      line-height: 1.45;
+      text-align: justify;
+      color: var(--ink-color);
+    }
+
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .right-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .right-block-stretch {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .right-title {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.2;
+      letter-spacing: 0.2px;
+    }
+
+    .right-col .image-upload-box {
+      width: 100%;
+      height: 230px;
+    }
+
+    .right-col .right-block-stretch .image-upload-box {
+      flex-grow: 1;
+      height: 0;
+      min-height: 220px;
+    }
+
+    .right-paragraph {
+      font-family: var(--font-serif);
+      font-size: 13.5px;
+      line-height: 1.35;
+      text-align: justify;
+      color: var(--ink-color);
+    }
+
+    .divider-with-ornament {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin: 10px 0;
+      gap: 12px;
+    }
+
+    .divider-line {
+      flex-grow: 1;
+      height: 1px;
+      background-color: var(--ink-color);
+    }
+
+    .ornament-stars {
+      font-family: var(--font-serif);
+      font-size: 11px;
+      color: var(--ink-color);
+      line-height: 1;
+      opacity: 0.85;
+    }
+
+    .image-upload-box {
+      position: relative;
+      border: 1px solid var(--ink-color);
+      background-color: rgba(234, 227, 215, 0.4);
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .image-upload-box.dragover {
+      border: 2px dashed var(--ink-color);
+      background-color: rgba(220, 213, 199, 0.6);
+    }
+
+    .image-file-input {
+      display: none;
+    }
+
+    .image-preview-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .image-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      filter: sepia(18%) contrast(1.02); 
+      display: block;
+    }
+
+    .image-upload-box::after {
+      content: 'CLICK OR DRAG PHOTO TO UPLOAD';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(36, 34, 32, 0.82);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 5;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .image-upload-box:hover::after {
+      opacity: 1;
+    }
+
+    .placeholder-state {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #555047;
+      z-index: 2;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .placeholder-icon {
+      opacity: 0.6;
+    }
+
+    .placeholder-text {
+      font-family: var(--font-serif);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .image-upload-box.has-image .placeholder-state {
+      display: none;
+    }
+
+    .footer-section {
+      width: 100%;
+      text-align: center;
+      border-top: 1.5px solid var(--ink-color);
+      padding-top: 10px;
+      margin-top: 8px;
+    }
+
+    .footer-text {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        margin: 0;
+        padding: 0;
+      }
+      .image-upload-box::after,
+      .image-file-input {
+        display: none !important;
+      }
+      
+      .poster-scale-container {
+        transform: none !important;
+        position: static !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        page-break-inside: avoid;
+        page-break-after: avoid;
+      }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <article class="poster-scale-container">
+      
+      <section class="header-section">
+        <div class="top-special-line">
+          <span class="special-line-part"></span>
+          <span class="special-line-text" id="special-text" data-editable="text">Especial Edition</span>
+          <span class="special-line-part"></span>
+        </div>
+        
+        <h1 class="masthead-title" id="masthead-headline" data-editable="text">BREAKING NEWS</h1>
+        
+        <div class="divider-double-thick-thin"></div>
+      </section>
+
+      <section class="body-grid-section">
+        
+        <div class="left-col">
+          <div class="image-upload-box" id="main-image-box" data-editable="image">
+            <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="main-image-img" class="image-preview" src="" alt="Hero Celebration Photo">
+            </div>
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2"/>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span class="placeholder-text">Click to upload hero image</span>
+            </div>
+          </div>
+          
+          <div class="divider-thin"></div>
+          
+          <h2 class="left-headline" id="left-headline" data-editable="text">JULIET'S BIRTHDAY NIGHT</h2>
+          
+          <div class="left-paragraph-box" id="left-text-content" data-editable="text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci velit, porttitor nec justo eget, fermentum facilisis enim. Nullam ut tincidunt quam. Curabitur in tempus est. Suspendisse sed urna efficitur, eleifend sapien quis, consectetur libero. Aliquam laoreet commodo imperdiet. Nulla facilisi. Duis rhoncus vitae quam in finibus. Maecenas porttitor ultrices dolor at tempus. Sed feugiat felis quis mauris porttitor sollicitudin. Nullam cursus massa vel facilisis auctor. Vivamus vel tincidunt turpis. Integer consectetur elementum vestibulum.
+          </div>
+        </div>
+
+        <div class="right-col">
+          <div class="right-block">
+            <div class="right-title" id="right-top-title" data-editable="text">
+              JULIET TELLS US HOW SHE PREPARED FOR HER PARTY.
+            </div>
+            
+            <div class="image-upload-box" id="top-right-box">
+              <input type="file" id="top-right-input" class="image-file-input" accept="image/*">
+              <div class="image-preview-container">
+                <img id="top-right-img" class="image-preview" src="" alt="Juliet Portrait">
+              </div>
+              <div class="placeholder-state">
+                <svg class="placeholder-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <circle cx="12" cy="12" r="3.2"/>
+                  <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                </svg>
+                <span class="placeholder-text">Juliet Photo</span>
+              </div>
+            </div>
+            
+            <div class="right-paragraph" id="right-top-paragraph" data-editable="text">
+              Lorem ipsum dolor sit amet, consecte tur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.
+            </div>
+          </div>
+          
+          <div class="divider-with-ornament">
+            <div class="divider-line"></div>
+            <div class="ornament-stars">★ &nbsp; ★ &nbsp; ★</div>
+            <div class="divider-line"></div>
+          </div>
+
+          <div class="right-block right-block-stretch">
+            <div class="right-title" id="right-bottom-title" data-editable="text">
+              MOM AND DAD, THE MOST ELEGANT OF THE NIGHT.
+            </div>
+            
+            <div class="image-upload-box" id="bottom-right-box">
+              <input type="file" id="bottom-right-input" class="image-file-input" accept="image/*">
+              <div class="image-preview-container">
+                <img id="bottom-right-img" class="image-preview" src="" alt="Parents Portrait">
+              </div>
+              <div class="placeholder-state">
+                <svg class="placeholder-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <circle cx="12" cy="12" r="3.2"/>
+                  <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                </svg>
+                <span class="placeholder-text">Parents Photo</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <footer class="footer-section">
+        <div class="footer-text" id="footer-text" data-editable="text">
+          MORE INFORMATION AT WWW.REALLYGREATSITE.COM
+        </div>
+      </footer>
+
+    </article>
+  </body>
+</html>
+
+

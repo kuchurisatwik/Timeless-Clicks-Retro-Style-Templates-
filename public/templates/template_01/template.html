@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Newspaper Poster Template</title>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  
+  <style>
+    /* --- CSS Variables & Design Tokens --- */
+    :root {
+      --paper-bg: radial-gradient(circle at center, #faf8f5 0%, #f4eee1 100%);
+      --paper-bg-fallback: #f6f4ee;
+      --ink-color: #1c1b18;
+      --font-serif: 'Gastronomy', serif;
+      --font-sans: 'Built Titling', sans-serif;
+      --font-gothic: 'Walbaum Fraktur', serif;
+      --font-headline: 'ChunkFive', serif;
+      --font-bold-serif: 'Chomsky', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--paper-bg);
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      
+      display: flex; justify-content: center;
+      
+      
+      overflow-x: hidden;
+    }
+
+    
+
+    .poster-scale-container {
+      width: 794px;
+      height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      background-color: var(--paper-bg-fallback);
+      border: 1px solid #d8d4c9;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 42px 48px;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-rows: auto auto auto 1fr auto 250px;
+      gap: 15px;
+      position: relative;
+      
+      margin: 0 auto;
+    }
+
+    [data-editable="text"] {
+      outline: none;
+      cursor: text;
+      transition: background-color 0.2s ease;
+    }
+
+    [data-editable="text"]:hover {
+      background-color: rgba(28, 27, 24, 0.04);
+      border-radius: 2px;
+    }
+
+    [data-editable="text"]:focus {
+      background-color: rgba(28, 27, 24, 0.07);
+      border-radius: 2px;
+    }
+
+    .header-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-serif);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding-bottom: 2px;
+    }
+
+    .meta-text {
+      width: 140px;
+    }
+
+    .meta-left {
+      text-align: left;
+    }
+
+    .meta-right {
+      text-align: right;
+    }
+
+    .header-flourish-container {
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
+    }
+
+    .header-flourish {
+      opacity: 0.95;
+    }
+
+    .double-line-top-thick {
+      border-bottom: 4px solid var(--ink-color);
+      position: relative;
+      margin-bottom: 4px;
+    }
+
+    .double-line-top-thick::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 1.5px;
+      background-color: var(--ink-color);
+    }
+
+    .double-line-bottom-thick {
+      border-bottom: 1.5px solid var(--ink-color);
+      position: relative;
+      margin-bottom: 4px;
+    }
+
+    .double-line-bottom-thick::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: var(--ink-color);
+    }
+
+    .single-line-divider {
+      height: 1px;
+      background-color: var(--ink-color);
+      width: 100%;
+      margin: 2px 0;
+    }
+
+    .headline-container {
+      text-align: center;
+      padding: 2px 0;
+    }
+
+    .headline-text {
+      font-family: var(--font-headline);
+      font-size: 88px;
+      font-weight: normal;
+      line-height: 0.9;
+      letter-spacing: 1px;
+      text-shadow: none;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .subheader-container {
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .subheader-text {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 8px;
+      word-spacing: 8px;
+      text-transform: uppercase;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .main-body-section {
+      display: grid;
+      grid-template-columns: 1fr 1px 1.7fr;
+      gap: 25px;
+      align-items: stretch;
+      padding: 8px 0;
+      overflow: hidden;
+    }
+
+    .vertical-divider {
+      background-color: var(--ink-color);
+      width: 1px;
+      height: 100%;
+    }
+
+    .main-left-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2px;
+    }
+
+    .double-underline {
+      border-bottom: 2.5px solid var(--ink-color);
+      padding-bottom: 2px;
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .double-underline::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 0.75px;
+      background-color: var(--ink-color);
+    }
+
+    .body-paragraph, .body-text-container p, .body-text-container div {
+      font-family: var(--font-serif);
+      font-size: 15.5px;
+      line-height: 1.45;
+      text-align: justify;
+      color: #2b2a26;
+      word-break: break-word;
+      margin-bottom: 0;
+    }
+
+    .body-paragraph + .body-paragraph,
+    .body-text-container p + p,
+    .body-text-container div + div,
+    .body-text-container p + div,
+    .body-text-container div + p {
+      margin-top: 10px;
+      text-indent: 18px;
+    }
+
+    .main-right-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .image-upload-box {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border: 1.5px solid var(--ink-color);
+      background-color: #ede9df;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .image-upload-box.dragover {
+      border: 2px dashed var(--ink-color);
+      background-color: #e3decb;
+    }
+
+    .image-file-input {
+      display: none;
+    }
+
+    .image-preview-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .image-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: grayscale(100%) contrast(1.08) brightness(0.97);
+      display: block;
+    }
+
+    .image-upload-box::after {
+      content: 'CLICK TO UPLOAD PHOTO';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(28, 27, 24, 0.75);
+      color: #f6f4ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 5;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .image-upload-box:hover::after {
+      opacity: 1;
+    }
+
+    .placeholder-state {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #57554e;
+      z-index: 2;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .placeholder-icon {
+      opacity: 0.6;
+    }
+
+    .placeholder-text {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .image-upload-box.has-image .placeholder-state {
+      display: none;
+    }
+
+    .horizontal-section-line {
+      height: 1px;
+      background-color: var(--ink-color);
+      width: 100%;
+      margin: 4px 0;
+    }
+
+    .bottom-body-section {
+      display: grid;
+      grid-template-columns: 1.05fr 1.05fr 1px 1.15fr;
+      gap: 20px;
+      align-items: stretch;
+      padding-top: 8px;
+    }
+
+    .bottom-left-col {
+      display: flex;
+      flex-direction: column;
+      height: 250px;
+    }
+
+    .bottom-middle-col {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .date-ticket-box {
+      position: relative;
+      width: 100%;
+      max-width: 220px;
+      height: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+    }
+
+    .ticket-border-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .ticket-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+    }
+
+    .ticket-date-num {
+      font-family: var(--font-serif);
+      font-size: 58px;
+      font-weight: 300;
+      line-height: 0.95;
+      color: var(--ink-color);
+    }
+
+    .ticket-date-month {
+      font-family: var(--font-sans);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-top: -4px;
+      color: var(--ink-color);
+    }
+
+    .ticket-address {
+      font-family: var(--font-serif);
+      font-size: 11.5px;
+      font-style: italic;
+      line-height: 1.3;
+      margin: 8px 0;
+      max-width: 160px;
+      color: var(--ink-color);
+      word-break: break-word;
+    }
+
+    .ticket-dashed-divider {
+      width: 80%;
+      border-top: 1.5px dashed var(--ink-color);
+      margin: 6px 0;
+    }
+
+    .ticket-time {
+      font-family: var(--font-sans);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--ink-color);
+    }
+
+    .bottom-right-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .image-upload-box::after,
+      .image-file-input {
+        display: none !important;
+      }
+
+      
+
+      .poster-scale-container {
+        transform: none !important;
+        position: static !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        page-break-inside: avoid;
+        page-break-after: avoid;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <article class="poster-scale-container">
+      
+      <section class="header-section">
+        <div class="header-meta-row">
+          <span class="meta-text meta-left" id="meta-left" data-editable="text">Special Edition</span>
+          <div class="header-flourish-container">
+            <svg viewBox="0 0 200 30" width="160" height="24" fill="var(--ink-color)" class="header-flourish">
+              <path d="M100,20 C101.5,14 105,10 109,10 C114,10 117,14.5 116.5,19 C116,23 111,25 107.5,23 C106.5,22.5 106,21.5 106.5,21.5 C107,21.5 107.5,22 108.5,22 C111,22 113.5,20.5 114,17.5 C114.5,14.5 112,12 109,12 C106,12 102.5,15.5 101,21 C99.5,21 98.5,21 97,21 C97.5,15.5 94,12 91,12 C88,12 85.5,14.5 86,17.5 C86.5,20.5 89,22 91.5,22 C92.5,22 93,21.5 93.5,21.5 C94,21.5 93.5,22.5 92.5,23 C89,25 84,23 83.5,19 C83,14.5 86,10 91,10 C95,10 98.5,14 100,20 Z M100,23 C99,23.5 98.5,24 97.5,24.5 C92.5,26.5 87.5,26 82.5,24 C75.5,21.2 69.5,16.2 63.5,11.5 C59,8 54,4.5 48,3 C46,2.5 43.5,2 41,2 C31,2 24.5,8 24.5,15 C24.5,20.5 29,24.5 35,24.5 C40,24.5 43.5,21 44,17 C44.5,13.5 42,10.5 38.5,10.5 C36,10.5 34.5,12 34.5,13.5 C34.5,14.5 35,15 36,15 C36.5,15 37,14.5 37,14 C37,12.5 38,12 39,12 C40.5,12 42,13.5 41.5,16 C41,18.5 38.5,22.5 34.5,22.5 C29.5,22.5 26.5,18.5 26.5,14 C26.5,8.5 32,3.5 41,3.5 C43,3.5 45.5,4 47.5,4.5 C53,6 57.5,9.5 62,12.8 C68,17.2 74,22.2 81,25 C87,27.4 93.5,28 100,25.5 C106.5,28 113,27.4 119,25 C126,22.2 132,17.2 138,12.8 C142.5,9.5 147,6 152.5,4.5 C154.5,4 157,3.5 159,3.5 C168,3.5 173.5,8.5 173.5,14 C173.5,18.5 170.5,22.5 165.5,22.5 C161.5,22.5 159,18.5 158.5,16 C158,13.5 159.5,12 161,12 C162,12 163,12.5 163,14 C163,14.5 163.5,15 164,15 C165,15 165.5,14.5 165.5,13.5 C165.5,12 164,10.5 161.5,10.5 C158,10.5 155.5,13.5 156,17 C156.5,21 160,24.5 165,24.5 C171,24.5 175.5,20.5 175.5,15 C175.5,8 169,2 159,2 C156.5,2 154,2.5 152,3 C146,4.5 141,8 136.5,11.5 C130.5,16.2 124.5,21.2 117.5,24 C112.5,26 107.5,26.5 102.5,24.5 C101.5,24 101,23.5 100,23 Z M20,15 C20,13.5 21,12.5 22,12.5 C23,12.5 24,13.5 24,15 C24,16.5 23,17.5 22,17.5 C21,17.5 20,16.5 20,15 Z M176,15 C176,13.5 177,12.5 178,12.5 C179,12.5 180,13.5 180,15 C180,16.5 179,17.5 178,17.5 C177,17.5 176,16.5 176,15 Z" />
+            </svg>
+          </div>
+          <span class="meta-text meta-right" id="meta-right" data-editable="text">New York</span>
+        </div>
+        <div class="double-line-top-thick"></div>
+      </section>
+
+      <section class="headline-container">
+        <h2 class="headline-text" id="headline" data-editable="text">Breaking News</h2>
+        <div class="double-line-bottom-thick"></div>
+      </section>
+
+      <section class="subheader-container">
+        <h3 class="subheader-text" id="subheader" data-editable="text">BIRTHDAY PARTY INVITATION</h3>
+        <div class="single-line-divider"></div>
+      </section>
+
+      <section class="main-body-section">
+        
+        <div class="main-left-col">
+          <h2 class="section-title" id="about-title" data-editable="text">About me</h2>
+          <div class="double-underline"></div>
+          <div class="body-text-container" id="about-text" data-editable="text">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+          </div>
+        </div>
+
+        <div class="vertical-divider"></div>
+
+        <div class="main-right-col">
+          <div class="image-upload-box" id="main-image-box" data-editable="image">
+            <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+            
+            <div class="image-preview-container">
+              <img id="main-image-img" class="image-preview" src="" alt="Portrait Upload">
+            </div>
+
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2"/>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span class="placeholder-text">Click to upload portrait</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="horizontal-section-line"></div>
+
+      <section class="bottom-body-section">
+        
+        <div class="bottom-left-col">
+          <div class="image-upload-box" id="bottom-image-box" data-editable="image">
+            <input type="file" id="bottom-image-input" class="image-file-input" accept="image/*">
+            
+            <div class="image-preview-container">
+              <img id="bottom-image-img" class="image-preview" src="" alt="Party Upload">
+            </div>
+
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2"/>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span class="placeholder-text">Click to upload photo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-middle-col">
+          <div class="date-ticket-box">
+            <svg class="ticket-border-svg" viewBox="0 0 240 280" preserveAspectRatio="none">
+              <path d="M 24 8 L 216 8 A 16 16 0 0 0 232 24 L 232 256 A 16 16 0 0 0 216 272 L 24 272 A 16 16 0 0 0 8 256 L 8 24 A 16 16 0 0 0 24 8 Z" fill="none" stroke="var(--ink-color)" stroke-width="2" />
+              <path d="M 24 12 L 216 12 A 12 12 0 0 0 228 24 L 228 256 A 12 12 0 0 0 216 268 L 24 268 A 12 12 0 0 0 12 256 L 12 24 A 12 12 0 0 0 24 12 Z" fill="none" stroke="var(--ink-color)" stroke-width="0.75" />
+            </svg>
+
+            <div class="ticket-content">
+              <div class="ticket-date-num" id="date-day" data-editable="text">22</div>
+              <div class="ticket-date-month" id="date-month" data-editable="text">NOV</div>
+              <div class="ticket-address" id="date-address" data-editable="text">123<br>Anywhere St.<br>Any City</div>
+              <div class="ticket-dashed-divider"></div>
+              <div class="ticket-time" id="date-time" data-editable="text">8 PM</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vertical-divider"></div>
+
+        <div class="bottom-right-col">
+          <h2 class="section-title" id="join-title" data-editable="text">Join us!</h2>
+          <div class="double-underline"></div>
+          <div class="body-paragraph" id="join-text" data-editable="text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </div>
+        </div>
+
+      </section>
+
+    </article>
+  </body>
+</html>
+
+

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Newspaper Poster Template 5</title>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  
+  <style>
+    :root {
+      --paper-bg: radial-gradient(circle at center, #faf6ef 0%, #f3ebd8 100%);
+      --paper-bg-fallback: #f5efe6;
+      --ink-color: #2c2421;
+      --dark-block-bg: #3c322d;
+      --font-serif: 'Gastronomy', serif;
+      --font-sans: 'Built Titling', sans-serif;
+      --font-gothic: 'Walbaum Fraktur', serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--paper-bg); font-family: var(--font-serif); color: var(--ink-color);  display: flex; justify-content: center;   overflow-x: hidden; }
+    
+    .poster-scale-container { width: 794px; height: 1123px; overflow: hidden; background: var(--paper-bg); background-color: var(--paper-bg-fallback); border: 1px solid #d8d4c9; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); padding: 36px 40px; box-sizing: border-box; display: grid; grid-template-rows: auto auto 1.25fr auto 1fr auto; gap: 10px; position: relative;  margin: 0 auto; }
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(44, 36, 33, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(44, 36, 33, 0.07); border-radius: 2px; }
+    .header-meta-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 4px; }
+    .meta-framed-card { position: relative; width: 120px; height: 65px; display: flex; align-items: center; justify-content: center; padding: 8px; color: var(--ink-color); }
+    .frame-border-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+    .frame-content { position: relative; z-index: 2; font-family: var(--font-sans); font-size: 10px; font-weight: 700; letter-spacing: 0.5px; line-height: 1.15; text-transform: uppercase; text-align: center; width: 100%; }
+    .header-flourish-container { display: flex; justify-content: center; align-items: center; flex-grow: 1; }
+    .divider-single-thin { height: 1.5px; background-color: var(--ink-color); width: 100%; margin-bottom: 8px; }
+    .divider-double-thin { box-sizing: content-box; height: 3px; border-top: 1.5px solid var(--ink-color); border-bottom: 1.5px solid var(--ink-color); margin: 4px 0; width: 100%; }
+    .divider-double-thick-thin { box-sizing: content-box; height: 3px; border-top: 4.5px solid var(--ink-color); border-bottom: 1.5px solid var(--ink-color); margin: 4px 0; width: 100%; }
+    .headline-text { font-family: 'Cloister Black', 'Old English Text MT', 'Chomsky', var(--font-gothic), serif; font-size: 70px; font-weight: 700; line-height: 0.9; letter-spacing: 1px; text-shadow: none; display: inline-block; white-space: nowrap; text-align: center; }
+    .banner-title-container { text-align: center; padding: 2px 0; }
+    .banner-title-text { font-family: var(--font-sans); font-size: 58px; font-weight: 700; text-transform: uppercase; line-height: 0.95; display: inline-block; width: 100%; letter-spacing: -0.5px; }
+    .banner-subtitle-text { font-family: var(--font-sans); font-size: 18px; font-weight: 400; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px; display: inline-block; width: 100%; }
+    .upper-body-section { display: grid; grid-template-columns: 1fr 1px 1.35fr; gap: 20px; align-items: stretch; padding: 4px 0; overflow: hidden; }
+    .vertical-divider { background-color: var(--ink-color); width: 1px; height: 100%; }
+    .upper-left-col { display: flex; flex-direction: column; }
+    .dark-date-block { background-color: var(--dark-block-bg); color: #faf6f0; padding: 10px 14px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; border: 1px solid var(--ink-color); }
+    .date-number { font-family: var(--font-sans); font-size: 68px; font-weight: 700; line-height: 0.9; }
+    .date-title { font-family: var(--font-sans); font-size: 11px; font-weight: 700; letter-spacing: 0.5px; line-height: 1.2; text-align: left; text-transform: uppercase; }
+    .body-paragraph { font-family: var(--font-serif); font-size: 14.5px; line-height: 1.4; text-align: justify; color: var(--ink-color); margin-bottom: 10px; word-break: break-word; }
+    .upper-right-col { display: flex; flex-direction: column; height: 100%; }
+    .image-upload-box { position: relative; width: 100%; height: 100%; border: 1.5px solid var(--ink-color); background-color: #ede9df; cursor: pointer; overflow: hidden; transition: all 0.2s ease; }
+    .image-upload-box.dragover { border: 2px dashed var(--ink-color); background-color: #e3decb; }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview { width: 100%; height: 100%; object-fit: cover; object-position: center center; filter: sepia(10%) contrast(1.02); display: block; }
+    .image-upload-box::after { content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(44, 36, 33, 0.75); color: #f6f4ee; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: 2px; opacity: 0; transition: opacity 0.2s ease; z-index: 5; text-align: center; padding: 20px; }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #57554e; z-index: 2; padding: 20px; text-align: center; }
+    .placeholder-icon { opacity: 0.6; }
+    .placeholder-text { font-family: var(--font-sans); font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+    .bottom-body-section { display: grid; grid-template-columns: 1.15fr 1px 2.15fr; gap: 16px; align-items: stretch; padding-top: 4px; overflow: hidden; }
+    .bottom-left-col { display: grid; grid-template-rows: 1fr 1fr; gap: 10px; height: 100%; }
+    .bottom-story-section { display: flex; flex-direction: column; height: 100%; }
+    .lower-section-title { font-family: var(--font-sans); font-size: 20px; font-weight: 700; line-height: 1.1; text-transform: uppercase; margin-bottom: 8px; color: var(--ink-color); letter-spacing: -0.2px; }
+    .lower-paragraph { font-family: var(--font-serif); font-size: 13.5px; line-height: 1.35; text-align: justify; color: var(--ink-color); margin-bottom: 8px; word-break: break-word; }
+    .story-split-row { display: grid; grid-template-columns: 1.35fr 1px 0.8fr; gap: 16px; align-items: stretch; margin-top: 6px; flex-grow: 1; overflow: hidden; }
+    .story-text-subcol { display: flex; flex-direction: column; height: 100%; }
+    .story-photo-subcol { display: flex; flex-direction: column; height: 100%; }
+    @media print {
+      body { background: #ffffff; margin: 0; padding: 0; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      
+      .poster-scale-container { transform: none !important; position: static !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; margin: 0 !important; page-break-inside: avoid; page-break-after: avoid; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <article class="poster-scale-container">
+      <section class="header-section">
+        <div class="header-meta-row">
+          <div class="meta-framed-card">
+            <svg class="frame-border-svg" viewBox="0 0 120 65" preserveAspectRatio="none">
+              <rect x="3" y="3" width="114" height="59" fill="none" stroke="var(--ink-color)" stroke-width="1.25"/>
+              <rect x="5" y="5" width="110" height="55" fill="none" stroke="var(--ink-color)" stroke-width="0.5"/>
+              <path d="M 3,12 C 3,10 10,3 12,3 M 117,12 C 117,10 110,3 108,3 M 3,53 C 3,55 10,62 12,62 M 117,53 C 117,55 110,62 108,62" fill="none" stroke="var(--ink-color)" stroke-width="1.25"/>
+            </svg>
+            <div class="frame-content" id="card-left-text" data-editable="text">Where Two<br>Stories<br>Become One</div>
+          </div>
+          <div class="header-flourish-container">
+            <h2 class="headline-text" id="meta-headline" data-editable="text">Breaking News</h2>
+          </div>
+          <div class="meta-framed-card">
+            <svg class="frame-border-svg" viewBox="0 0 120 65" preserveAspectRatio="none">
+              <rect x="3" y="3" width="114" height="59" fill="none" stroke="var(--ink-color)" stroke-width="1.25"/>
+              <rect x="5" y="5" width="110" height="55" fill="none" stroke="var(--ink-color)" stroke-width="0.5"/>
+              <path d="M 3,12 C 3,10 10,3 12,3 M 117,12 C 117,10 110,3 108,3 M 3,53 C 3,55 10,62 12,62 M 117,53 C 117,55 110,62 108,62" fill="none" stroke="var(--ink-color)" stroke-width="1.25"/>
+            </svg>
+            <div class="frame-content" id="card-right-text" data-editable="text">Celebrating<br>The Promise<br>Of Forever</div>
+          </div>
+        </div>
+        <div class="divider-double-thin"></div>
+      </section>
+
+      <section class="banner-title-container">
+        <h1 class="banner-title-text" id="banner-title" data-editable="text">CELEBRATING THE JOURNEY</h1>
+        <h2 class="banner-subtitle-text" id="banner-subtitle" data-editable="text">OF LOVE, LAUGHTER, AND FOREVER TOGETHER</h2>
+        <div class="divider-double-thick-thin"></div>
+      </section>
+
+      <section class="upper-body-section">
+        <div class="upper-left-col">
+          <div class="dark-date-block">
+            <div class="date-number" id="date-num" data-editable="text">24</div>
+            <div class="date-title" id="date-title" data-editable="text">THE DAY TWO HEARTS<br>BECAME ONE AND<br>PROMISED A LIFETIME<br>TOGETHER</div>
+          </div>
+          <div class="body-paragraph" id="left-p1" data-editable="text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu pretium neque. Vivamus euismod mauris eget nibh ultrices, vitae molestie sem suscipit. Nullam non fringilla lacus.
+          </div>
+          <div class="body-paragraph" id="left-p2" data-editable="text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu pretium neque. Vivamus euismod mauris eget nibh ultrices, vitae molestie sem suscipit. 
+          </div>
+        </div>
+
+        <div class="vertical-divider"></div>
+
+        <div class="upper-right-col">
+          <div class="image-upload-box" id="main-image-box" data-editable="image">
+            <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="main-image-img" class="image-preview" src="" alt="Main Portrait Photo">
+            </div>
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2"/>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span class="placeholder-text">Click to upload portrait</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider-double-thin"></div>
+
+      <section class="bottom-body-section">
+        <div class="bottom-left-col">
+          <div class="image-upload-box" id="lower-left-1-box">
+            <input type="file" id="lower-left-1-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="lower-left-1-img" class="image-preview" src="" alt="Wedding Detail 1">
+            </div>
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2"/>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span class="placeholder-text">Upload photo</span>
+            </div>
+          </div>
+          <div class="image-upload-box" id="lower-left-2-box">
+            <input type="file" id="lower-left-2-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="lower-left-2-img" class="image-preview" src="" alt="Wedding Detail 2">
+            </div>
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2"/>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span class="placeholder-text">Upload photo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="vertical-divider"></div>
+
+        <div class="bottom-story-section">
+          <h2 class="lower-section-title" id="lower-title" data-editable="text">A WEDDING TO REMEMBER: A DAY OF JOY, FAMILY, AND PROMISES KEPT</h2>
+          <div class="lower-paragraph" id="lower-p1" data-editable="text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu pretium neque. Vivamus euismod mauris eget nibh ultrices, vitae molestie sem suscipit.
+          </div>
+          
+          <div class="story-split-row">
+            <div class="story-text-subcol">
+              <div class="lower-paragraph" id="lower-p2" data-editable="text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu pretium neque.
+              </div>
+              <div class="lower-paragraph" id="lower-p3" data-editable="text">
+                Aenean elementum dui vitae nibh scelerisque sodales. Donec ultrices libero tellus.
+              </div>
+            </div>
+            
+            <div class="vertical-divider"></div>
+            
+            <div class="story-photo-subcol">
+              <div class="image-upload-box" id="lower-right-box">
+                <input type="file" id="lower-right-input" class="image-file-input" accept="image/*">
+                <div class="image-preview-container">
+                  <img id="lower-right-img" class="image-preview" src="" alt="Wedding Portrait Small">
+                </div>
+                <div class="placeholder-state">
+                  <svg class="placeholder-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                    <circle cx="12" cy="12" r="3.2"/>
+                    <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                  </svg>
+                  <span class="placeholder-text">Upload</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </section>
+
+      <div class="divider-thick-thin"></div>
+    </article>
+  </body>
+</html>
+
+

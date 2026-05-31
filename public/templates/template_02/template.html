@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Newspaper Poster Template 2</title>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+
+  <style>
+    :root {
+      --paper-bg: radial-gradient(circle at center, #faf9f6 0%, #f1efe9 100%);
+      --paper-bg-fallback: #f2f1ed;
+      --ink-color: #1a1917;
+      --font-serif: 'Gastronomy', serif;
+      --font-sans: 'Built Titling', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--paper-bg);
+      font-family: var(--font-serif);
+      color: var(--ink-color);
+      
+      display: flex; justify-content: center;
+      
+      
+      overflow-x: hidden;
+    }
+    
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden; background: var(--paper-bg); background-color: var(--paper-bg-fallback);
+      border: 1px solid #d8d4c9; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); padding: 42px 48px; box-sizing: border-box;
+      display: grid; grid-template-rows: auto auto auto 384px 170px 260px; gap: 15px; position: relative;  margin: 0 auto;
+    }
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(28, 27, 24, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(28, 27, 24, 0.07); border-radius: 2px; }
+    .header-meta-row { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-sans); font-size: 13.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; padding-bottom: 6px; border-bottom: 1px solid var(--ink-color); }
+    .meta-left { text-align: left; }
+    .meta-right { text-align: right; }
+    .masthead-container { text-align: center; padding: 4px 0; }
+    .masthead-title { font-family: var(--font-serif); font-size: 84px; font-weight: 500; text-transform: uppercase; letter-spacing: 6px; text-align: center; line-height: 0.95; display: inline-block; width: 100%; }
+    .sub-masthead { display: flex; align-items: center; text-align: center; font-family: var(--font-sans); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-color); padding: 2px 0; }
+    .sub-masthead::before, .sub-masthead::after { content: ''; flex: 1; border-bottom: 1.5px solid var(--ink-color); }
+    .sub-masthead::before { margin-right: 15px; }
+    .sub-masthead::after { margin-left: 15px; }
+    .main-image-container { position: relative; width: 100%; height: 100%; }
+    .image-upload-box { position: relative; width: 100%; height: 100%; border: 1.5px solid var(--ink-color); background-color: #ede9df; cursor: pointer; overflow: hidden; transition: all 0.2s ease; }
+    .image-upload-box.dragover { border: 2px dashed var(--ink-color); background-color: #e3decb; }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(100%) contrast(1.08) brightness(0.97); display: block; }
+    .image-upload-box::after { content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(28, 27, 24, 0.75); color: #f6f4ee; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 11px; font-weight: 500; letter-spacing: 2px; opacity: 0; transition: opacity 0.2s ease; z-index: 5; text-align: center; padding: 20px; }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #57554e; z-index: 2; padding: 20px; text-align: center; }
+    .placeholder-icon { opacity: 0.6; }
+    .placeholder-text { font-family: var(--font-sans); font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+    .image-text-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 30px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; z-index: 6; pointer-events: none; }
+    .image-text-overlay [data-editable="text"] { pointer-events: auto; font-family: var(--font-sans); text-transform: uppercase; line-height: 1.05; }
+    .image-text-overlay [data-editable="text"]:hover { background-color: rgba(255, 255, 255, 0.15); border-radius: 2px; }
+    .image-text-overlay [data-editable="text"]:focus { background-color: rgba(255, 255, 255, 0.25); border-radius: 2px; }
+    .overlay-line-1 { font-size: 52px; font-weight: 700; color: #ffd54f; letter-spacing: -1.5px; margin-bottom: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); }
+    .overlay-line-2 { font-size: 52px; font-weight: 700; color: #ffffff; letter-spacing: -1.5px; margin-bottom: 12px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); }
+    .overlay-line-3 { font-size: 15px; font-weight: 600; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 2px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); }
+    .overlay-line-4 { font-size: 15px; font-weight: 600; color: #ffffff; letter-spacing: 0.5px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); }
+    .article-paragraphs-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; padding: 4px 0; }
+    .article-col { font-family: var(--font-serif); font-size: 14.5px; line-height: 1.4; text-align: justify; color: #2b2a26; word-break: break-word; }
+    .bottom-section-grid { display: grid; grid-template-columns: 1.05fr 1.05fr 1.2fr; gap: 20px; align-items: stretch; }
+    .bottom-photo-col { display: flex; flex-direction: column; height: 100%; }
+    .bottom-text-col { display: flex; flex-direction: column; justify-content: flex-start; }
+    .bottom-title { font-family: var(--font-sans); font-size: 26px; font-weight: 700; line-height: 1.1; text-transform: capitalize; margin-bottom: 8px; color: var(--ink-color); }
+    .bottom-body-text { font-family: var(--font-serif); font-size: 14px; line-height: 1.38; text-align: justify; color: #2b2a26; word-break: break-word; }
+    @media print {
+      body { background: #ffffff; margin: 0; padding: 0; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      
+      .poster-scale-container { transform: none !important; position: static !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; margin: 0 !important; page-break-inside: avoid; page-break-after: avoid; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <article class="poster-scale-container">
+      <header class="header-meta-row">
+        <span class="meta-left" id="meta-left" data-editable="text">STUDIO SHODWE</span>
+        <span class="meta-right" id="meta-right" data-editable="text">27 SEPTEMBER, 2026</span>
+      </header>
+
+      <section class="masthead-container">
+        <h1 class="masthead-title" id="masthead-title" data-editable="text">NEWSPAPER</h1>
+      </section>
+
+      <section class="sub-masthead">
+        <span id="sub-masthead-title" data-editable="text">WORLD OF PHOTOGRAPHY</span>
+      </section>
+
+      <section class="main-image-container">
+        <div class="image-upload-box" id="main-image-box" data-editable="image">
+          <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="main-image-img" class="image-preview" src="" alt="Main Landscape">
+          </div>
+          <div class="placeholder-state">
+            <svg class="placeholder-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+              <circle cx="12" cy="12" r="3.2" />
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+            </svg>
+            <span class="placeholder-text">Click to upload image</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="article-paragraphs-row">
+        <div class="article-col" id="col-text-1" data-editable="text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam a velit sit amet lectus dignissim dapibus sed sit amet nisl.
+        </div>
+        <div class="article-col" id="col-text-2" data-editable="text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam a velit sit amet lectus dignissim dapibus sed sit amet nisl.
+        </div>
+        <div class="article-col" id="col-text-3" data-editable="text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam a velit sit amet lectus dignissim dapibus sed sit amet nisl.
+        </div>
+      </section>
+
+      <section class="bottom-section-grid">
+        <div class="bottom-photo-col">
+          <div class="image-upload-box" id="bottom-left-box">
+            <input type="file" id="bottom-left-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="bottom-left-img" class="image-preview" src="" alt="Bottom Left Photo">
+            </div>
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2" />
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+              </svg>
+              <span class="placeholder-text">Upload photo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-photo-col">
+          <div class="image-upload-box" id="bottom-middle-box">
+            <input type="file" id="bottom-middle-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="bottom-middle-img" class="image-preview" src="" alt="Bottom Middle Photo">
+            </div>
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2" />
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+              </svg>
+              <span class="placeholder-text">Upload photo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-text-col">
+          <h2 class="bottom-title" id="bottom-title" data-editable="text">Techniques in<br>Photography</h2>
+          <div class="bottom-body-text" id="bottom-text" data-editable="text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam a velit sit amet lectus dignissim dapibus sed sit amet nisl.
+          </div>
+        </div>
+      </section>
+
+    </article>
+  </body>
+</html>
+
+

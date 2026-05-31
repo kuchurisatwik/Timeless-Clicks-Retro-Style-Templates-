@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Newspaper Poster Template 7</title>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  
+  <style>
+    :root {
+      --paper-bg-fallback: #ebdccb;
+      --ink-color: #2b2724; 
+      --dark-block-bg: #3b3530; 
+      --font-serif: 'Gastronomy', serif;
+      --font-sans: 'Built Titling', sans-serif;
+      --font-gothic: 'Walbaum Fraktur', serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: #dcd7ca; font-family: var(--font-serif); color: var(--ink-color);  display: flex; justify-content: center;   overflow-x: hidden; }
+    
+    
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden; background-size: cover; background-position: center; background-color: var(--paper-bg-fallback);
+      border: 1px solid #c0b8ad; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); padding: 38px 44px; box-sizing: border-box;
+      display: grid; grid-template-rows: auto 1.48fr auto 0.52fr; gap: 12px; position: relative;  margin: 0 auto;
+    }
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(59, 53, 48, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(59, 53, 48, 0.08); border-radius: 2px; }
+    
+    .divider-double-thin { box-sizing: content-box; height: 2px; border-top: 1.5px solid var(--ink-color); border-bottom: 1.5px solid var(--ink-color); width: 100%; margin: 2px 0; }
+    .header-section { display: flex; flex-direction: column; width: 100%; }
+    .top-special-line { display: flex; align-items: center; width: 100%; margin-bottom: 4px; }
+    .special-line-part { flex-grow: 1; height: 1px; background-color: var(--ink-color); }
+    .special-line-text { font-family: var(--font-serif); font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 0 12px; line-height: 1; }
+    .masthead-row { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 4px 0; }
+    .masthead-left, .masthead-right { font-family: var(--font-serif); font-size: 15px; font-weight: 700; letter-spacing: 0.5px; width: 140px; }
+    .masthead-right { text-align: right; }
+    .masthead-title { font-family: 'Cloister Black', 'Old English Text MT', 'Chomsky', var(--font-gothic), serif; font-size: 64px; font-weight: 700; text-align: center; flex-grow: 1; display: flex; align-items: center; justify-content: center; gap: 15px; line-height: 0.95; }
+    .masthead-star { font-family: var(--font-serif); font-size: 24px; vertical-align: middle; line-height: 1; }
+    
+    .upper-body-section { display: grid; grid-template-columns: 1fr 2.3fr; gap: 24px; align-items: stretch; width: 100%; overflow: hidden; }
+    .upper-left-col { display: flex; flex-direction: column; height: 100%; }
+    .left-header-block { background-color: var(--dark-block-bg); color: #ffffff; font-family: var(--font-serif); font-size: 21px; font-weight: 700; text-align: center; padding: 8px 10px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.15; margin-bottom: 12px; width: 100%; }
+    .left-paragraph-box { font-family: var(--font-serif); font-size: 13.5px; line-height: 1.45; text-align: justify; color: var(--ink-color); margin-bottom: 12px; }
+    .drop-cap-box { float: left; background-color: var(--dark-block-bg); color: #ffffff; font-family: 'Cloister Black', 'Old English Text MT', 'Chomsky', var(--font-gothic), serif; font-size: 36px; font-weight: 700; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 8px; margin-top: 4px; line-height: 1; }
+    .exclusive-block { background-color: var(--dark-block-bg); color: #ffffff; font-family: var(--font-sans); font-size: 24px; font-weight: 700; text-align: center; padding: 12px 10px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.2; width: 100%; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+    
+    .upper-right-col { display: flex; flex-direction: column; height: 100%; }
+    .main-headline-container { display: flex; flex-direction: column; margin-bottom: 8px; }
+    .main-headline-italic { font-family: var(--font-serif); font-size: 50px; font-weight: 400; font-style: italic; line-height: 0.95; letter-spacing: -0.5px; }
+    .main-headline-bold { font-family: var(--font-serif); font-size: 88px; font-weight: 700; line-height: 0.85; letter-spacing: -1.5px; }
+    .main-headline-normal { font-family: var(--font-serif); font-size: 38px; font-weight: 700; line-height: 0.95; letter-spacing: -0.5px; }
+    .upper-right-col .image-upload-box { flex-grow: 1; height: 0; margin-top: 8px; }
+    
+    .image-upload-box { position: relative; width: 100%; height: 100%; border: 1.5px solid var(--ink-color); background-color: rgba(237, 231, 220, 0.5); cursor: pointer; overflow: hidden; transition: all 0.2s ease; }
+    .image-upload-box.dragover { border: 2px dashed var(--ink-color); background-color: rgba(226, 219, 205, 0.7); }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview { width: 100%; height: 100%; object-fit: cover; object-position: center center; filter: sepia(12%) contrast(1.02); display: block; }
+    .image-upload-box::after { content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(43, 39, 36, 0.8); color: #ffffff; display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; opacity: 0; transition: opacity 0.2s ease; z-index: 5; text-align: center; padding: 10px; }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #615c4d; z-index: 2; padding: 20px; text-align: center; }
+    .placeholder-icon { opacity: 0.6; }
+    .placeholder-text { font-family: var(--font-serif); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+    
+    .quote-banner-container { width: 100%; text-align: center; padding: 2px 0; }
+    .quote-banner-text { font-family: var(--font-sans); font-size: 18px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; line-height: 1.2; padding: 6px 0; }
+    
+    .bottom-columns-section { display: grid; grid-template-columns: 1fr 1.6fr 1.6fr 1fr; gap: 16px; align-items: stretch; width: 100%; overflow: hidden; }
+    .bottom-photo-col { display: flex; flex-direction: column; height: 100%; }
+    .bottom-text-col { display: flex; flex-direction: column; height: 100%; justify-content: center; }
+    .bottom-columns-section .body-paragraph { font-family: var(--font-serif); font-size: 14.5px; line-height: 1.45; text-align: justify; color: var(--ink-color); word-break: break-word; }
+    
+    @media print {
+      body { background: #ffffff; margin: 0; padding: 0; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      
+      .poster-scale-container { transform: none !important; position: static !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; margin: 0 !important; page-break-inside: avoid; page-break-after: avoid; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <article class="poster-scale-container">
+      
+      <section class="header-section">
+        <div class="top-special-line">
+          <span class="special-line-part"></span>
+          <span class="special-line-text" id="special-text" data-editable="text">SPECIAL EDITION</span>
+          <span class="special-line-part"></span>
+        </div>
+        
+        <div class="masthead-row">
+          <div class="masthead-left" id="meta-vol" data-editable="text">VOL. 10, NO. 4</div>
+          <h2 class="masthead-title">
+            <span class="masthead-star">*</span>
+            <span id="meta-headline" data-editable="text">Daily Quote</span>
+            <span class="masthead-star">*</span>
+          </h2>
+          <div class="masthead-right" id="meta-date" data-editable="text">10 MAY 2025</div>
+        </div>
+        
+        <div class="divider-double-thin"></div>
+      </section>
+
+      <section class="upper-body-section">
+        
+        <div class="upper-left-col">
+          <div class="left-header-block" id="left-header-title" data-editable="text">
+            WRITE YOUR<br>OWN STORY
+          </div>
+          <div class="left-paragraph-box">
+            <span class="drop-cap-box" id="left-drop-cap" data-editable="text">I</span>
+            <span id="left-text-content" data-editable="text">n life, you are not a bystander; you are the main character of your own story. Every choice, every challenge, and every victory is a chapter that you write.</span>
+          </div>
+          <div class="exclusive-block" id="left-exclusive-text" data-editable="text">
+            EXCLUSIVE<br>
+            EXCLUSIVE<br>
+            EXCLUSIVE<br>
+            EXCLUSIVE<br>
+            EXCLUSIVE
+          </div>
+        </div>
+
+        <div class="upper-right-col">
+          <div class="main-headline-container">
+            <h2 class="main-headline-italic" id="headline-p1" data-editable="text">You are the main-</h2>
+            <h1 class="main-headline-bold" id="headline-p2" data-editable="text">CHARACTER</h1>
+            <h2 class="main-headline-normal" id="headline-p3" data-editable="text">IN YOUR OWN STORY.</h2>
+          </div>
+          
+          <div class="divider-double-thin"></div>
+          
+          <div class="image-upload-box" id="main-image-box" data-editable="image">
+            <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="main-image-img" class="image-preview" src="" alt="Main Character Photo">
+            </div>
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2"/>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span class="placeholder-text">Click to upload main image</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="quote-banner-container">
+        <div class="divider-double-thin"></div>
+        <div class="quote-banner-text" id="middle-quote" data-editable="text">
+          OWN YOUR STORY, CHASE YOUR DREAMS, AND LIVE WITH PURPOSE.
+        </div>
+        <div class="divider-double-thin"></div>
+      </section>
+
+      <section class="bottom-columns-section">
+        <div class="bottom-photo-col">
+          <div class="image-upload-box" id="lower-left-box">
+            <input type="file" id="lower-left-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="lower-left-img" class="image-preview" src="" alt="Bottom Left Photo">
+            </div>
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2"/>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span class="placeholder-text">Photo</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bottom-text-col">
+          <div class="body-paragraph" id="lower-p1" data-editable="text">
+            This is your story, and you hold the power to make it extraordinary. Don't settle for autopilot—live with intention and passion.
+          </div>
+        </div>
+
+        <div class="bottom-text-col">
+          <div class="body-paragraph" id="lower-p2" data-editable="text">
+            Chase your dreams fearlessly, knowing each step brings you closer to your true potential. Life's challenges aren't roadblocks but valuable stepping stones.
+          </div>
+        </div>
+
+        <div class="bottom-photo-col">
+          <div class="image-upload-box" id="lower-right-box">
+            <input type="file" id="lower-right-input" class="image-file-input" accept="image/*">
+            <div class="image-preview-container">
+              <img id="lower-right-img" class="image-preview" src="" alt="Bottom Right Photo">
+            </div>
+            <div class="placeholder-state">
+              <svg class="placeholder-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <circle cx="12" cy="12" r="3.2"/>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              </svg>
+              <span class="placeholder-text">Photo</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </article>
+  </body>
+</html>
+
+

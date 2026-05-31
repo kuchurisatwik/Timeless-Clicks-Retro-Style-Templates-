@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Newspaper Poster Template 4</title>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  
+  <style>
+    :root {
+      --paper-bg: #ffffff;
+      --ink-color: #111111;
+      --font-serif: 'Gastronomy', serif;
+      --font-sans: 'Built Titling', sans-serif;
+      --font-gothic: 'Walbaum Fraktur', serif;
+      --font-display: 'Cinzel Decorative', serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--paper-bg); font-family: var(--font-serif); color: var(--ink-color); display: flex; justify-content: center;  overflow-x: hidden; }
+    .poster-scale-container { width: 794px; height: 1123px; overflow: hidden; background: var(--paper-bg); padding: 42px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; margin: 0 auto; }
+    
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(28, 27, 24, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(28, 27, 24, 0.07); border-radius: 2px; }
+    
+    .header-meta-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; }
+    .meta-col { flex: 1; }
+    .meta-left { text-align: left; font-family: var(--font-sans); font-size: 15.5px; font-weight: 700; letter-spacing: 2px; line-height: 1.22; }
+    .meta-center { text-align: center; font-family: var(--font-serif); font-size: 18.5px; font-weight: 700; letter-spacing: 1.5px; }
+    .meta-right { text-align: right; font-family: var(--font-sans); font-size: 15.5px; font-weight: 700; letter-spacing: 2px; line-height: 1.22; }
+    
+    .thin-divider-line { height: 1.5px; background-color: var(--ink-color); width: 100%; margin: 2px 0; }
+    .double-line-bottom-thick { border-bottom: 1.5px solid var(--ink-color); position: relative; margin-bottom: 4px; }
+    .double-line-bottom-thick::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 4px; background-color: var(--ink-color); }
+    
+    .headline-container { text-align: center; padding: 2px 0; }
+    .headline-text { font-family: 'Chomsky', serif; font-size: 84px; font-weight: normal; line-height: 0.9; letter-spacing: 1px; text-shadow: none; display: inline-block; width: 100%; }
+    
+    .display-title-container { text-align: center; padding: 4px 0; }
+    .display-title-text { font-family: var(--font-display); font-size: 40px; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; word-spacing: 6px; line-height: 1.1; display: inline-block; width: 100%; }
+    
+    .main-image-container { position: relative; width: 100%; height: 100%; }
+    .image-upload-box { position: relative; width: 100%; height: 100%; border: 1.5px solid var(--ink-color); background-color: #f7f6f2; cursor: pointer; overflow: hidden; transition: all 0.2s ease; }
+    .image-upload-box.dragover { border: 2px dashed var(--ink-color); background-color: #edece8; }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview { width: 100%; height: 100%; object-fit: cover; object-position: center center; filter: grayscale(100%) contrast(1.08) brightness(0.97); display: block; }
+    .image-upload-box::after { content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(28, 27, 24, 0.75); color: #ffffff; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 11.5px; font-weight: 500; letter-spacing: 2px; opacity: 0; transition: opacity 0.2s ease; z-index: 5; text-align: center; padding: 20px; }
+    .image-upload-box:hover::after { opacity: 1; }
+    .placeholder-state { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #57554e; z-index: 2; padding: 20px; text-align: center; }
+    .placeholder-icon { opacity: 0.6; }
+    .placeholder-text { font-family: var(--font-sans); font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+    
+    @media print {
+      body { background: #ffffff; margin: 0; padding: 0; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      
+      .poster-scale-container { transform: none !important; position: static !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; margin: 0 !important; page-break-inside: avoid; page-break-after: avoid; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+
+    <article class="poster-scale-container">
+      
+      <section class="header-section">
+        <div class="header-meta-row">
+          <div class="meta-col meta-left">
+            <div id="meta-left-1" data-editable="text">SEPTEMBER</div>
+            <div id="meta-left-2" data-editable="text">24TH</div>
+          </div>
+          <div class="meta-col meta-center" id="meta-center" data-editable="text">OLIVIA AND COREY</div>
+          <div class="meta-col meta-right">
+            <div id="meta-right-1" data-editable="text">123 ANY</div>
+            <div id="meta-right-2" data-editable="text">WHERE ST.</div>
+          </div>
+        </div>
+        <div class="thin-divider-line"></div>
+      </section>
+
+      <section class="headline-container">
+        <h2 class="headline-text" id="headline" data-editable="text">The Newlywed Times</h2>
+        <div class="double-line-bottom-thick"></div>
+      </section>
+
+      <section class="display-title-container">
+        <h1 class="display-title-text" id="wedding-title" data-editable="text">WEDDING OF THE YEAR</h1>
+      </section>
+
+      <section class="main-image-container">
+        <div class="image-upload-box" id="main-image-box" data-editable="image">
+          <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+          <div class="image-preview-container">
+            <img id="main-image-img" class="image-preview" src="" alt="Wedding Portrait">
+          </div>
+          <div class="placeholder-state">
+            <svg class="placeholder-icon" viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+              <circle cx="12" cy="12" r="3.2"/>
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+            </svg>
+            <span class="placeholder-text">Click to upload portrait</span>
+          </div>
+        </div>
+      </section>
+
+    </article>
+    
+  </body>
+</html>
+
+
