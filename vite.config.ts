@@ -1,17 +1,18 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type ViteDevServer } from 'vite'
 import react from '@vitejs/plugin-react'
 import fs from 'fs'
 import path from 'path'
+import type { IncomingMessage, ServerResponse } from 'http'
 
 // Custom plugin to handle saving templates to disk
 const templateSaverPlugin = () => {
   return {
     name: 'template-saver',
-    configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use(async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
         if (req.url === '/api/save-template' && req.method === 'POST') {
           let body = '';
-          req.on('data', chunk => {
+          req.on('data', (chunk: Buffer) => {
             body += chunk.toString();
           });
           req.on('end', () => {

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import html2canvas from 'html2canvas';
