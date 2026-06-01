@@ -3,6 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import html2canvas from 'html2canvas';
 
+// Prioritized fallback model list — tried in order when the primary model hits a 429 rate limit
+const FALLBACK_MODELS = [
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-2.0-flash-lite',
+  'gemini-1.5-flash',
+  'gemini-1.5-pro',
+];
+
 const EditorPage: React.FC = () => {
   const { templateId } = useParams<{ templateId: string }>();
   const navigate = useNavigate();
@@ -411,7 +420,37 @@ const EditorPage: React.FC = () => {
       if (!iframeDoc) throw new Error("Iframe not accessible");
 
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: apiModel });
+
+      // Build ordered model list: user-selected first, then fallbacks (deduplicated)
+      const modelsToTry = [apiModel, ...FALLBACK_MODELS.filter(m => m !== apiModel)];
+
+      // Helper: try generateContent with automatic fallback on 429
+      const generateWithFallback = async (prompt: string) => {
+        let lastError: unknown = null;
+        for (const modelName of modelsToTry) {
+          try {
+            console.log(`[AI Director] Trying model: ${modelName}`);
+            const model = genAI.getGenerativeModel({ model: modelName });
+            const result = await model.generateContent(prompt);
+            if (modelName !== apiModel) {
+              console.log(`[AI Director] Succeeded with fallback model: ${modelName}`);
+            }
+            return result;
+          } catch (err: unknown) {
+            lastError = err;
+            const errMsg = err instanceof Error ? err.message : String(err);
+            // Only fallback on rate-limit (429) errors
+            if (errMsg.includes('429') || errMsg.toLowerCase().includes('quota') || errMsg.toLowerCase().includes('rate')) {
+              console.warn(`[AI Director] Model ${modelName} rate-limited, trying next fallback...`);
+              continue;
+            }
+            // For non-rate-limit errors, throw immediately
+            throw err;
+          }
+        }
+        // All models exhausted
+        throw lastError || new Error('All models exhausted due to rate limits. Please wait a moment and try again.');
+      };
 
       if (target) {
         // --- MODE A: TARGETED EDIT ---
@@ -426,7 +465,7 @@ const EditorPage: React.FC = () => {
         
         Return ONLY the final modified text. Do not include markdown, explanations, or quotes around the output.`;
 
-        const result = await model.generateContent(prompt);
+        const result = await generateWithFallback(prompt);
         const newText = result.response.text().trim();
         
         if (newText) {
@@ -511,7 +550,7 @@ const EditorPage: React.FC = () => {
         }
         Only include keys in the JSON that need to be changed. If no theme changes, omit "theme". For visibility, set false to hide an element, true to show.`;
 
-        const result = await model.generateContent(prompt);
+        const result = await generateWithFallback(prompt);
         let responseText = result.response.text().trim();
         
         // Clean up markdown if Gemini adds it
@@ -708,6 +747,8 @@ const EditorPage: React.FC = () => {
               <option value="gemini-2.5-pro" />
               <option value="gemini-2.0-flash" />
               <option value="gemini-2.0-flash-lite" />
+              <option value="gemini-1.5-flash" />
+              <option value="gemini-1.5-pro" />
             </datalist>
           </div>
 
