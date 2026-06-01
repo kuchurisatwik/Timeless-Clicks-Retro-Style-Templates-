@@ -5,11 +5,10 @@ import html2canvas from 'html2canvas';
 
 // Prioritized fallback model list — tried in order when the primary model hits a 429 rate limit
 const FALLBACK_MODELS = [
+  'gemini-3.0-flash',
   'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-2.0-flash-lite',
-  'gemini-1.5-flash',
-  'gemini-1.5-pro',
+  'gemini-3.1-flash-lite',
+  'gemini-2.5-flash-lite',
 ];
 
 const EditorPage: React.FC = () => {
@@ -743,12 +742,10 @@ const EditorPage: React.FC = () => {
               </button>
             </div>
             <datalist id="gemini-models">
+              <option value="gemini-3.0-flash" />
               <option value="gemini-2.5-flash" />
-              <option value="gemini-2.5-pro" />
-              <option value="gemini-2.0-flash" />
-              <option value="gemini-2.0-flash-lite" />
-              <option value="gemini-1.5-flash" />
-              <option value="gemini-1.5-pro" />
+              <option value="gemini-3.1-flash-lite" />
+              <option value="gemini-2.5-flash-lite" />
             </datalist>
           </div>
 
