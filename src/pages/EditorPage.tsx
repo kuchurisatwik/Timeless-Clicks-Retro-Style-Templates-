@@ -21,7 +21,21 @@ const EditorPage: React.FC = () => {
   
   const [aiPrompt, setAiPrompt] = useState("");
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [zoom, setZoom] = useState(0.6);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+  const [zoom, setZoom] = useState(() => {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      return Math.max(0.2, (window.innerWidth - 32) / 794); // fit width with small padding
+    }
+    return 0.6;
+  });
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Undo/Redo State
   interface EditorState {
@@ -674,7 +688,7 @@ const EditorPage: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: isMobile ? 'column-reverse' : 'row', height: '100vh', width: '100vw', overflow: 'hidden' }}>
       {/* Hidden file input */}
       <input 
         type="file" 
@@ -686,15 +700,18 @@ const EditorPage: React.FC = () => {
 
       {/* Sidebar */}
       <aside style={{
-        width: '380px',
+        width: isMobile ? '100%' : '380px',
+        height: isMobile ? '45vh' : 'auto',
         background: 'rgba(30, 41, 59, 0.5)',
         backdropFilter: 'blur(16px)',
-        borderRight: '1px solid var(--border-color)',
+        borderRight: isMobile ? 'none' : '1px solid var(--border-color)',
+        borderTop: isMobile ? '1px solid var(--border-color)' : 'none',
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',
         gap: '16px',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        flexShrink: 0
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
           <button className="btn btn-secondary" onClick={() => navigate('/')} style={{ padding: '8px 12px' }}>
@@ -1097,8 +1114,8 @@ const EditorPage: React.FC = () => {
         {/* Undo/Redo controls */}
         <div style={{
           position: 'absolute',
-          top: '24px',
-          right: '24px',
+          top: isMobile ? '12px' : '24px',
+          right: isMobile ? '12px' : '24px',
           zIndex: 10,
           display: 'flex',
           gap: '8px'
@@ -1140,8 +1157,8 @@ const EditorPage: React.FC = () => {
         {/* Zoom controls */}
         <div style={{
           position: 'absolute',
-          bottom: '24px',
-          right: '24px',
+          bottom: isMobile ? '12px' : '24px',
+          right: isMobile ? '12px' : '24px',
           zIndex: 10,
           display: 'flex',
           alignItems: 'center',
@@ -1228,7 +1245,7 @@ const EditorPage: React.FC = () => {
         <div style={{
           flex: 1,
           overflow: 'auto',
-          padding: '32px',
+          padding: isMobile ? '16px' : '32px',
         }}>
           <div style={{
             width: `${794 * zoom}px`,

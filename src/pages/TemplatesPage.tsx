@@ -51,6 +51,7 @@ const TemplatesPage: React.FC = () => {
   const [containerWidth, setContainerWidth] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
   const [activeCategory, setActiveCategory] = useState('All Templates');
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
 
   const activeTemplates = templateCategories.find(c => c.name === activeCategory)?.templates || templateCategories[0].templates;
 
@@ -65,6 +66,7 @@ const TemplatesPage: React.FC = () => {
         setContainerWidth(containerRef.current.offsetWidth);
         setContainerHeight(containerRef.current.offsetHeight);
       }
+      setIsMobile(window.innerWidth <= 768);
     };
     measure();
     window.addEventListener('resize', measure);
@@ -163,7 +165,7 @@ const TemplatesPage: React.FC = () => {
     return t * t * 0.85;
   };
 
-  const showArrows = (activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP) > containerWidth;
+  const showArrows = !isMobile && (activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP) > containerWidth;
 
   return (
     <div style={{
@@ -173,7 +175,7 @@ const TemplatesPage: React.FC = () => {
       overflow: 'hidden',
       background: 'radial-gradient(ellipse at center, #1e293b 0%, #0f172a 70%)',
     }}>
-      <header style={{ padding: '32px 40px 10px', textAlign: 'center', flexShrink: 0 }}>
+      <header style={{ padding: isMobile ? '20px 16px 10px' : '32px 40px 10px', textAlign: 'center', flexShrink: 0 }}>
         <h1 className="logo-title">
           Timeless Clicks
         </h1>
@@ -228,17 +230,21 @@ const TemplatesPage: React.FC = () => {
       {/* Carousel container */}
       <div
         ref={containerRef}
+        className={isMobile ? "" : "hide-scrollbar"}
         style={{
           flex: 1,
           position: 'relative',
-          overflow: 'hidden',
+          overflowX: isMobile ? 'auto' : 'hidden',
+          overflowY: 'hidden',
+          scrollSnapType: isMobile ? 'x mandatory' : 'none',
+          WebkitOverflowScrolling: 'touch',
           cursor: showArrows ? (isDragging.current ? 'grabbing' : 'grab') : 'default',
         }}
-        onWheel={handleWheel}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerLeave={handlePointerUp}
+        onWheel={isMobile ? undefined : handleWheel}
+        onPointerDown={isMobile ? undefined : handlePointerDown}
+        onPointerMove={isMobile ? undefined : handlePointerMove}
+        onPointerUp={isMobile ? undefined : handlePointerUp}
+        onPointerLeave={isMobile ? undefined : handlePointerUp}
       >
         {/* Edge gradient overlays (purely decorative, over the entire viewport) */}
         {showArrows && (
@@ -337,16 +343,17 @@ const TemplatesPage: React.FC = () => {
           style={{
             display: 'flex',
             gap: `${CARD_GAP}px`,
-            transform: `translateX(${scrollX}px)`,
-            transition: isDragging.current ? 'none' : 'transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1)',
-            padding: '24px 0',
+            transform: isMobile ? 'none' : `translateX(${scrollX}px)`,
+            transition: isDragging.current || isMobile ? 'none' : 'transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1)',
+            padding: isMobile ? `24px ${CARD_GAP}px` : '24px 0',
             height: '100%',
             alignItems: 'center',
+            width: isMobile ? 'max-content' : 'auto'
           }}
         >
           {activeTemplates.map((id, index) => {
-            const overlay = getOverlayOpacity(index);
-            const scale = 1 - overlay * 0.08; // slightly shrink darkened cards
+            const overlay = isMobile ? 0 : getOverlayOpacity(index);
+            const scale = isMobile ? 1 : 1 - overlay * 0.08; // slightly shrink darkened cards on PC
 
             return (
               <div
@@ -358,6 +365,7 @@ const TemplatesPage: React.FC = () => {
                   borderRadius: '16px',
                   overflow: 'hidden',
                   cursor: 'pointer',
+                  scrollSnapAlign: isMobile ? 'center' : 'none',
                   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                   transform: `scale(${scale})`,
                   boxShadow: overlay < 0.2
@@ -369,16 +377,18 @@ const TemplatesPage: React.FC = () => {
                   if (!isDragging.current) navigate(`/editor/${id}`);
                 }}
                 onMouseEnter={e => {
-                  if (overlay < 0.3) {
+                  if (!isMobile && overlay < 0.3) {
                     e.currentTarget.style.transform = `scale(${scale * 1.03})`;
                     e.currentTarget.style.boxShadow = '0 16px 50px rgba(59,130,246,0.2)';
                   }
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.transform = `scale(${scale})`;
-                  e.currentTarget.style.boxShadow = overlay < 0.2
-                    ? '0 12px 40px rgba(0,0,0,0.4)'
-                    : '0 4px 16px rgba(0,0,0,0.2)';
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = `scale(${scale})`;
+                    e.currentTarget.style.boxShadow = overlay < 0.2
+                      ? '0 12px 40px rgba(0,0,0,0.4)'
+                      : '0 4px 16px rgba(0,0,0,0.2)';
+                  }
                 }}
               >
                 {/* Card preview */}
