@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>\n<html lang="en"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>Daily Bugle Comic Cover Template</title>
@@ -21,7 +19,7 @@
       background-color: #e0e0e0;
       font-family: var(--font-sans);
       color: var(--ink-color);
-      display: flex; justify-content: center;
+       
       padding: 20px 0;
     }
 
@@ -31,7 +29,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       padding: 25px 30px;
       display: flex; flex-direction: column; position: relative;
-    }
+     margin: 0 auto; }
 
     [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
     [data-editable="text"]:hover { background-color: rgba(0, 0, 0, 0.05); border-radius: 2px; }
@@ -260,7 +258,7 @@
 
     @media print {
       body { background: #fff; padding: 0; }
-      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm;  margin: 0 auto; }
       [data-editable="image"]::after, .image-file-input { display: none !important; }
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
@@ -270,18 +268,18 @@
   <article class="poster-scale-container">
     
     <div class="masthead-row">
-      <div class="marvel-box" id="marvel" data-editable="text">MARVEL</div>
+      <div class="marvel-box" id="marvel" data-editable="text" style="">MARVEL</div>
       
       <div class="masthead-center">
         <div class="bugle-title">
-          <span id="mh-left" data-editable="text">DAILY</span>
+          <span id="mh-left" data-editable="text" style="">DAILY</span>
           <div class="bugle-icon"></div>
-          <span id="mh-right" data-editable="text">BUGLE</span>
+          <span id="mh-right" data-editable="text" style="">BUGLE</span>
         </div>
-        <div class="masthead-sub" id="mh-sub" data-editable="text">NEW YORK'S FINEST DAILY NEWSPAPER</div>
+        <div class="masthead-sub" id="mh-sub" data-editable="text" style="">NEW YORK'S FINEST DAILY NEWSPAPER</div>
       </div>
       
-      <div class="final-box" id="final" data-editable="text">
+      <div class="final-box" id="final" data-editable="text" style="">
         <div class="stars">****</div>
         <div class="final">FINAL</div>
         <div>RATED T</div>
@@ -289,22 +287,22 @@
     </div>
 
     <div class="credits-row">
-      <span id="cred-left" data-editable="text">JOE KELLY * MICHAEL DOWLING * MARTE GRACIA</span>
-      <span id="cred-right" data-editable="text">Mostly Fair, slight chance of showers. High 78-82 &deg;F. Details p.2</span>
+      <span id="cred-left" data-editable="text" style="">JOE KELLY * MICHAEL DOWLING * MARTE GRACIA</span>
+      <span id="cred-right" data-editable="text" style="">Mostly Fair, slight chance of showers. High 78-82 °F. Details p.2</span>
     </div>
 
-    <div class="black-headline" id="hl-black" data-editable="text">
+    <div class="black-headline" id="hl-black" data-editable="text" style="">
       THE BRUTAL NEW SIDE OF
     </div>
 
     <div class="comic-title-area">
       <div class="issue-info">
-        <div class="issue-num" id="issue" data-editable="text"><sup>#</sup>10</div>
-        <div class="issue-lgy" id="lgy" data-editable="text">LGY#974</div>
+        <div class="issue-num" id="issue" data-editable="text" style=""><sup>#</sup>10</div>
+        <div class="issue-lgy" id="lgy" data-editable="text" style="">LGY#974</div>
       </div>
       <div class="title-logo">
-        <div class="the" id="the" data-editable="text">the</div>
-        <div class="amazing-spiderman" id="spiderman" data-editable="text">
+        <div class="the" id="the" data-editable="text" style="">the</div>
+        <div class="amazing-spiderman" id="spiderman" data-editable="text" style="">
           AMAZING<br>SPIDER-MAN
         </div>
       </div>
@@ -312,11 +310,11 @@
 
     <div class="content-area">
       <div class="article-col">
-        <div class="intro-para" id="intro" data-editable="text">
+        <div class="intro-para" id="intro" data-editable="text" style="">
           It might be time to drop "friendly" from the recently returned Spider-Man's moniker as most of his recent interactions with criminals has led said crooks into the I.C.U.
         </div>
-        <div class="byline" id="byline" data-editable="text">by Ben Urich</div>
-        <div class="article-text" id="body" data-editable="text">
+        <div class="byline" id="byline" data-editable="text" style="">by Ben Urich</div>
+        <div class="article-text" id="body" data-editable="text" style="">
           <span class="drop-cap">N</span>ew York City was left in shock a few weeks ago when Spider-Man failed to stop a destructive rampage across town, ending in Central Park. Eyewitnesses state that this was not for lack of trying. "Spidey webbed a bunch of those [nitrogen] tanks and hit the guy with it, turning him into an ice cube," said hot-dog stand worker Dan Lawrence. "But the dude just lit up and busted right out! Not sure what happened next. I took off."
           <br><br>
           What happened next was Spider-Man repeatedly making himself the target of this unknown assailant's rage. "The rock guy chopped down a statue like a lumberjack cuts down a tree," said Scarlet Holohan who was visiting Central Park that morning. "Spider-Man caught the statute and the gray guy kept pounding him." The fight spilled out onto nearby Central Park West where the strange gray monster, who some witnesses say called itself "Hellgate," punched Spider-Man with glowing fists, and the hero disappeared for weeks, leading some New Yorkers to assume the worst.
@@ -329,14 +327,15 @@
       <div class="image-col">
         <div class="image-upload-box" id="hero-img" data-editable="image">
           <input type="file" class="image-file-input" accept="image/*">
-          <div  class="image-preview" ></div>
+          <div class="image-preview"></div>
           <div class="placeholder-state">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"></path></svg>
           </div>
         </div>
       </div>
     </div>
 
   </article>
-</body>
-</html>
+
+
+</body></html>

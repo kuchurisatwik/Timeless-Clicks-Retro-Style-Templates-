@@ -21,7 +21,7 @@
       background-color: #a0a0a0;
       font-family: var(--font-sans);
       color: var(--ink-color);
-      display: flex; justify-content: center;
+       
       padding: 20px 0;
     }
 
@@ -33,7 +33,7 @@
       display: flex; flex-direction: column; position: relative;
       /* Add slight vignette to simulate aged paper */
       background-image: radial-gradient(circle, rgba(255,255,255,0) 50%, rgba(0,0,0,0.05) 100%);
-    }
+     margin: 0 auto; }
 
     [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
     [data-editable="text"]:hover { background-color: rgba(0, 0, 0, 0.05); border-radius: 2px; }
@@ -217,7 +217,7 @@
 
     @media print {
       body { background: #fff; padding: 0; }
-      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; background-image: none !important; background-color: #fff !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; background-image: none !important; background-color: #fff !important;  margin: 0 auto; }
       [data-editable="image"]::after, .image-file-input { display: none !important; }
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
