@@ -1362,7 +1362,7 @@ const EditorPage: React.FC = () => {
 
         {/* AI Director Section - Hero Tool */}
         <div style={{ 
-          display: 'flex', flexDirection: 'column', gap: '4px', flex: 1,
+          display: 'flex', flexDirection: 'column', gap: '4px',
           background: 'rgba(255, 77, 141, 0.05)',
           border: '1px solid rgba(255, 77, 141, 0.2)',
           borderRadius: '10px',
