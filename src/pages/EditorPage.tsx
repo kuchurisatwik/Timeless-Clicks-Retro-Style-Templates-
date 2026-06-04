@@ -795,6 +795,13 @@ const EditorPage: React.FC = () => {
         .canvas-frame:hover {
           transform: scale(1.01);
         }
+        .editor-sidebar::-webkit-scrollbar {
+          display: none;
+        }
+        .editor-sidebar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+        }
       `}</style>
 
       {/* Hidden file input */}
@@ -997,7 +1004,7 @@ const EditorPage: React.FC = () => {
         <div style={{
           flex: 1,
           overflow: 'auto',
-          padding: isMobile ? '16px' : '64px',
+          padding: isMobile ? '80px 16px 16px 16px' : '64px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -1034,7 +1041,7 @@ const EditorPage: React.FC = () => {
       </main>
 
       {/* Floating Left Sidebar */}
-      <aside style={{
+      <aside className="editor-sidebar" style={{
         width: isMobile ? '100%' : '350px',
         height: isMobile ? '45vh' : '100vh',
         background: 'rgba(255,255,255,0.02)',
@@ -1042,10 +1049,11 @@ const EditorPage: React.FC = () => {
         borderLeft: isMobile ? 'none' : '1px solid rgba(255,255,255,0.08)',
         borderTop: isMobile ? '1px solid rgba(255,255,255,0.08)' : 'none',
         padding: '10px',
+        paddingBottom: isMobile ? '20px' : '10px',
         display: 'flex',
         flexDirection: 'column',
         gap: '6px',
-        overflowY: 'hidden',
+        overflowY: 'auto',
         flexShrink: 0,
         zIndex: 10,
         boxShadow: '-10px 0 30px rgba(0,0,0,0.2)'
