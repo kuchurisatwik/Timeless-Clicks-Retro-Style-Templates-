@@ -1041,45 +1041,39 @@ const EditorPage: React.FC = () => {
         backdropFilter: 'blur(30px)',
         borderLeft: isMobile ? 'none' : '1px solid rgba(255,255,255,0.08)',
         borderTop: isMobile ? '1px solid rgba(255,255,255,0.08)' : 'none',
-        padding: '8px 12px',
+        padding: '10px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '4px',
+        gap: '6px',
         overflowY: 'hidden',
         flexShrink: 0,
         zIndex: 10,
         boxShadow: '-10px 0 30px rgba(0,0,0,0.2)'
       }}>
         {/* Header */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '0px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button 
-              onClick={() => navigate('/')} 
-              style={{ 
-                width: '28px', height: '28px', 
-                borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)', 
-                background: 'rgba(255,255,255,0.05)', color: '#fff',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', transition: 'all 0.2s'
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-            </button>
-            <h1 className="heading-font" style={{ margin: 0, fontSize: '1.5rem', fontWeight: 600 }}>Editor</h1>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-2)', fontSize: '0.8rem', fontWeight: 500, paddingLeft: '42px' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-            Design Studio
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+          <button 
+            onClick={() => navigate('/')} 
+            style={{ 
+              width: '28px', height: '28px', 
+              borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)', 
+              background: 'rgba(255,255,255,0.05)', color: '#fff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', transition: 'all 0.2s'
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+          <h1 className="heading-font" style={{ margin: 0, fontSize: '1.4rem', fontWeight: 600 }}>Editor</h1>
         </div>
 
         {/* API Settings Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', background: 'rgba(0,0,0,0.2)', padding: '6px 8px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Configuration</label>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Configuration</label>
           </div>
           
           <input 
@@ -1117,7 +1111,7 @@ const EditorPage: React.FC = () => {
             />
             <button 
               className="btn-gradient"
-              style={{ padding: '0 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}
+              style={{ padding: '0 10px', borderRadius: '8px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               onClick={async () => {
                 if (!apiKey) {
                   alert("Please enter an API key first.");
@@ -1189,12 +1183,12 @@ const EditorPage: React.FC = () => {
 
           {selectedFontSize === null && (
             <div style={{
-              padding: '6px 8px',
-              borderRadius: '8px',
+              padding: '4px 8px',
+              borderRadius: '6px',
               background: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,255,255,0.05)',
               color: 'var(--text-secondary)',
-              fontSize: '0.75rem',
+              fontSize: '0.7rem',
               textAlign: 'center',
               lineHeight: 1.2,
             }}>
@@ -1206,7 +1200,7 @@ const EditorPage: React.FC = () => {
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             background: 'rgba(0,0,0,0.2)',
-            borderRadius: '8px',
+            borderRadius: '10px',
             border: '1px solid rgba(255,255,255,0.05)',
             padding: '2px',
             opacity: selectedFontSize === null ? 0.35 : 1,
@@ -1297,7 +1291,7 @@ const EditorPage: React.FC = () => {
             border: '1px solid rgba(255,255,255,0.05)',
             padding: '6px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
               <span style={{ fontSize: '0.8rem', fontWeight: 500, color: 'var(--text-secondary)' }}>Fill Color</span>
               <span style={{ fontSize: '0.75rem', color: '#fff', marginLeft: 'auto', fontFamily: 'monospace', fontWeight: 500, background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px' }}>
                 {selectedFontColor.toUpperCase()}
@@ -1362,11 +1356,11 @@ const EditorPage: React.FC = () => {
 
         {/* AI Director Section - Hero Tool */}
         <div style={{ 
-          display: 'flex', flexDirection: 'column', gap: '4px',
+          display: 'flex', flexDirection: 'column', gap: '4px', flex: 1,
           background: 'rgba(255, 77, 141, 0.05)',
           border: '1px solid rgba(255, 77, 141, 0.2)',
           borderRadius: '10px',
-          padding: '6px 8px',
+          padding: '6px',
           boxShadow: 'inset 0 0 20px rgba(255, 77, 141, 0.05)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1403,8 +1397,8 @@ const EditorPage: React.FC = () => {
               <div style={{ position: 'absolute', bottom: '6px', right: '6px' }}>
                 <button 
                   style={{ 
-                    padding: '4px 8px', fontSize: '0.7rem', background: 'rgba(255,255,255,0.1)', 
-                    border: 'none', borderRadius: '6px', color: '#fff', cursor: 'pointer',
+                    padding: '6px 12px', fontSize: '0.75rem', background: 'rgba(255,255,255,0.1)', 
+                    border: 'none', borderRadius: '8px', color: '#fff', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s'
                   }}
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
