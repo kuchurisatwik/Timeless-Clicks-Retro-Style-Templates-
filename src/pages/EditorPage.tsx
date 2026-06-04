@@ -168,15 +168,29 @@ const EditorPage: React.FC = () => {
     const internalInputs = iframeDoc.querySelectorAll('.image-file-input');
     internalInputs.forEach(input => {
       input.addEventListener('change', (e) => {
-        const file = (e.target as HTMLInputElement).files?.[0];
+        const inputTarget = e.target as HTMLInputElement;
+        const file = inputTarget.files?.[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = (ev) => {
           const dataUrl = ev.target?.result as string;
-          const container = (e.target as HTMLElement).closest('[data-editable="image"]');
+          const container = inputTarget.closest('[data-editable="image"]');
           if (container) {
-            const img = container.querySelector('img');
-            if (img) img.src = dataUrl;
+            const previewEl = container.querySelector('img, .image-preview') as HTMLElement;
+            if (previewEl) {
+              if (previewEl.tagName === 'IMG') {
+                (previewEl as HTMLImageElement).src = dataUrl;
+              } else {
+                previewEl.style.backgroundImage = `url("${dataUrl}")`;
+              }
+              previewEl.style.filter = 'none';
+              previewEl.style.mixBlendMode = 'normal';
+              previewEl.style.opacity = '1';
+            }
+            // Also reset on the container just in case the filter is applied there
+            (container as HTMLElement).style.filter = 'none';
+            (container as HTMLElement).style.mixBlendMode = 'normal';
+            
             const placeholder = container.querySelector('.placeholder-state');
             if (placeholder) (placeholder as HTMLElement).style.display = 'none';
             saveState();
@@ -293,23 +307,36 @@ const EditorPage: React.FC = () => {
       const dataUrl = ev.target?.result as string;
       const iframeDoc = iframeRef.current?.contentDocument;
       if (!iframeDoc) return;
-
       const target = selectedElementRef.current;
-      let imgToReplace: HTMLImageElement | null = null;
+      let imgToReplace: HTMLElement | null = null;
       
       if (target) {
-        if (target.tagName === 'IMG') {
-          imgToReplace = target as HTMLImageElement;
+        if (target.tagName === 'IMG' || target.classList.contains('image-preview')) {
+          imgToReplace = target as HTMLElement;
         } else {
           const container = target.closest('[data-editable="image"]');
           if (container) {
-            imgToReplace = container.querySelector('img');
+            imgToReplace = container.querySelector('img, .image-preview') as HTMLElement;
           }
         }
       }
 
       if (imgToReplace) {
-        imgToReplace.src = dataUrl;
+        if (imgToReplace.tagName === 'IMG') {
+          (imgToReplace as HTMLImageElement).src = dataUrl;
+        } else {
+          imgToReplace.style.backgroundImage = `url("${dataUrl}")`;
+        }
+        imgToReplace.style.filter = 'none';
+        imgToReplace.style.mixBlendMode = 'normal';
+        imgToReplace.style.opacity = '1';
+        
+        const container = imgToReplace.closest('[data-editable="image"]');
+        if (container) {
+          (container as HTMLElement).style.filter = 'none';
+          (container as HTMLElement).style.mixBlendMode = 'normal';
+        }
+
         // Hide placeholder state if it exists
         const placeholder = imgToReplace.closest('[data-editable="image"]')?.querySelector('.placeholder-state');
         if (placeholder) {
@@ -317,9 +344,23 @@ const EditorPage: React.FC = () => {
         }
       } else {
         // Otherwise replace the first image in the document
-        const firstImg = iframeDoc.querySelector('img');
+        const firstImg = iframeDoc.querySelector('img, .image-preview') as HTMLElement;
         if (firstImg) {
-          firstImg.src = dataUrl;
+          if (firstImg.tagName === 'IMG') {
+            (firstImg as HTMLImageElement).src = dataUrl;
+          } else {
+            firstImg.style.backgroundImage = `url("${dataUrl}")`;
+          }
+          firstImg.style.filter = 'none';
+          firstImg.style.mixBlendMode = 'normal';
+          firstImg.style.opacity = '1';
+
+          const container = firstImg.closest('[data-editable="image"]');
+          if (container) {
+            (container as HTMLElement).style.filter = 'none';
+            (container as HTMLElement).style.mixBlendMode = 'normal';
+          }
+
           const placeholder = firstImg.closest('[data-editable="image"]')?.querySelector('.placeholder-state');
           if (placeholder) {
             (placeholder as HTMLElement).style.display = 'none';
@@ -994,28 +1035,28 @@ const EditorPage: React.FC = () => {
 
       {/* Floating Left Sidebar */}
       <aside style={{
-        width: isMobile ? '100%' : '380px',
-        height: isMobile ? '45vh' : 'auto',
+        width: isMobile ? '100%' : '350px',
+        height: isMobile ? '45vh' : '100vh',
         background: 'rgba(255,255,255,0.02)',
         backdropFilter: 'blur(30px)',
         borderLeft: isMobile ? 'none' : '1px solid rgba(255,255,255,0.08)',
         borderTop: isMobile ? '1px solid rgba(255,255,255,0.08)' : 'none',
-        padding: '24px',
+        padding: '16px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '24px',
-        overflowY: 'auto',
+        gap: '12px',
+        overflowY: 'hidden',
         flexShrink: 0,
         zIndex: 10,
         boxShadow: '-10px 0 30px rgba(0,0,0,0.2)'
       }}>
         {/* Header */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <button 
               onClick={() => navigate('/')} 
               style={{ 
-                width: '36px', height: '36px', 
+                width: '32px', height: '32px', 
                 borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)', 
                 background: 'rgba(255,255,255,0.05)', color: '#fff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1024,21 +1065,21 @@ const EditorPage: React.FC = () => {
               onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
               onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
             </button>
-            <h1 className="heading-font" style={{ margin: 0, fontSize: '1.8rem', fontWeight: 600 }}>Editor</h1>
+            <h1 className="heading-font" style={{ margin: 0, fontSize: '1.5rem', fontWeight: 600 }}>Editor</h1>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-2)', fontSize: '0.9rem', fontWeight: 500, paddingLeft: '48px' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-2)', fontSize: '0.8rem', fontWeight: 500, paddingLeft: '42px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
             Design Studio
           </div>
         </div>
 
         {/* API Settings Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Configuration</label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Configuration</label>
           </div>
           
           <input 
@@ -1051,9 +1092,9 @@ const EditorPage: React.FC = () => {
               localStorage.setItem('gemini_api_key', e.target.value);
             }}
             style={{
-              width: '100%', padding: '10px 14px', border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px', background: 'rgba(255,255,255,0.03)', color: 'white',
-              fontSize: '0.85rem', outline: 'none', transition: 'all 0.2s'
+              width: '100%', padding: '8px 12px', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '10px', background: 'rgba(255,255,255,0.03)', color: 'white',
+              fontSize: '0.8rem', outline: 'none', transition: 'all 0.2s'
             }}
           />
           
@@ -1069,14 +1110,14 @@ const EditorPage: React.FC = () => {
                 localStorage.setItem('gemini_model', e.target.value);
               }}
               style={{
-                flex: 1, padding: '10px 14px', border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '12px', background: 'rgba(255,255,255,0.03)', color: 'white',
-                fontSize: '0.85rem', outline: 'none', transition: 'all 0.2s'
+                flex: 1, padding: '8px 12px', border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '10px', background: 'rgba(255,255,255,0.03)', color: 'white',
+                fontSize: '0.8rem', outline: 'none', transition: 'all 0.2s'
               }}
             />
             <button 
               className="btn-gradient"
-              style={{ padding: '0 16px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
+              style={{ padding: '0 12px', borderRadius: '10px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               onClick={async () => {
                 if (!apiKey) {
                   alert("Please enter an API key first.");
@@ -1110,9 +1151,9 @@ const EditorPage: React.FC = () => {
         </div>
 
         {/* Assets / Upload Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             Assets
           </label>
           <button 
@@ -1120,44 +1161,44 @@ const EditorPage: React.FC = () => {
             onClick={() => fileInputRef.current?.click()}
             style={{ 
               width: '100%', 
-              padding: '24px 16px', 
+              padding: '16px 12px', 
               border: '1px dashed rgba(255,255,255,0.2)', 
-              borderRadius: '16px',
+              borderRadius: '12px',
               background: 'rgba(255,255,255,0.02)',
               color: 'var(--text-secondary)',
               cursor: 'pointer',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '8px',
+              gap: '6px',
               transition: 'all 0.3s ease'
             }}
           >
-            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             </div>
-            <span style={{ fontSize: '0.9rem', fontWeight: 500, color: '#fff' }}>Upload Photo</span>
-            <span style={{ fontSize: '0.75rem' }}>Drag & drop or click to browse</span>
+            <span style={{ fontSize: '0.85rem', fontWeight: 500, color: '#fff' }}>Upload Photo</span>
+            <span style={{ fontSize: '0.7rem' }}>Drag & drop or click to browse</span>
           </button>
         </div>
 
         {/* Typography Controls */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
             Typography
           </label>
 
           {selectedFontSize === null && (
             <div style={{
-              padding: '12px 16px',
-              borderRadius: '12px',
+              padding: '10px 12px',
+              borderRadius: '10px',
               background: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,255,255,0.05)',
               color: 'var(--text-secondary)',
-              fontSize: '0.8rem',
+              fontSize: '0.75rem',
               textAlign: 'center',
-              lineHeight: 1.5,
+              lineHeight: 1.4,
             }}>
               Select a text element on the poster to edit typography
             </div>
@@ -1167,9 +1208,9 @@ const EditorPage: React.FC = () => {
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             background: 'rgba(0,0,0,0.2)',
-            borderRadius: '16px',
+            borderRadius: '12px',
             border: '1px solid rgba(255,255,255,0.05)',
-            padding: '6px',
+            padding: '4px',
             opacity: selectedFontSize === null ? 0.35 : 1,
             pointerEvents: selectedFontSize === null ? 'none' : 'auto',
             transition: 'opacity 0.3s ease'
@@ -1184,16 +1225,16 @@ const EditorPage: React.FC = () => {
                 }
               }}
               style={{
-                width: '36px', height: '36px',
+                width: '30px', height: '30px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                border: 'none', borderRadius: '12px',
+                border: 'none', borderRadius: '10px',
                 background: 'transparent', color: 'var(--text-secondary)',
                 cursor: 'pointer', transition: 'all 0.15s'
               }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
             
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -1211,11 +1252,11 @@ const EditorPage: React.FC = () => {
                   }
                 }}
                 style={{
-                  width: '50px',
+                  width: '40px',
                   border: 'none',
                   background: 'transparent',
                   color: '#fff',
-                  fontSize: '1.2rem',
+                  fontSize: '1rem',
                   fontWeight: 600,
                   outline: 'none',
                   textAlign: 'center',
@@ -1235,16 +1276,16 @@ const EditorPage: React.FC = () => {
                 }
               }}
               style={{
-                width: '36px', height: '36px',
+                width: '30px', height: '30px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                border: 'none', borderRadius: '12px',
+                border: 'none', borderRadius: '10px',
                 background: 'transparent', color: 'var(--text-secondary)',
                 cursor: 'pointer', transition: 'all 0.15s'
               }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
           </div>
 
@@ -1254,9 +1295,9 @@ const EditorPage: React.FC = () => {
             pointerEvents: selectedFontSize === null ? 'none' : 'auto', 
             transition: 'opacity 0.3s ease',
             background: 'rgba(0,0,0,0.2)',
-            borderRadius: '16px',
+            borderRadius: '12px',
             border: '1px solid rgba(255,255,255,0.05)',
-            padding: '12px'
+            padding: '10px'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
               <span style={{ fontSize: '0.8rem', fontWeight: 500, color: 'var(--text-secondary)' }}>Fill Color</span>
@@ -1278,7 +1319,7 @@ const EditorPage: React.FC = () => {
                     }
                   }}
                   style={{
-                    width: '24px', height: '24px',
+                    width: '20px', height: '20px',
                     borderRadius: '50%',
                     border: 'none',
                     background: c,
@@ -1291,7 +1332,7 @@ const EditorPage: React.FC = () => {
                 />
               ))}
               {/* Custom color picker */}
-              <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }} className="color-swatch">
+              <div style={{ position: 'relative', width: '20px', height: '20px', flexShrink: 0 }} className="color-swatch">
                 <input
                   type="color"
                   value={selectedFontColor}
@@ -1309,7 +1350,7 @@ const EditorPage: React.FC = () => {
                   }}
                 />
                 <div style={{
-                  width: '24px', height: '24px', borderRadius: '50%',
+                  width: '20px', height: '20px', borderRadius: '50%',
                   background: 'conic-gradient(from 0deg, #f87171, #fbbf24, #34d399, #60a5fa, #a78bfa, #f472b6, #f87171)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.2)'
@@ -1323,19 +1364,19 @@ const EditorPage: React.FC = () => {
 
         {/* AI Director Section - Hero Tool */}
         <div style={{ 
-          display: 'flex', flexDirection: 'column', gap: '12px', flex: 1,
+          display: 'flex', flexDirection: 'column', gap: '8px', flex: 1,
           background: 'rgba(255, 77, 141, 0.05)',
           border: '1px solid rgba(255, 77, 141, 0.2)',
-          borderRadius: '20px',
-          padding: '16px',
+          borderRadius: '16px',
+          padding: '12px',
           boxShadow: 'inset 0 0 20px rgba(255, 77, 141, 0.05)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <label className="heading-font" style={{ fontSize: '1.2rem', fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" strokeWidth="2"><defs><linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#FF4D8D" /><stop offset="100%" stopColor="#A855F7" /></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <label className="heading-font" style={{ fontSize: '1rem', fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" strokeWidth="2"><defs><linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#FF4D8D" /><stop offset="100%" stopColor="#A855F7" /></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
               AI Director
             </label>
-            <span style={{ fontSize: '0.7rem', background: 'linear-gradient(135deg, rgba(255, 77, 141, 0.2), rgba(168, 85, 247, 0.2))', color: '#fff', padding: '2px 8px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>AI Assisted Editing</span>
+            <span style={{ fontSize: '0.65rem', background: 'linear-gradient(135deg, rgba(255, 77, 141, 0.2), rgba(168, 85, 247, 0.2))', color: '#fff', padding: '2px 6px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>AI Assisted Editing</span>
           </div>
 
           <div style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
@@ -1347,16 +1388,16 @@ const EditorPage: React.FC = () => {
               style={{ 
                 width: '100%', 
                 resize: 'none', 
-                padding: '16px',
-                paddingBottom: '40px',
+                padding: '10px',
+                paddingBottom: '32px',
                 color: '#fff',
                 background: 'rgba(0,0,0,0.3)',
                 border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '16px',
-                fontSize: '0.9rem',
+                borderRadius: '12px',
+                fontSize: '0.8rem',
                 outline: 'none',
-                minHeight: '120px',
-                lineHeight: 1.5,
+                minHeight: '80px',
+                lineHeight: 1.4,
                 transition: 'all 0.2s'
               }}
             />
@@ -1412,7 +1453,7 @@ const EditorPage: React.FC = () => {
             className="btn-gradient" 
             style={{ 
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              padding: '16px', borderRadius: '16px', fontSize: '1rem', fontWeight: 600,
+              padding: '10px', borderRadius: '12px', fontSize: '0.9rem', fontWeight: 600,
               cursor: isAiLoading ? 'not-allowed' : 'pointer', opacity: isAiLoading ? 0.7 : 1
             }}
             onClick={handleAiSubmit}
@@ -1434,7 +1475,7 @@ const EditorPage: React.FC = () => {
           <button 
             style={{ 
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              padding: '16px', borderRadius: '16px', fontSize: '1rem', fontWeight: 600,
+              padding: '12px', borderRadius: '12px', fontSize: '0.9rem', fontWeight: 600,
               background: 'rgba(247, 201, 72, 0.1)', border: '1px solid rgba(247, 201, 72, 0.3)',
               color: '#FFD166', cursor: 'pointer', transition: 'all 0.3s'
             }}
