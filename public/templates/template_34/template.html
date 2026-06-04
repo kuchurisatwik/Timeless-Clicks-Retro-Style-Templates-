@@ -1,4 +1,5 @@
-<!DOCTYPE html>\n<html lang="en" data-tb-snip-trigger-v1="1"><head>
+<!DOCTYPE html>
+<html lang="en" data-tb-snip-trigger-v1="1"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>The 1975 Collage Template</title>
@@ -79,7 +80,7 @@
     /* Main Title */
     .main-title {
       font-family: var(--font-serif);
-      font-size: 100px;
+      font-size: 80px;
       font-weight: 900;
       text-align: center;
       letter-spacing: 5px;
@@ -112,7 +113,7 @@
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
     .image-preview {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat;
       display: block;
     }
     .image-upload-box::after {
@@ -124,7 +125,7 @@
     }
     .image-upload-box:hover::after { opacity: 1; }
 
-    .bg-image-preview { filter: grayscale(100%) contrast(1.2); }
+    .bg-image-preview {}
 
     /* The Tilted Poster */
     .tilted-poster {
@@ -150,7 +151,7 @@
       width: 100%; height: 400px;
       position: relative; margin-bottom: 10px;
     }
-    .tp-image-preview { filter: grayscale(100%) contrast(1.1); }
+    .tp-image-preview {}
     .tp-footer {
       display: flex; justify-content: space-between;
     }
@@ -172,7 +173,7 @@
       transform: rotate(2deg);
       border: 3px solid #fff;
     }
-    .small-food-preview { filter: grayscale(100%); }
+    .small-food-preview {}
 
     .camera-graphic {
       position: absolute;

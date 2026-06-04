@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>\n<html lang="en" style="--color-background: #FDF5E6; --color-text-main: #333333; --color-heading: #8A2BE2; --color-accent: #FFD700;"><head></head><body>\n
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>The 1975 Photobooth Template</title>
@@ -81,7 +79,7 @@
     /* Main Title */
     .main-title {
       font-family: var(--font-serif);
-      font-size: 100px;
+      font-size: 80px;
       font-weight: 900;
       text-align: center;
       letter-spacing: 5px;
@@ -115,7 +113,7 @@
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
     .image-preview {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat;
       display: block;
     }
     .image-upload-box::after {
@@ -127,7 +125,7 @@
     }
     .image-upload-box:hover::after { opacity: 1; }
 
-    .bg-image-preview { filter: grayscale(100%) contrast(1.2); }
+    .bg-image-preview {}
 
     /* The Tilted Poster */
     .tilted-poster {
@@ -153,7 +151,7 @@
       width: 100%; height: 400px;
       position: relative; margin-bottom: 10px;
     }
-    .tp-image-preview { filter: grayscale(100%) contrast(1.1); }
+    .tp-image-preview {}
     .tp-footer {
       display: flex; justify-content: space-between;
     }
@@ -183,7 +181,7 @@
       width: 100%;
       position: relative;
     }
-    .strip-preview { filter: grayscale(100%) contrast(1.1); }
+    .strip-preview {}
     
     /* Evil Eye Graphic */
     .evil-eye {
@@ -248,24 +246,24 @@
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
   </style>
-</head>
-<body>
+
+
   <article class="poster-scale-container">
     
     <div class="header-area">
       <div class="top-header">
-        <div class="th-side" id="th-left" data-editable="text">SPECIAL<br>EDITION</div>
-        <div class="th-center" id="th-center" data-editable="text">The 1975</div>
-        <div class="th-side" id="th-right" data-editable="text">DAILY<br>REPORT</div>
+        <div class="th-side" id="th-left" data-editable="text" style="">HAPPY BIRTHDAY</div>
+        <div class="th-center" id="th-center" data-editable="text" style="">SHIVANI</div>
+        <div class="th-side" id="th-right" data-editable="text" style="">BIG 30!</div>
       </div>
 
       <div class="meta-row">
-        <div id="mr-left" data-editable="text">DIRTY HIT RECORDS</div>
-        <div class="mr-center" id="mr-center" data-editable="text">BEING FUNNY IN A FOREIGN LANGUAGE</div>
-        <div id="mr-right" data-editable="text">14 OKT 2022</div>
+        <div id="mr-left" data-editable="text" style="">Warm Wishes!</div>
+        <div class="mr-center" id="mr-center" data-editable="text" style="">HAPPY BIRTHDAY, SHIVANI!</div>
+        <div id="mr-right" data-editable="text" style="">TURNING 30!</div>
       </div>
 
-      <div class="main-title" id="main-title" data-editable="text">ABOUT YOU</div>
+      <div class="main-title" id="main-title" data-editable="text" style="">YOUR DAY!</div>
     </div>
 
     <div class="collage-section">
@@ -279,13 +277,13 @@
         </div>
       </div>
 
-      <div class="right-side-text" id="rs-text" data-editable="text">ABOUT YOU?"</div>
+      <div class="right-side-text" id="rs-text" data-editable="text" style="">TO SHIVANI!</div>
 
       <!-- Tilted Poster -->
       <div class="tilted-poster">
         <div class="tp-header">
-          <span id="tp-h-left" data-editable="text">BEING FUNNY IN A FOREIGN LANGUAGE</span>
-          <span id="tp-h-right" data-editable="text">14 OCTOBER 2022</span>
+          <span id="tp-h-left" data-editable="text" style="">HAPPY 30TH BIRTHDAY, SHIVANI!</span>
+          <span id="tp-h-right" data-editable="text" style="">A FABULOUS 30!</span>
         </div>
         <div class="tp-image-area">
           <div class="image-upload-box absolute-box" id="tp-image-box" data-editable="image">
@@ -297,20 +295,8 @@
         </div>
         <div class="tp-footer">
           <div class="tp-title-box">
-            <div class="tp-main-text" id="tp-mt" data-editable="text">THE 1975</div>
-            <div class="tp-tracklist" id="tp-tl" data-editable="text">
-              1. THE 1975<br>
-              2. HAPPINESS<br>
-              3. LOOKING FOR SOMEBODY<br>
-              4. PART OF THE BAND<br>
-              5. OH CAROLINE<br>
-              6. I'M IN LOVE WITH YOU<br>
-              7. ALL I NEED TO HEAR<br>
-              8. WINTERING<br>
-              9. HUMAN TOO<br>
-              10. ABOUT YOU<br>
-              11. WHEN WE ARE TOGETHER
-            </div>
+            <div class="tp-main-text" id="tp-mt" data-editable="text" style="">SHIVANI</div>
+            <div class="tp-tracklist" id="tp-tl" data-editable="text" style="">1. JOY &amp; LAUGHTER<br>2. GOOD HEALTH<br>3. SWEET MEMORIES<br>4. NEW ADVENTURES<br>5. GREAT SUCCESS<br>6. TRUE HAPPINESS<br>7. MUCH LOVE<br>8. WONDERFUL FRIENDS<br>9. BRIGHT FUTURE<br>10. MANY GIFTS<br>11. AMAZING CAKE!</div>
           </div>
         </div>
       </div>
@@ -352,17 +338,12 @@
 
     <!-- Bottom Text Area -->
     <div class="bottom-area">
-      <div class="col-text" id="col-1" data-editable="text">
-        forgotten? Do you think I have forgotten? About you? (Don't let go) were there something 'bout you that I could lay and just look in your eyes. Wait, and pretend (don't let go).
-      </div>
-      <div class="col-text" id="col-2" data-editable="text">
-        forgotten? Do you think I have forgotten? Do you think I have forgotten, about you? There was something 'bout you that now I can't remember.
-      </div>
-      <div class="col-text" id="col-3" data-editable="text">
-        s the same damn thing made my heart flutter. And I miss you again, I miss you in the morning. I never know what to think about. I think about you. About you (so don't let go). Do you think I have forgotten. About you? (Don't let go). About you. About you. Do you think I have forgotten, about you?
-      </div>
+      <div class="col-text" id="col-1" data-editable="text" style="">May your special day be filled with immense joy, laughter, and all the things you cherish. Wishing you an unforgettable 30th birthday, Shivani! Here's to a fantastic year ahead!</div>
+      <div class="col-text" id="col-2" data-editable="text" style="">To Shivani, on your 30th birthday! May this new chapter bring you endless blessings, exciting adventures, and all your dreams come true. Have a truly wonderful celebration!</div>
+      <div class="col-text" id="col-3" data-editable="text" style="">Happy 30th Birthday, Shivani! From all of us, we hope you have a day as amazing as you are. May your year be bright, your heart be light, and your every wish take flight. Sending you all our love and warmest wishes on this joyous occasion. Celebrate big and make countless beautiful memories!</div>
     </div>
 
   </article>
-</body>
-</html>
+
+
+</body></html>

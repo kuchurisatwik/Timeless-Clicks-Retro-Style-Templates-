@@ -114,7 +114,7 @@
       display: flex; flex-direction: column; text-align: center; justify-content: space-between;
     }
     .huge-word {
-      font-size: 130px; line-height: 0.8; letter-spacing: -2px; transform: scaleY(1.3); margin: 20px 0;
+      font-size: 104px; line-height: 0.8; letter-spacing: -2px; transform: scaleY(1.3); margin: 20px 0;
     }
     .center-image-box {
       flex-grow: 1; border: 3px solid var(--ink-color); background: #eee;
@@ -148,8 +148,8 @@
     /* Image Utils */
     .image-upload-box { width: 100%; height: 100%; position: absolute; top: 0; left: 0; cursor: pointer; }
     .image-file-input { display: none; }
-    .image-preview { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .overlap-image-box .image-preview { object-fit: contain; object-position: bottom right; }
+    .image-preview { width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; display: block; }
+    .overlap-image-box .image-preview { object-fit: contain; background-position: bottom right; }
     .placeholder-state {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); z-index: 2;
@@ -228,7 +228,7 @@
         <div class="left-image-box">
           <div class="image-upload-box" id="img-left" data-editable="image">
             <input type="file" class="image-file-input" accept="image/*">
-            <img class="image-preview" src="" alt="Left Panel">
+            <div  class="image-preview" ></div>
             <div class="placeholder-state">Logo / Graphic</div>
           </div>
         </div>
@@ -240,7 +240,7 @@
         <div class="center-image-box">
           <div class="image-upload-box" id="img-center" data-editable="image">
             <input type="file" class="image-file-input" accept="image/*">
-            <img class="image-preview" src="" alt="Center Action">
+            <div  class="image-preview" ></div>
             <div class="placeholder-state">
               <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
             </div>
@@ -257,7 +257,7 @@
         <div class="right-image-box">
           <div class="image-upload-box" id="img-right-top" data-editable="image">
             <input type="file" class="image-file-input" accept="image/*">
-            <img class="image-preview" src="" alt="Top Right Panel">
+            <div  class="image-preview" ></div>
             <div class="placeholder-state">Graphic</div>
           </div>
         </div>
@@ -270,7 +270,7 @@
       <div class="overlap-image-box">
         <div class="image-upload-box" id="img-overlap" data-editable="image">
           <input type="file" class="image-file-input" accept="image/*">
-          <img class="image-preview" src="" alt="Overlap Character">
+          <div  class="image-preview" ></div>
           <!-- No placeholder state for the overlap, let it be invisible until uploaded -->
         </div>
       </div>
@@ -286,7 +286,7 @@
     <div class="bottom-strip-box">
       <div class="image-upload-box" id="img-strip" data-editable="image">
         <input type="file" class="image-file-input" accept="image/*">
-        <img class="image-preview" src="" alt="Comic Strip Panel">
+        <div  class="image-preview" ></div>
         <div class="placeholder-state" style="color: #666;">COMIC STRIP BANNER</div>
       </div>
     </div>

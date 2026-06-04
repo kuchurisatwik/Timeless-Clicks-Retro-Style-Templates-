@@ -41,7 +41,7 @@
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
     .image-preview {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat;
       display: block;
     }
     .image-upload-box::after {
@@ -80,7 +80,7 @@
       width: 100%;
       text-align: center;
       font-family: var(--font-serif);
-      font-size: 155px;
+      font-size: 124px;
       font-weight: 700;
       letter-spacing: -2px;
       line-height: 1;
@@ -182,7 +182,7 @@
     <div class="image-upload-box" id="main-image-box" data-editable="image">
       <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
       <div class="image-preview-container">
-        <img id="main-image-img" class="image-preview" src="" alt="Cover Photo">
+        <div id="main-image-img" class="image-preview" ></div>
       </div>
       <div class="placeholder-state">
         <svg viewBox="0 0 24 24" width="64" height="64" fill="currentColor" style="opacity: 0.6; margin-bottom: 10px;">

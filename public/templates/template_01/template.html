@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>Vintage Newspaper Poster Template</title>
@@ -149,7 +147,7 @@
 
     .headline-text {
       font-family: var(--font-headline);
-      font-size: 88px;
+      font-size: 70px;
       font-weight: normal;
       line-height: 0.9;
       letter-spacing: 1px;
@@ -275,9 +273,9 @@
     .image-preview {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: center top;
-      filter: grayscale(100%) contrast(1.08) brightness(0.97);
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      background-position: center top;
+      
       display: block;
     }
 
@@ -487,33 +485,33 @@
       
       <section class="header-section">
         <div class="header-meta-row">
-          <span class="meta-text meta-left" id="meta-left" data-editable="text">Special Edition</span>
+          <span class="meta-text meta-left" id="meta-left" data-editable="text" style="">Special Edition</span>
           <div class="header-flourish-container">
             <svg viewBox="0 0 200 30" width="160" height="24" fill="var(--ink-color)" class="header-flourish">
-              <path d="M100,20 C101.5,14 105,10 109,10 C114,10 117,14.5 116.5,19 C116,23 111,25 107.5,23 C106.5,22.5 106,21.5 106.5,21.5 C107,21.5 107.5,22 108.5,22 C111,22 113.5,20.5 114,17.5 C114.5,14.5 112,12 109,12 C106,12 102.5,15.5 101,21 C99.5,21 98.5,21 97,21 C97.5,15.5 94,12 91,12 C88,12 85.5,14.5 86,17.5 C86.5,20.5 89,22 91.5,22 C92.5,22 93,21.5 93.5,21.5 C94,21.5 93.5,22.5 92.5,23 C89,25 84,23 83.5,19 C83,14.5 86,10 91,10 C95,10 98.5,14 100,20 Z M100,23 C99,23.5 98.5,24 97.5,24.5 C92.5,26.5 87.5,26 82.5,24 C75.5,21.2 69.5,16.2 63.5,11.5 C59,8 54,4.5 48,3 C46,2.5 43.5,2 41,2 C31,2 24.5,8 24.5,15 C24.5,20.5 29,24.5 35,24.5 C40,24.5 43.5,21 44,17 C44.5,13.5 42,10.5 38.5,10.5 C36,10.5 34.5,12 34.5,13.5 C34.5,14.5 35,15 36,15 C36.5,15 37,14.5 37,14 C37,12.5 38,12 39,12 C40.5,12 42,13.5 41.5,16 C41,18.5 38.5,22.5 34.5,22.5 C29.5,22.5 26.5,18.5 26.5,14 C26.5,8.5 32,3.5 41,3.5 C43,3.5 45.5,4 47.5,4.5 C53,6 57.5,9.5 62,12.8 C68,17.2 74,22.2 81,25 C87,27.4 93.5,28 100,25.5 C106.5,28 113,27.4 119,25 C126,22.2 132,17.2 138,12.8 C142.5,9.5 147,6 152.5,4.5 C154.5,4 157,3.5 159,3.5 C168,3.5 173.5,8.5 173.5,14 C173.5,18.5 170.5,22.5 165.5,22.5 C161.5,22.5 159,18.5 158.5,16 C158,13.5 159.5,12 161,12 C162,12 163,12.5 163,14 C163,14.5 163.5,15 164,15 C165,15 165.5,14.5 165.5,13.5 C165.5,12 164,10.5 161.5,10.5 C158,10.5 155.5,13.5 156,17 C156.5,21 160,24.5 165,24.5 C171,24.5 175.5,20.5 175.5,15 C175.5,8 169,2 159,2 C156.5,2 154,2.5 152,3 C146,4.5 141,8 136.5,11.5 C130.5,16.2 124.5,21.2 117.5,24 C112.5,26 107.5,26.5 102.5,24.5 C101.5,24 101,23.5 100,23 Z M20,15 C20,13.5 21,12.5 22,12.5 C23,12.5 24,13.5 24,15 C24,16.5 23,17.5 22,17.5 C21,17.5 20,16.5 20,15 Z M176,15 C176,13.5 177,12.5 178,12.5 C179,12.5 180,13.5 180,15 C180,16.5 179,17.5 178,17.5 C177,17.5 176,16.5 176,15 Z" />
+              <path d="M100,20 C101.5,14 105,10 109,10 C114,10 117,14.5 116.5,19 C116,23 111,25 107.5,23 C106.5,22.5 106,21.5 106.5,21.5 C107,21.5 107.5,22 108.5,22 C111,22 113.5,20.5 114,17.5 C114.5,14.5 112,12 109,12 C106,12 102.5,15.5 101,21 C99.5,21 98.5,21 97,21 C97.5,15.5 94,12 91,12 C88,12 85.5,14.5 86,17.5 C86.5,20.5 89,22 91.5,22 C92.5,22 93,21.5 93.5,21.5 C94,21.5 93.5,22.5 92.5,23 C89,25 84,23 83.5,19 C83,14.5 86,10 91,10 C95,10 98.5,14 100,20 Z M100,23 C99,23.5 98.5,24 97.5,24.5 C92.5,26.5 87.5,26 82.5,24 C75.5,21.2 69.5,16.2 63.5,11.5 C59,8 54,4.5 48,3 C46,2.5 43.5,2 41,2 C31,2 24.5,8 24.5,15 C24.5,20.5 29,24.5 35,24.5 C40,24.5 43.5,21 44,17 C44.5,13.5 42,10.5 38.5,10.5 C36,10.5 34.5,12 34.5,13.5 C34.5,14.5 35,15 36,15 C36.5,15 37,14.5 37,14 C37,12.5 38,12 39,12 C40.5,12 42,13.5 41.5,16 C41,18.5 38.5,22.5 34.5,22.5 C29.5,22.5 26.5,18.5 26.5,14 C26.5,8.5 32,3.5 41,3.5 C43,3.5 45.5,4 47.5,4.5 C53,6 57.5,9.5 62,12.8 C68,17.2 74,22.2 81,25 C87,27.4 93.5,28 100,25.5 C106.5,28 113,27.4 119,25 C126,22.2 132,17.2 138,12.8 C142.5,9.5 147,6 152.5,4.5 C154.5,4 157,3.5 159,3.5 C168,3.5 173.5,8.5 173.5,14 C173.5,18.5 170.5,22.5 165.5,22.5 C161.5,22.5 159,18.5 158.5,16 C158,13.5 159.5,12 161,12 C162,12 163,12.5 163,14 C163,14.5 163.5,15 164,15 C165,15 165.5,14.5 165.5,13.5 C165.5,12 164,10.5 161.5,10.5 C158,10.5 155.5,13.5 156,17 C156.5,21 160,24.5 165,24.5 C171,24.5 175.5,20.5 175.5,15 C175.5,8 169,2 159,2 C156.5,2 154,2.5 152,3 C146,4.5 141,8 136.5,11.5 C130.5,16.2 124.5,21.2 117.5,24 C112.5,26 107.5,26.5 102.5,24.5 C101.5,24 101,23.5 100,23 Z M20,15 C20,13.5 21,12.5 22,12.5 C23,12.5 24,13.5 24,15 C24,16.5 23,17.5 22,17.5 C21,17.5 20,16.5 20,15 Z M176,15 C176,13.5 177,12.5 178,12.5 C179,12.5 180,13.5 180,15 C180,16.5 179,17.5 178,17.5 C177,17.5 176,16.5 176,15 Z"></path>
             </svg>
           </div>
-          <span class="meta-text meta-right" id="meta-right" data-editable="text">New York</span>
+          <span class="meta-text meta-right" id="meta-right" data-editable="text" style="">New York</span>
         </div>
         <div class="double-line-top-thick"></div>
       </section>
 
       <section class="headline-container">
-        <h2 class="headline-text" id="headline" data-editable="text">Breaking News</h2>
+        <h2 class="headline-text" id="headline" data-editable="text" style="">Breaking News</h2>
         <div class="double-line-bottom-thick"></div>
       </section>
 
       <section class="subheader-container">
-        <h3 class="subheader-text" id="subheader" data-editable="text">BIRTHDAY PARTY INVITATION</h3>
+        <h3 class="subheader-text" id="subheader" data-editable="text" style="">BIRTHDAY PARTY INVITATION</h3>
         <div class="single-line-divider"></div>
       </section>
 
       <section class="main-body-section">
         
         <div class="main-left-col">
-          <h2 class="section-title" id="about-title" data-editable="text">About me</h2>
+          <h2 class="section-title" id="about-title" data-editable="text" style="">About me</h2>
           <div class="double-underline"></div>
-          <div class="body-text-container" id="about-text" data-editable="text">
+          <div class="body-text-container" id="about-text" data-editable="text" style="">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
@@ -527,13 +525,13 @@
             <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
             
             <div class="image-preview-container">
-              <img id="main-image-img" class="image-preview" src="" alt="Portrait Upload">
+              <div id="main-image-img" class="image-preview"></div>
             </div>
 
             <div class="placeholder-state">
               <svg class="placeholder-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-                <circle cx="12" cy="12" r="3.2"/>
-                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                <circle cx="12" cy="12" r="3.2"></circle>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"></path>
               </svg>
               <span class="placeholder-text">Click to upload portrait</span>
             </div>
@@ -550,13 +548,13 @@
             <input type="file" id="bottom-image-input" class="image-file-input" accept="image/*">
             
             <div class="image-preview-container">
-              <img id="bottom-image-img" class="image-preview" src="" alt="Party Upload">
+              <div id="bottom-image-img" class="image-preview"></div>
             </div>
 
             <div class="placeholder-state">
               <svg class="placeholder-icon" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                <circle cx="12" cy="12" r="3.2"/>
-                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                <circle cx="12" cy="12" r="3.2"></circle>
+                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"></path>
               </svg>
               <span class="placeholder-text">Click to upload photo</span>
             </div>
@@ -566,16 +564,16 @@
         <div class="bottom-middle-col">
           <div class="date-ticket-box">
             <svg class="ticket-border-svg" viewBox="0 0 240 280" preserveAspectRatio="none">
-              <path d="M 24 8 L 216 8 A 16 16 0 0 0 232 24 L 232 256 A 16 16 0 0 0 216 272 L 24 272 A 16 16 0 0 0 8 256 L 8 24 A 16 16 0 0 0 24 8 Z" fill="none" stroke="var(--ink-color)" stroke-width="2" />
-              <path d="M 24 12 L 216 12 A 12 12 0 0 0 228 24 L 228 256 A 12 12 0 0 0 216 268 L 24 268 A 12 12 0 0 0 12 256 L 12 24 A 12 12 0 0 0 24 12 Z" fill="none" stroke="var(--ink-color)" stroke-width="0.75" />
+              <path d="M 24 8 L 216 8 A 16 16 0 0 0 232 24 L 232 256 A 16 16 0 0 0 216 272 L 24 272 A 16 16 0 0 0 8 256 L 8 24 A 16 16 0 0 0 24 8 Z" fill="none" stroke="var(--ink-color)" stroke-width="2"></path>
+              <path d="M 24 12 L 216 12 A 12 12 0 0 0 228 24 L 228 256 A 12 12 0 0 0 216 268 L 24 268 A 12 12 0 0 0 12 256 L 12 24 A 12 12 0 0 0 24 12 Z" fill="none" stroke="var(--ink-color)" stroke-width="0.75"></path>
             </svg>
 
             <div class="ticket-content">
-              <div class="ticket-date-num" id="date-day" data-editable="text">22</div>
-              <div class="ticket-date-month" id="date-month" data-editable="text">NOV</div>
-              <div class="ticket-address" id="date-address" data-editable="text">123<br>Anywhere St.<br>Any City</div>
+              <div class="ticket-date-num" id="date-day" data-editable="text" style="">22</div>
+              <div class="ticket-date-month" id="date-month" data-editable="text" style="">NOV</div>
+              <div class="ticket-address" id="date-address" data-editable="text" style="">123<br>Anywhere St.<br>Any City</div>
               <div class="ticket-dashed-divider"></div>
-              <div class="ticket-time" id="date-time" data-editable="text">8 PM</div>
+              <div class="ticket-time" id="date-time" data-editable="text" style="">8 PM</div>
             </div>
           </div>
         </div>
@@ -583,9 +581,9 @@
         <div class="vertical-divider"></div>
 
         <div class="bottom-right-col">
-          <h2 class="section-title" id="join-title" data-editable="text">Join us!</h2>
+          <h2 class="section-title" id="join-title" data-editable="text" style="">Join us!</h2>
           <div class="double-underline"></div>
-          <div class="body-paragraph" id="join-text" data-editable="text">
+          <div class="body-paragraph" id="join-text" data-editable="text" style="">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
           </div>
         </div>
@@ -593,7 +591,8 @@
       </section>
 
     </article>
-  </body>
-</html>
+  
 
 
+
+</body></html>

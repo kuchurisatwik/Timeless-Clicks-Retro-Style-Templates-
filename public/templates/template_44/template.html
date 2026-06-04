@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>\n<html lang="en"><head></head><body>\n
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>Deazur Magazine Cover Template</title>
@@ -43,7 +41,7 @@
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
     .image-preview {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat;
       display: block;
     }
     .image-upload-box::after {
@@ -82,7 +80,7 @@
     }
     .magazine-title {
       font-family: var(--font-serif);
-      font-size: 185px;
+      font-size: 148px;
       font-weight: 700;
       letter-spacing: -2px;
       transform: scaleY(1.1);
@@ -156,7 +154,7 @@
     }
     .right-h1-num {
       font-family: var(--font-serif);
-      font-size: 65px;
+      font-size: 52px;
       line-height: 0.9;
     }
     .right-h1-text {
@@ -220,7 +218,7 @@
     
     .main-bottom-title {
       font-family: var(--font-serif);
-      font-size: 85px;
+      font-size: 68px;
       letter-spacing: 2px;
       line-height: 1;
     }
@@ -281,15 +279,15 @@
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
   </style>
-</head>
-<body>
+
+
   <article class="poster-scale-container">
     
     <!-- Background Image -->
     <div class="image-upload-box" id="main-image-box" data-editable="image">
       <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
       <div class="image-preview-container">
-        <img id="main-image-img" class="image-preview" src="" alt="Magazine Cover Photo">
+        <div id="main-image-img" class="image-preview"></div>
       </div>
     </div>
 
@@ -298,70 +296,71 @@
       
       <!-- Top Header -->
       <div class="top-header">
-        <div class="website" id="t-web" data-editable="text">DEAZUR.COM</div>
-        <div class="magazine-title" id="t-title" data-editable="text">Deazur</div>
-        <div class="sub-title" id="t-sub" data-editable="text">VISUAL TRENDS & AESTHETICS</div>
-        <div class="mini-tags" id="t-tags" data-editable="text">discover save create</div>
+        <div class="website" id="t-web" data-editable="text" style="">DEAZUR.COM</div>
+        <div class="magazine-title" id="t-title" data-editable="text" style="">Deazur</div>
+        <div class="sub-title" id="t-sub" data-editable="text" style="">VISUAL TRENDS &amp; AESTHETICS</div>
+        <div class="mini-tags" id="t-tags" data-editable="text" style="">discover save create</div>
       </div>
-      <div class="vol-number" id="t-vol" data-editable="text">VOL. 26 / MAY 2026</div>
+      <div class="vol-number" id="t-vol" data-editable="text" style="">VOL. 26 / MAY 2026</div>
 
       <!-- Left Column -->
       <div class="left-column">
         <div class="left-block">
-          <div class="left-h1" id="l1-h1" data-editable="text">BOLD</div>
-          <div class="left-h1-sub" id="l1-h2" data-editable="text">BY DESIGN</div>
-          <div class="left-p" id="l1-p" data-editable="text">OUTFITS THAT TURN<br>EVERYDAY MOMENTS<br>INTO STATEMENT<br>STYLE.</div>
+          <div class="left-h1" id="l1-h1" data-editable="text" style="">BOLD</div>
+          <div class="left-h1-sub" id="l1-h2" data-editable="text" style="">BY DESIGN</div>
+          <div class="left-p" id="l1-p" data-editable="text" style="">OUTFITS THAT TURN<br>EVERYDAY MOMENTS<br>INTO STATEMENT<br>STYLE.</div>
           <div class="line-sep"></div>
         </div>
 
         <div class="left-block">
-          <div class="left-h2" id="l2-h1" data-editable="text">SHAPES<br>THAT SPEAK</div>
-          <div class="left-p" id="l2-p" data-editable="text">OVERSIZED,<br>STRUCTURED &<br>UNAPOLOGETIC.</div>
+          <div class="left-h2" id="l2-h1" data-editable="text" style="">SHAPES<br>THAT SPEAK</div>
+          <div class="left-p" id="l2-p" data-editable="text" style="">OVERSIZED,<br>STRUCTURED &amp;<br>UNAPOLOGETIC.</div>
           <div class="line-sep"></div>
         </div>
 
         <div class="left-block">
-          <div class="left-h2" id="l3-h1" data-editable="text" style="color: #6e6459;">POWER<br>IN DETAIL</div>
-          <div class="left-p" id="l3-p" data-editable="text" style="color: #6e6459;">ACCESSORIES THAT<br>DEFINE THE LOOK,<br>NOT FOLLOW IT.</div>
+          <div class="left-h2" id="l3-h1" data-editable="text" style="color: rgb(110, 100, 89);">POWER<br>IN DETAIL</div>
+          <div class="left-p" id="l3-p" data-editable="text" style="color: rgb(110, 100, 89);">ACCESSORIES THAT<br>DEFINE THE LOOK,<br>NOT FOLLOW IT.</div>
         </div>
       </div>
 
       <!-- Right Column -->
       <div class="right-column">
         <div class="left-block" style="align-items: flex-end;">
-          <div class="right-h1-num" id="r1-num" data-editable="text">26</div>
-          <div class="right-h1-text" id="r1-text" data-editable="text">FASHION<br>IDEAS</div>
-          <div class="right-p" id="r1-p" data-editable="text">TO ELEVATE YOUR<br>AESTHETIC<br>GAME.</div>
+          <div class="right-h1-num" id="r1-num" data-editable="text" style="">26</div>
+          <div class="right-h1-text" id="r1-text" data-editable="text" style="">FASHION<br>IDEAS</div>
+          <div class="right-p" id="r1-p" data-editable="text" style="">TO ELEVATE YOUR<br>AESTHETIC<br>GAME.</div>
         </div>
       </div>
 
       <!-- Floating Circle -->
       <div class="floating-circle">
-        <div id="circ-text" data-editable="text">STYLE ISN'T<br>ABOUT FITTING IN.<br>IT'S ABOUT<br>STANDING OUT.</div>
+        <div id="circ-text" data-editable="text" style="">STYLE ISN'T<br>ABOUT FITTING IN.<br>IT'S ABOUT<br>STANDING OUT.</div>
       </div>
 
       <!-- Right Bottom Text -->
       <div class="right-bottom-block">
-        <div class="right-h2" id="rb-h2" data-editable="text">CITY MOOD</div>
-        <div class="left-p" id="rb-p" data-editable="text">MODERN LOOKS<br>FOR REAL LIFE,<br>CURATED<br>WITH INTENTION.</div>
+        <div class="right-h2" id="rb-h2" data-editable="text" style="">CITY MOOD</div>
+        <div class="left-p" id="rb-p" data-editable="text" style="">MODERN LOOKS<br>FOR REAL LIFE,<br>CURATED<br>WITH INTENTION.</div>
         <div class="line-sep"></div>
       </div>
 
       <!-- Bottom Overlay -->
       <div class="bottom-section">
-        <div class="main-bottom-title" id="b-title1" data-editable="text">STATEMENT</div>
-        <div class="sub-bottom-title" id="b-title2" data-editable="text">EVERY DAY</div>
-        <div class="bottom-tagline" id="b-tag" data-editable="text">BOLD FASHION. REAL CONFIDENCE.</div>
+        <div class="main-bottom-title" id="b-title1" data-editable="text" style="">STATEMENT</div>
+        <div class="sub-bottom-title" id="b-title2" data-editable="text" style="">EVERY DAY</div>
+        <div class="bottom-tagline" id="b-tag" data-editable="text" style="">BOLD FASHION. REAL CONFIDENCE.</div>
       </div>
 
       <!-- Barcode -->
       <div class="barcode-area">
-        <div class="barcode-category" id="bc-text" data-editable="text">STYLE / AESTHETICS / CULTURE</div>
+        <div class="barcode-category" id="bc-text" data-editable="text" style="">STYLE / AESTHETICS / CULTURE</div>
         <div class="barcode-img"></div>
       </div>
 
     </div>
 
   </article>
-</body>
-</html>
+
+
+</body></html>

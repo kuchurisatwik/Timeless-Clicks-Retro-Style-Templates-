@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>\n<html lang="en"><head></head><body>\n\n\n\n
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>Vintage Birthday Post Template</title>
@@ -75,7 +73,7 @@
     .main-title {
       text-align: center;
       font-family: var(--font-gothic);
-      font-size: 100px;
+      font-size: 80px;
       line-height: 0.9;
       margin-top: 5px;
     }
@@ -140,7 +138,7 @@
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
     .image-preview {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat;
       display: block;
     }
     .image-upload-box::after {
@@ -217,21 +215,21 @@
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
   </style>
-</head>
-<body>
+
+
   <article class="poster-scale-container">
     
     <div class="top-meta">
-      <div id="meta-left" data-editable="text">Special Edition</div>
+      <div id="meta-left" data-editable="text" style="">Special Edition</div>
       <div class="ornament">❦</div>
-      <div id="meta-right" data-editable="text">New York</div>
+      <div id="meta-right" data-editable="text" style="">New York</div>
     </div>
     
     <div class="line-thin"></div>
-    <div class="main-title" id="main-title" data-editable="text">Birthday Post</div>
+    <div class="main-title" id="main-title" data-editable="text" style="">Birthday Post</div>
     <div class="double-line-top"></div>
     
-    <div class="sub-headline" id="sub-headline" data-editable="text">
+    <div class="sub-headline" id="sub-headline" data-editable="text" style="">
       ELENA GILBERT<br>TURNS TWENTY TWO
     </div>
     
@@ -239,10 +237,10 @@
 
     <div class="middle-content">
       <div class="left-col-text">
-        <div class="left-col-bold" id="lc-bold" data-editable="text">
+        <div class="left-col-bold" id="lc-bold" data-editable="text" style="">
           EMBRACE EVERY<br>JOURNEY AHEAD,<br>TRUST IN YOUR<br>INNER STRENGTH.
         </div>
-        <div id="lc-text" data-editable="text">
+        <div id="lc-text" data-editable="text" style="">
           Unlock the doors of possibility with the key of self-belief. Embrace your inner strength and trust in your abilities to conquer challenges that come your way. With self-belief as your guiding light, you have the power to unlock doors leading to growth, success, and fulfillment. Believe in yourself, for you hold the key to a future filled with endless possibilities.
         </div>
       </div>
@@ -250,12 +248,12 @@
         <div class="image-upload-box" id="main-image-box" data-editable="image">
           <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
           <div class="image-preview-container">
-            <img id="main-image-img" class="image-preview" src="" alt="Birthday Photo">
+            <div id="main-image-img" class="image-preview"></div>
           </div>
-          <div class="placeholder-state">
+          <div class="placeholder-state" style="display: none;">
             <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.5; margin-bottom: 10px;">
-              <circle cx="12" cy="12" r="3.2"/>
-              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              <circle cx="12" cy="12" r="3.2"></circle>
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"></path>
             </svg>
           </div>
         </div>
@@ -270,12 +268,12 @@
         <div class="image-upload-box" id="sub-image-box" data-editable="image">
           <input type="file" id="sub-image-input" class="image-file-input" accept="image/*">
           <div class="image-preview-container">
-            <img id="sub-image-img" class="image-preview" src="" alt="Small Photo">
+            <div id="sub-image-img" class="image-preview"></div>
           </div>
-          <div class="placeholder-state">
+          <div class="placeholder-state" style="display: none;">
             <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="opacity: 0.5;">
-              <circle cx="12" cy="12" r="3.2"/>
-              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+              <circle cx="12" cy="12" r="3.2"></circle>
+              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"></path>
             </svg>
           </div>
         </div>
@@ -286,27 +284,28 @@
         <div class="ticket-box-tl"></div>
         <div class="ticket-box-bl"></div>
         <div class="ticket-left">
-          <div class="t-day" id="t-day" data-editable="text">22</div>
-          <div class="t-month" id="t-month" data-editable="text">NOV</div>
+          <div class="t-day" id="t-day" data-editable="text" style="">22</div>
+          <div class="t-month" id="t-month" data-editable="text" style="">NOV</div>
         </div>
         <div class="ticket-right">
-          <div class="t-loc" id="t-loc" data-editable="text">AT DEJA VU CLUB HONGKONG,<br>STREET 1234</div>
+          <div class="t-loc" id="t-loc" data-editable="text" style="">AT DEJA VU CLUB HONGKONG,<br>STREET 1234</div>
           <div class="t-time-row">
-            <span id="t-time" data-editable="text">8 PM</span>
+            <span id="t-time" data-editable="text" style="">8 PM</span>
             <span class="t-time-line">-----</span>
-            <span id="t-dayname" data-editable="text">SATURDAY</span>
+            <span id="t-dayname" data-editable="text" style="">SATURDAY</span>
           </div>
-          <div class="t-dress" id="t-dress" data-editable="text">DRESS CODE: WEAR 90S ATTIRE</div>
+          <div class="t-dress" id="t-dress" data-editable="text" style="">DRESS CODE: WEAR 90S ATTIRE</div>
         </div>
       </div>
     </div>
 
     <div class="line-thin"></div>
     
-    <div class="footer-text" id="footer-text" data-editable="text">
+    <div class="footer-text" id="footer-text" data-editable="text" style="">
       Unlock the doors of possibility with the key of self-belief. Embrace your inner strength and trust in your abilities to conquer challenges that come your way. With self-belief as your guiding light, you have the power to unlock doors leading to growth and fulfillment.
     </div>
 
   </article>
-</body>
-</html>
+
+
+</body></html>

@@ -98,7 +98,7 @@
     }
     .script-title {
       font-family: var(--font-script);
-      font-size: 80px;
+      font-size: 64px;
       line-height: 0.6;
       font-weight: normal;
       position: relative;
@@ -108,7 +108,7 @@
     }
     .bold-title {
       font-family: var(--font-sans);
-      font-size: 115px;
+      font-size: 92px;
       line-height: 0.85;
       font-weight: 700;
       letter-spacing: -2px;
@@ -135,8 +135,8 @@
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
     .image-preview {
-      width: 100%; height: 100%; object-fit: cover;
-      filter: sepia(0.6) contrast(1.1) brightness(0.9);
+      width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat;
+      
       display: block;
     }
     .image-upload-box::after {
@@ -227,7 +227,7 @@
       <div class="image-upload-box" id="main-image-box" data-editable="image">
         <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
         <div class="image-preview-container">
-          <img id="main-image-img" class="image-preview" src="" alt="Queen Photo">
+          <div id="main-image-img" class="image-preview" ></div>
         </div>
         <div class="placeholder-state">
           <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor" style="opacity: 0.5; margin-bottom: 10px;">

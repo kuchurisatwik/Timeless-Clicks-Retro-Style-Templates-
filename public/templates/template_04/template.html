@@ -32,7 +32,7 @@
     .double-line-bottom-thick::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 4px; background-color: var(--ink-color); }
     
     .headline-container { text-align: center; padding: 2px 0; }
-    .headline-text { font-family: serif; font-size: 84px; font-weight: normal; line-height: 0.9; letter-spacing: 1px; text-shadow: none; display: inline-block; width: 100%; }
+    .headline-text { font-family: serif; font-size: 67px; font-weight: normal; line-height: 0.9; letter-spacing: 1px; text-shadow: none; display: inline-block; width: 100%; }
     
     .display-title-container { text-align: center; padding: 4px 0; }
     .display-title-text { font-family: var(--font-display); font-size: 40px; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; word-spacing: 6px; line-height: 1.1; display: inline-block; width: 100%; }
@@ -42,7 +42,7 @@
     .image-upload-box.dragover { border: 2px dashed var(--ink-color); background-color: #edece8; }
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-    .image-preview { width: 100%; height: 100%; object-fit: cover; object-position: center center; filter: grayscale(100%) contrast(1.08) brightness(0.97); display: block; }
+    .image-preview { width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; background-position: center center;  display: block; }
     .image-upload-box::after { content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(28, 27, 24, 0.75); color: #ffffff; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 11.5px; font-weight: 500; letter-spacing: 2px; opacity: 0; transition: opacity 0.2s ease; z-index: 5; text-align: center; padding: 20px; }
     .image-upload-box:hover::after { opacity: 1; }
     .placeholder-state { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #57554e; z-index: 2; padding: 20px; text-align: center; }
@@ -91,7 +91,7 @@
         <div class="image-upload-box" id="main-image-box" data-editable="image">
           <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
           <div class="image-preview-container">
-            <img id="main-image-img" class="image-preview" src="" alt="Wedding Portrait">
+            <div id="main-image-img" class="image-preview" ></div>
           </div>
           <div class="placeholder-state">
             <svg class="placeholder-icon" viewBox="0 0 24 24" width="36" height="36" fill="currentColor">

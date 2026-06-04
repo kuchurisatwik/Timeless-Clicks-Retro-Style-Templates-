@@ -1,0 +1,405 @@
+<!DOCTYPE html>\n<html lang="en"><head></head><body>\n
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Deccan Bazaar Timeless Clicks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&amp;family=Cinzel:wght@500;700;900&amp;family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;family=Oswald:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --paper-bg: #EAE0CD;
+      --ink-color: #1a1a1a;
+      --font-headline: 'Cinzel', serif;
+      --font-serif: 'Libre Baskerville', serif;
+      --font-sans: 'Oswald', sans-serif;
+      --font-body: 'Playfair Display', serif;
+      --accent-blue: #5AB2B2;
+      --accent-orange: #F5975A;
+      --accent-pink: #E9568B;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #d1ccbf;
+      font-family: var(--font-body);
+      color: var(--ink-color);
+      display: flex; justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      padding: 18px;
+      display: flex; flex-direction: column; position: relative;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .inner-border {
+      width: 100%; height: 100%;
+      border: 3px solid var(--ink-color);
+      padding: 15px;
+      position: relative;
+      display: flex; flex-direction: column;
+    }
+
+    .inner-border::before {
+      content: "";
+      position: absolute;
+      top: 4px; left: 4px; right: 4px; bottom: 4px;
+      border: 1px solid var(--ink-color);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      display: flex; flex-direction: column; height: 100%;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
+    [data-editable="text"]:hover { background-color: rgba(26, 26, 26, 0.04); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(26, 26, 26, 0.07); border-radius: 2px; }
+
+    /* Top Section */
+    .top-section {
+      display: flex; justify-content: space-between; align-items: stretch;
+      padding-bottom: 15px;
+    }
+
+    .top-left {
+      width: 25%; display: flex; align-items: center; justify-content: flex-start;
+      font-family: var(--font-serif); font-size: 10px; font-weight: 700; line-height: 1.4;
+      padding-top: 15px;
+    }
+    .top-left svg { width: 35px; margin-right: 10px; flex-shrink: 0; }
+
+    .top-center {
+      width: 50%; text-align: center; position: relative;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .top-center .logo-icon {
+      font-family: var(--font-headline); font-size: 32px; font-weight: 900;
+      border: 2px solid var(--ink-color); border-radius: 50% 50% 0 0;
+      padding: 10px 15px; background: var(--paper-bg);
+      position: relative; z-index: 2; margin-bottom: -15px;
+    }
+    .top-center .ribbon {
+      font-family: var(--font-serif); font-size: 10px; letter-spacing: 1px;
+      display: flex; justify-content: center; align-items: center; width: 100%;
+      border-top: 1px solid var(--ink-color); border-bottom: 1px solid var(--ink-color);
+      padding: 5px 0; margin-bottom: 8px; position: relative; z-index: 1;
+    }
+    .top-center .ribbon span { background: var(--paper-bg); padding: 0 10px; font-weight: 700; z-index: 3; }
+    .top-center .estd { font-family: var(--font-sans); font-size: 11px; letter-spacing: 2px; margin-top: 5px; }
+
+    .top-right {
+      width: 25%; text-align: center;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .bazaar-logo-hanger { font-size: 24px; color: var(--accent-pink); margin-bottom: -5px; }
+    .bazaar-logo-top { font-family: var(--font-sans); font-size: 14px; color: var(--accent-orange); font-weight: 500; letter-spacing: 1px; }
+    .bazaar-logo-main { font-family: var(--font-sans); font-size: 32px; font-weight: 600; line-height: 1; letter-spacing: -1px; }
+    .bazaar-logo-main .c-orange { color: var(--accent-orange); }
+    .bazaar-logo-main .c-blue { color: var(--accent-blue); }
+    .bazaar-logo-sub { font-family: var(--font-sans); font-size: 9px; color: var(--accent-pink); letter-spacing: 0.5px; }
+
+    /* Header */
+    .header-main {
+      text-align: center; margin: 10px 0;
+    }
+    .title-huge {
+      font-family: var(--font-headline); font-size: 48px; font-weight: 700; line-height: 0.9;
+      letter-spacing: -1px; text-transform: uppercase;
+      transform: scaleY(1.15); display: inline-block; margin-bottom: 15px;
+    }
+    
+    .divider-double {
+      border-top: 1px solid var(--ink-color); border-bottom: 2px solid var(--ink-color);
+      height: 4px; width: 100%; margin: 5px 0;
+    }
+    .divider-single {
+      border-bottom: 1px solid var(--ink-color); width: 100%; margin: 5px 0;
+    }
+
+    .sub-edition {
+      font-family: var(--font-serif); font-size: 12px; font-weight: 700; letter-spacing: 4px;
+      text-align: center; padding: 5px 0;
+    }
+
+    .category-ribbon {
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--font-serif); font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      padding: 5px 15px; border-top: 1px solid var(--ink-color); border-bottom: 2px solid var(--ink-color);
+    }
+
+    /* Main Content */
+    .headline-wrap { text-align: center; padding: 20px 0 15px; }
+    .headline {
+      font-family: var(--font-headline); font-size: 42px; font-weight: 900; letter-spacing: -0.5px;
+      text-transform: uppercase; transform: scaleY(1.1); display: inline-block;
+    }
+    .sub-headline {
+      font-family: var(--font-sans); font-size: 12px; letter-spacing: 2px; margin-top: 15px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sub-headline::before, .sub-headline::after {
+      content: ""; flex: 1; border-top: 1px solid var(--ink-color); margin: 0 15px; max-width: 50px;
+    }
+
+    .middle-layout {
+      display: grid; grid-template-columns: 1fr 180px; gap: 20px;
+      flex: 1; border-bottom: 2px solid var(--ink-color); padding-bottom: 15px; margin-bottom: 15px;
+    }
+
+    /* Image Upload Box */
+    .image-container {
+      position: relative; width: 100%; height: 100%; min-height: 400px;
+      border: 2px solid var(--ink-color); padding: 5px;
+      border-radius: 5px 5px 0 0;
+    }
+    .image-container::before {
+      content: ""; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+      border: 1px solid var(--ink-color); pointer-events: none; z-index: 2; border-radius: 3px;
+    }
+    
+    .image-upload-box {
+      width: 100%; height: 100%; background-color: rgba(0,0,0,0.03);
+      cursor: pointer; position: relative; overflow: hidden;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat;
+      display: block; 
+    }
+    
+    .image-upload-box::after {
+      content: 'UPLOAD'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-sans); font-size: 14px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    
+    .placeholder-state {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ink-color); z-index: 2;
+    }
+    .image-upload-box.has-image .placeholder-state { display: none; }
+    .placeholder-icon svg { width: 35px; height: 35px; margin-bottom: 15px; }
+    .placeholder-text { font-family: var(--font-serif); font-size: 12px; font-weight: 700; letter-spacing: 2px; }
+
+    /* Right Sidebar */
+    .sidebar {
+      display: flex; flex-direction: column; border-left: 1px solid var(--ink-color); padding-left: 15px;
+    }
+    .sidebar-title {
+      font-family: var(--font-headline); font-size: 20px; font-weight: 900; text-align: center;
+      line-height: 1.1; margin-bottom: 10px; border-bottom: 1px solid var(--ink-color); padding-bottom: 10px;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; padding: 12px 0; border-bottom: 1px dashed rgba(26,26,26,0.3);
+    }
+    .sidebar-item:last-child { border-bottom: none; }
+    .sidebar-icon { width: 35px; display: flex; justify-content: center; align-items: center; margin-right: 15px; }
+    .sidebar-icon svg { width: 24px; height: 24px; fill: none; stroke: var(--ink-color); stroke-width: 2; }
+    .sidebar-text { font-family: var(--font-serif); font-size: 10px; font-weight: 700; letter-spacing: 1px; line-height: 1.3; }
+
+    /* Bottom Section */
+    .bottom-layout {
+      display: grid; grid-template-columns: 1fr 220px; gap: 20px; align-items: stretch; margin-bottom: 15px;
+    }
+    
+    .about-me { padding-right: 15px; border-right: 1px solid var(--ink-color); }
+    .about-title {
+      font-family: var(--font-serif); font-size: 18px; font-weight: 700; text-align: center;
+      letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center;
+    }
+    .about-title::before, .about-title::after { content: "❦"; font-size: 14px; margin: 0 10px; opacity: 0.7; }
+    
+    .about-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .about-col { font-family: var(--font-body); font-size: 11px; line-height: 1.5; text-align: justify; }
+
+    .bottom-right-box {
+      border: 1px dashed var(--ink-color); padding: 5px; height: 100%;
+    }
+    .brb-inner {
+      border: 1px solid var(--ink-color); padding: 15px; height: 100%;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    }
+    .brb-inner svg { width: 60px; margin-bottom: 10px; }
+    .brb-text { font-family: var(--font-serif); font-size: 12px; font-weight: 700; line-height: 1.4; letter-spacing: 1px; }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--ink-color); padding-top: 15px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-left svg { width: 40px; }
+    .footer-center { text-align: center; }
+    .footer-center .fc-main { font-family: var(--font-serif); font-size: 14px; font-weight: 700; letter-spacing: 2px; }
+    .footer-center .fc-sub { font-family: var(--font-body); font-style: italic; font-size: 12px; margin-top: 3px; }
+    .footer-right { font-family: var(--font-sans); font-size: 10px; text-align: center; line-height: 1.3; font-weight: 500; }
+    .footer-right .fr-main { font-size: 13px; font-weight: 600; letter-spacing: 1px; }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 0 !important; }
+      .inner-border { border: none !important; padding: 15px !important; }
+      .inner-border::before { display: none !important; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+
+
+
+  <article class="poster-scale-container">
+    <div class="inner-border">
+      <div class="content-wrapper">
+        
+        <!-- Top Section -->
+        <div class="top-section">
+          <div class="top-left" data-editable="text" style="">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"></rect><circle cx="12" cy="14" r="3"></circle><path d="M7 8v-2a2 2 0 012-2h6a2 2 0 012 2v2"></path></svg>
+            CAPTURING<br>MEMORIES<br>THAT LAST<br>FOREVER.
+          </div>
+          
+          <div class="top-center">
+            <div class="ribbon">
+              <span>FREEZE TODAY</span>
+              <span style="opacity: 0;">TC TIMELESS CLICKS</span>
+              <span>TREASURE FOREVER</span>
+            </div>
+            <div class="logo-icon" style="position:absolute; top:-10px; background-color: var(--paper-bg);">
+              <div data-editable="text" style="">TC</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 30px; margin: 5px 0;"><rect x="4" y="6" width="16" height="14" rx="2"></rect><circle cx="12" cy="13" r="4"></circle><line x1="12" y1="20" x2="12" y2="22"></line><line x1="8" y1="22" x2="16" y2="22"></line><circle cx="16" cy="9" r="1"></circle></svg>
+              <div style="font-size: 10px; font-family: var(--font-serif); font-weight: 700; letter-spacing: 1px; white-space: nowrap;" data-editable="text">TIMELESS CLICKS</div>
+            </div>
+            <div class="estd" data-editable="text" style="position: absolute; bottom: -25px; background: var(--paper-bg); padding: 0px 10px; z-index: 4;">— ESTD. 2026 —</div>
+          </div>
+          
+          <div class="top-right">
+            <div class="bazaar-logo-hanger">♥</div>
+            <div class="bazaar-logo-top" data-editable="text" style="">THE DECCAN</div>
+            <div class="bazaar-logo-main" data-editable="text" style=""><span class="c-orange">BAZ</span><span class="c-blue">AAR</span></div>
+            <div class="bazaar-logo-sub" data-editable="text" style="">Fashion and Lifestyle Exhibition</div>
+          </div>
+        </div>
+
+        <div class="header-main">
+          <div class="title-huge" data-editable="text" style="">TIMELESS CLICKS</div>
+          <div class="divider-double"></div>
+          <div class="sub-edition" data-editable="text" style="">★ • SPECIAL DECCAN BAZAR EDITION • ★</div>
+          <div class="category-ribbon">
+            <span data-editable="text" style="">FASHION • LIFESTYLE • MEMORIES</span>
+            <span>|</span>
+            <span data-editable="text" style="">MAKING MOMENTS TIMELESS</span>
+            <span>★</span>
+          </div>
+        </div>
+
+        <div class="headline-wrap">
+          <div class="headline" data-editable="text" style="">MEMORIES WORTH PRINTING.</div>
+          <div class="sub-headline" data-editable="text" style="">A SPECIAL KEEPSAKE FROM YOUR VISIT TO THE DECCAN BAZAR.</div>
+        </div>
+
+        <div class="middle-layout">
+          <div class="image-container">
+            <div class="image-upload-box" id="main-image-box" data-editable="image">
+              <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+              <div class="image-preview-container">
+                <div id="main-image-img" class="image-preview"></div>
+              </div>
+              <div class="placeholder-state">
+                <div class="placeholder-icon">
+                  <svg viewBox="0 0 24 24" fill="var(--ink-color)"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm8 13a5 5 0 100-10 5 5 0 000 10zm0-2a3 3 0 110-6 3 3 0 010 6z"></path></svg>
+                </div>
+                <div class="placeholder-text" data-editable="text" style="">YOUR FRONT PAGE MOMENT</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar">
+            <div class="sidebar-title" data-editable="text" style="">TODAY'S<br>HIGHLIGHTS</div>
+            
+            <div class="sidebar-item">
+              <div class="sidebar-icon">
+                <svg viewBox="0 0 24 24"><path d="M7.4 12.1L3 18.5C2.6 19.1 3 20 3.7 20h16.6c.7 0 1.1-.9.7-1.5l-4.4-6.4M12 7.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"></path></svg>
+              </div>
+              <div class="sidebar-text" data-editable="text" style="">FASHION<br>FINDS</div>
+            </div>
+            
+            <div class="sidebar-item">
+              <div class="sidebar-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="18" r="3"></circle><path d="M5 8c0-3 3-5 7-5s7 2 7 5c0 4-4 7-7 10-3-3-7-6-7-10z"></path></svg>
+              </div>
+              <div class="sidebar-text" data-editable="text" style="">LIFESTYLE<br>DISCOVERIES</div>
+            </div>
+            
+            <div class="sidebar-item">
+              <div class="sidebar-icon">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 00-3-3.87"></path><path d="M16 3.13a4 4 0 010 7.75"></path></svg>
+              </div>
+              <div class="sidebar-text" data-editable="text" style="">FAMILY<br>TIME</div>
+            </div>
+            
+            <div class="sidebar-item">
+              <div class="sidebar-icon">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 01-8 0"></path></svg>
+              </div>
+              <div class="sidebar-text" data-editable="text" style="">SHOPPING<br>MEMORIES</div>
+            </div>
+            
+            <div class="sidebar-item">
+              <div class="sidebar-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"></rect><circle cx="12" cy="14" r="3"></circle><path d="M7 8v-2a2 2 0 012-2h6a2 2 0 012 2v2"></path></svg>
+              </div>
+              <div class="sidebar-text" data-editable="text" style="">TIMELESS<br>MOMENTS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-layout">
+          <div class="about-me">
+            <div class="about-title" data-editable="text" style="">ABOUT ME</div>
+            <div class="about-cols">
+              <div class="about-col" data-editable="text" style="">Today was all about discovering something new. From fashion and jewellery to unique lifestyle finds, every corner of Deccan Bazar had a story waiting to be explored.</div>
+              <div class="about-col" data-editable="text" style="">A day spent shopping with family and friends is always special. Between finding favourites, sharing laughs, and making memories, the experience becomes much more than just a shopping trip.</div>
+              <div class="about-col" data-editable="text" style="">This keepsake captures a moment from a wonderful day out. A little reminder of the people, memories, and experiences that made it worth remembering.</div>
+            </div>
+          </div>
+          
+          <div class="bottom-right-box">
+            <div class="brb-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="8" width="18" height="12" rx="2"></rect><circle cx="12" cy="14" r="3"></circle><path d="M7 8v-2a2 2 0 012-2h6a2 2 0 012 2v2"></path><circle cx="16" cy="10" r="1"></circle></svg>
+              <div class="brb-text" data-editable="text" style="">GOOD FINDS<br>GREAT TIMES<br>BEST MEMORIES</div>
+              <div style="font-size:8px; margin-top:8px;">— <span data-editable="text" style="">WORTH REMEMBERING</span> —</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="footer-left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="8" width="18" height="12" rx="2"></rect><circle cx="12" cy="14" r="3"></circle><path d="M7 8v-2a2 2 0 012-2h6a2 2 0 012 2v2"></path></svg>
+          </div>
+          <div class="footer-center">
+            <div class="fc-main" data-editable="text" style="">❦ CAPTURED BY TIMELESS CLICKS ❦</div>
+            <div class="fc-sub" data-editable="text" style="">Where every moment becomes a headline.</div>
+          </div>
+          <div class="footer-right">
+            <div class="fr-main" data-editable="text" style="">THE DECCAN BAZAAR</div>
+            <div data-editable="text" style="">THANK YOU FOR BEING<br>A PART OF THE STORY.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </article>
+
+
+
+</body></html>

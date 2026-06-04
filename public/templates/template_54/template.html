@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>\n<html lang="en"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>Daily Bugle Template</title>
@@ -74,7 +72,7 @@
       text-align: center;
       display: flex; align-items: center; justify-content: center; gap: 15px;
       font-family: var(--font-serif);
-      font-size: 85px;
+      font-size: 68px;
       font-weight: bold;
       letter-spacing: -2px;
       line-height: 0.8;
@@ -110,7 +108,7 @@
     /* Headline */
     .main-headline {
       font-family: var(--font-impact);
-      font-size: 78px;
+      font-size: 62px;
       text-transform: uppercase;
       text-align: center;
       line-height: 0.9;
@@ -215,7 +213,7 @@
       position: relative; overflow: hidden; cursor: pointer;
     }
     .image-file-input { display: none; }
-    .image-preview { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .image-preview { width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; display: block; }
     .placeholder-state {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; z-index: 2;
@@ -252,21 +250,21 @@
 <body>
   <article class="poster-scale-container">
     
-    <div class="top-red-bar" id="top-bar" data-editable="text">
+    <div class="top-red-bar" id="top-bar" data-editable="text" style="">
       EXCELSIOR
     </div>
 
     <div class="masthead-row">
-      <div class="masthead-box masthead-box-left" id="mh-left" data-editable="text">
+      <div class="masthead-box masthead-box-left" id="mh-left" data-editable="text" style="">
         <div class="stars">****</div>
         FINAL
       </div>
       <div class="masthead-center">
-        <span id="mh-c1" data-editable="text">DAILY</span>
+        <span id="mh-c1" data-editable="text" style="font-size: 48px;" class="">DAILY</span>
         <div class="bugle-icon"></div>
-        <span id="mh-c2" data-editable="text">BUGLE</span>
+        <span id="mh-c2" data-editable="text" style="font-size: 52px;" class="">BUGLE</span>
       </div>
-      <div class="masthead-box masthead-box-right" id="mh-right" data-editable="text">
+      <div class="masthead-box masthead-box-right" id="mh-right" data-editable="text" style="">
         <div class="stars">****</div>
         SINCE 1897<br>
         $1.00 (in NYC)<br>
@@ -274,42 +272,42 @@
       </div>
     </div>
 
-    <div class="sub-masthead" id="sub-mh" data-editable="text">
+    <div class="sub-masthead" id="sub-mh" data-editable="text" style="">
       NEW YORK'S FINEST DAILY NEWSPAPER
     </div>
 
-    <div class="main-headline" id="main-hl" data-editable="text">
+    <div class="main-headline" id="main-hl" data-editable="text" style="font-size: 50px;">
       VENOM STRIKES!
     </div>
 
     <div class="content-layout">
       <!-- Sidebar -->
       <div class="sidebar">
-        <div class="sidebar-red-box" id="sb-red" data-editable="text">
+        <div class="sidebar-red-box" id="sb-red" data-editable="text" style="">
           CRIME<br>ON THE<br>RISE!
         </div>
-        <div class="sidebar-subtext" id="sb-sub" data-editable="text">
+        <div class="sidebar-subtext" id="sb-sub" data-editable="text" style="">
           SPIDER-MAN TO BLAME
         </div>
         <div class="sidebar-image-box" id="sb-img" data-editable="image">
           <input type="file" class="image-file-input" accept="image/*">
-          <img class="image-preview" src="" alt="Thumbnail">
+          <div class="image-preview"></div>
         </div>
-        <div class="sidebar-story-page" id="sb-story" data-editable="text">
+        <div class="sidebar-story-page" id="sb-story" data-editable="text" style="">
           STORY ON PAGE 6
         </div>
         
-        <div class="sidebar-blue-box" id="sb-blue" data-editable="text">
+        <div class="sidebar-blue-box" id="sb-blue" data-editable="text" style="">
           NEW YORK'S<br>MEGA<br>MILLIONS
         </div>
 
-        <div class="sidebar-sports" id="sb-sports" data-editable="text">
-          <div class="sports-title">SPORTS & WEATHER</div>
+        <div class="sidebar-sports" id="sb-sports" data-editable="text" style="">
+          <div class="sports-title">SPORTS &amp; WEATHER</div>
           <div class="sports-sub">FULL REPORT, PAGE 16</div>
         </div>
 
         <div class="sidebar-barcode">
-          <div class="barcode-numbers" id="barcode" data-editable="text">
+          <div class="barcode-numbers" id="barcode" data-editable="text" style="">
             4 094275 724175
           </div>
         </div>
@@ -318,17 +316,18 @@
       <!-- Main Image -->
       <div class="main-image-box" id="main-img" data-editable="image">
         <input type="file" class="image-file-input" accept="image/*">
-        <img class="image-preview" src="" alt="Hero Poster">
+        <div class="image-preview"></div>
         <div class="placeholder-state">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"></path></svg>
         </div>
       </div>
     </div>
 
-    <div class="bottom-blue-bar" id="footer" data-editable="text">
+    <div class="bottom-blue-bar" id="footer" data-editable="text" style="">
       THE DAILY BUGLE ALWAYS GIVES YOU MORE * EXCLUSIVE STORY INSIDE!
     </div>
 
   </article>
-</body>
-</html>
+
+
+</body></html>

@@ -46,7 +46,7 @@
     .image-upload-box.dragover { border: 2px dashed var(--ink-color); background-color: #e2dbcd; }
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-    .image-preview { width: 100%; height: 100%; object-fit: cover; object-position: center center; filter: sepia(12%) contrast(1.02); display: block; }
+    .image-preview { width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; background-position: center center;  display: block; }
     .image-upload-box::after { content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(51, 48, 37, 0.8); color: #fbf8f3; display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; opacity: 0; transition: opacity 0.2s ease; z-index: 5; text-align: center; padding: 10px; }
     .image-upload-box:hover::after { opacity: 1; }
     .placeholder-state { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #615c4d; z-index: 2; padding: 20px; text-align: center; }
@@ -144,7 +144,7 @@
           <div class="image-upload-box" id="main-image-box" data-editable="image">
             <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
             <div class="image-preview-container">
-              <img id="main-image-img" class="image-preview" src="" alt="Main Portrait Photo">
+              <div id="main-image-img" class="image-preview" ></div>
             </div>
             <div class="placeholder-state">
               <svg class="placeholder-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">

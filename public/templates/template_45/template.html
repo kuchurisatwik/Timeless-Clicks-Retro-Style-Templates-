@@ -88,7 +88,7 @@
     }
     .thr-title {
       font-family: var(--font-gothic);
-      font-size: 65px;
+      font-size: 52px;
       line-height: 1;
       transform: scaleY(1.1);
     }
@@ -113,7 +113,7 @@
     /* Main Title */
     .main-title {
       font-family: var(--font-sans);
-      font-size: 150px;
+      font-size: 120px;
       text-align: center;
       letter-spacing: -2px;
       transform: scaleY(1.3);
@@ -137,9 +137,9 @@
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
     .image-preview {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat;
       display: block;
-      filter: grayscale(100%);
+      
     }
     .image-upload-box::after {
       content: 'UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
@@ -214,7 +214,7 @@
       padding: 20px;
     }
     .quote-icon {
-      font-size: 60px;
+      font-size: 48px;
       font-family: var(--font-sans);
       line-height: 0.5;
       margin-bottom: 20px;
@@ -275,7 +275,7 @@
       <div class="image-upload-box" id="main-image-box" data-editable="image">
         <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
         <div class="image-preview-container">
-          <img id="main-image-img" class="image-preview" src="" alt="Manifestation Photo">
+          <div id="main-image-img" class="image-preview" ></div>
         </div>
       </div>
     </div>

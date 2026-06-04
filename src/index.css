@@ -1,16 +1,28 @@
 :root {
-  --bg-color: #0f172a;
-  --surface-color: rgba(30, 41, 59, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --accent-color: #3b82f6;
-  --accent-hover: #60a5fa;
+  --bg-dark: #0F0A16;
+  --bg-mid: #1A1027;
+  --bg-light: #2D153D;
+  
+  --accent-1: #FF7A59;
+  --accent-2: #FF4D8D;
+  --accent-3: #A855F7;
+  
+  --secondary-1: #FFD166;
+  --secondary-2: #F4C95D;
+
+  --surface-color: rgba(255, 255, 255, 0.06);
+  --surface-hover: rgba(255, 255, 255, 0.09);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(255, 255, 255, 0.2);
+  
+  --text-primary: #FFFFFF;
+  --text-secondary: #B7B7C8;
+
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: var(--text-primary);
-  background-color: var(--bg-color);
+  background-color: var(--bg-dark);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -21,7 +33,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: radial-gradient(circle at top left, #1e293b, #0f172a);
+  background: var(--bg-dark);
+  overflow-x: hidden;
 }
 
 * {
@@ -36,68 +49,81 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* Glassmorphism utility */
+/* Glassmorphism */
 .glass-panel {
   background: var(--surface-color);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 15px rgba(168, 85, 247, 0.15);
 }
 
 /* Utilities */
-.btn {
-  background: var(--accent-color);
+.heading-font {
+  font-family: 'Clash Display', 'Inter', sans-serif;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+  background-size: 200% auto;
   color: #fff;
   border: none;
-  padding: 10px 16px;
+  padding: 10px 20px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 }
 
-.btn:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
+.btn-primary:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 77, 141, 0.4);
 }
 
 .btn-secondary {
-  background: transparent;
+  background: var(--surface-color);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
+  backdrop-filter: blur(8px);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-hover);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Logo shimmer effect */
+/* Animations */
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { 
-    filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.3)) drop-shadow(0 0 20px rgba(167, 139, 250, 0.15));
-  }
-  50% { 
-    filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.5)) drop-shadow(0 0 40px rgba(167, 139, 250, 0.3));
-  }
 }
 
 @keyframes float {
@@ -105,44 +131,85 @@ body {
   50% { transform: translateY(-3px); }
 }
 
-.logo-title {
-  font-size: 2.8rem;
-  font-weight: 800;
-  margin: 0 0 10px 0;
-  background: linear-gradient(
-    90deg,
-    #60a5fa 0%,
-    #a78bfa 25%,
-    #f0abfc 50%,
-    #a78bfa 75%,
-    #60a5fa 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: 
-    shimmer 4s linear infinite,
-    glow-pulse 3s ease-in-out infinite,
-    float 5s ease-in-out infinite;
-  letter-spacing: -0.5px;
-  position: relative;
-  display: inline-block;
+/* Background Layers */
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
-/* Responsive Utilities */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  animation: blob-float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.blob-1 {
+  width: 600px;
+  height: 600px;
+  background: var(--accent-2);
+  top: -10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.blob-2 {
+  width: 500px;
+  height: 500px;
+  background: var(--accent-3);
+  top: 40%;
+  right: -10%;
+  animation-delay: -5s;
+}
+
+.blob-3 {
+  width: 700px;
+  height: 700px;
+  background: var(--accent-1);
+  bottom: -20%;
+  left: 20%;
+  opacity: 0.3;
+  animation-delay: -10s;
+}
+
+@keyframes blob-float {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.aurora-waves {
+  background: linear-gradient(120deg, 
+    rgba(255, 122, 89, 0) 0%, 
+    rgba(255, 77, 141, 0.1) 25%, 
+    rgba(168, 85, 247, 0.1) 50%, 
+    rgba(255, 122, 89, 0) 100%);
+  background-size: 200% 100%;
+  animation: aurora-flow 15s linear infinite;
+}
+
+@keyframes aurora-flow {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+}
+
+/* Mobile Adjustments */
 @media (max-width: 768px) {
-  .logo-title {
-    font-size: 2.2rem;
-  }
   .hide-on-mobile {
     display: none !important;
   }
   .mobile-only {
     display: block !important;
   }
-  
-  /* Scrollbar hidden for touch interfaces on mobile */
   ::-webkit-scrollbar {
     width: 0px;
     height: 0px;

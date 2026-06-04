@@ -34,7 +34,7 @@
     .masthead-row { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 4px 0; }
     .masthead-left, .masthead-right { font-family: var(--font-serif); font-size: 15px; font-weight: 700; letter-spacing: 0.5px; width: 140px; }
     .masthead-right { text-align: right; }
-    .masthead-title { font-family: 'Cloister Black', 'Old English Text MT', var(--font-gothic), serif; font-size: 64px; font-weight: 700; text-align: center; flex-grow: 1; display: flex; align-items: center; justify-content: center; gap: 15px; line-height: 0.95; }
+    .masthead-title { font-family: 'Cloister Black', 'Old English Text MT', var(--font-gothic), serif; font-size: 51px; font-weight: 700; text-align: center; flex-grow: 1; display: flex; align-items: center; justify-content: center; gap: 15px; line-height: 0.95; }
     .masthead-star { font-family: var(--font-serif); font-size: 24px; vertical-align: middle; line-height: 1; }
     
     .upper-body-section { display: grid; grid-template-columns: 1fr 2.3fr; gap: 24px; align-items: stretch; width: 100%; overflow: hidden; }
@@ -47,7 +47,7 @@
     .upper-right-col { display: flex; flex-direction: column; height: 100%; }
     .main-headline-container { display: flex; flex-direction: column; margin-bottom: 8px; }
     .main-headline-italic { font-family: var(--font-serif); font-size: 50px; font-weight: 400; font-style: italic; line-height: 0.95; letter-spacing: -0.5px; }
-    .main-headline-bold { font-family: var(--font-serif); font-size: 88px; font-weight: 700; line-height: 0.85; letter-spacing: -1.5px; }
+    .main-headline-bold { font-family: var(--font-serif); font-size: 70px; font-weight: 700; line-height: 0.85; letter-spacing: -1.5px; }
     .main-headline-normal { font-family: var(--font-serif); font-size: 38px; font-weight: 700; line-height: 0.95; letter-spacing: -0.5px; }
     .upper-right-col .image-upload-box { flex-grow: 1; height: 0; margin-top: 8px; }
     
@@ -55,7 +55,7 @@
     .image-upload-box.dragover { border: 2px dashed var(--ink-color); background-color: rgba(226, 219, 205, 0.7); }
     .image-file-input { display: none; }
     .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-    .image-preview { width: 100%; height: 100%; object-fit: cover; object-position: center center; filter: sepia(12%) contrast(1.02); display: block; }
+    .image-preview { width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; background-position: center center;  display: block; }
     .image-upload-box::after { content: 'CLICK TO UPLOAD PHOTO'; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(43, 39, 36, 0.8); color: #ffffff; display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; opacity: 0; transition: opacity 0.2s ease; z-index: 5; text-align: center; padding: 10px; }
     .image-upload-box:hover::after { opacity: 1; }
     .placeholder-state { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #615c4d; z-index: 2; padding: 20px; text-align: center; }
@@ -135,7 +135,7 @@
           <div class="image-upload-box" id="main-image-box" data-editable="image">
             <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
             <div class="image-preview-container">
-              <img id="main-image-img" class="image-preview" src="" alt="Main Character Photo">
+              <div id="main-image-img" class="image-preview" ></div>
             </div>
             <div class="placeholder-state">
               <svg class="placeholder-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
@@ -162,7 +162,7 @@
           <div class="image-upload-box" id="lower-left-box">
             <input type="file" id="lower-left-input" class="image-file-input" accept="image/*">
             <div class="image-preview-container">
-              <img id="lower-left-img" class="image-preview" src="" alt="Bottom Left Photo">
+              <div id="lower-left-img" class="image-preview" ></div>
             </div>
             <div class="placeholder-state">
               <svg class="placeholder-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -190,7 +190,7 @@
           <div class="image-upload-box" id="lower-right-box">
             <input type="file" id="lower-right-input" class="image-file-input" accept="image/*">
             <div class="image-preview-container">
-              <img id="lower-right-img" class="image-preview" src="" alt="Bottom Right Photo">
+              <div id="lower-right-img" class="image-preview" ></div>
             </div>
             <div class="placeholder-state">
               <svg class="placeholder-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">

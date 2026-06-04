@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>\n<html lang="en"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>Avengers Review Template</title>
@@ -47,7 +45,7 @@
     }
     .masthead-text {
       font-family: var(--font-gothic);
-      font-size: 80px;
+      font-size: 64px;
       font-weight: bold;
       letter-spacing: -2px;
       text-transform: capitalize;
@@ -102,7 +100,7 @@
     /* Headline */
     .headline {
       font-family: var(--font-impact);
-      font-size: 140px;
+      font-size: 112px;
       text-transform: uppercase;
       text-align: center;
       line-height: 0.9;
@@ -175,7 +173,7 @@
       position: relative; overflow: hidden; cursor: pointer;
     }
     .image-file-input { display: none; }
-    .image-preview { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .image-preview { width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; display: block; }
     .placeholder-state {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; z-index: 2;
@@ -200,50 +198,51 @@
   <article class="poster-scale-container">
     
     <div class="masthead-container">
-      <div class="masthead-text" id="masthead-left" data-editable="text">Daily</div>
+      <div class="masthead-text" id="masthead-left" data-editable="text" style="">Daily</div>
       <div class="globe-icon"></div>
-      <div class="masthead-text" id="masthead-right" data-editable="text">Planet</div>
+      <div class="masthead-text" id="masthead-right" data-editable="text" style="">Planet</div>
     </div>
 
     <div class="special-edition">
-      <div class="special-edition-text" id="special-edition" data-editable="text">SPECIAL EDITION</div>
+      <div class="special-edition-text" id="special-edition" data-editable="text" style="">SPECIAL EDITION</div>
     </div>
 
-    <div class="headline" id="main-headline" data-editable="text">
+    <div class="headline" id="main-headline" data-editable="text" style="font-size: 80px;">
       AVENGERS
     </div>
 
-    <div class="sub-headline" id="sub-headline" data-editable="text">
+    <div class="sub-headline" id="sub-headline" data-editable="text" style="font-size: 40px;">
       AGE of ULTRON REVIEW
     </div>
 
     <div class="content-grid">
       <div class="left-col">
         <div class="byline-box">
-          <div class="byline-name" id="author" data-editable="text">By Matt K. Leppo</div>
-          <div class="byline-handle" id="handle" data-editable="text">@Mattlep97</div>
+          <div class="byline-name" id="author" data-editable="text" style="">By Matt K. Leppo</div>
+          <div class="byline-handle" id="handle" data-editable="text" style="">@Mattlep97</div>
         </div>
-        <div class="article-text" id="article-body" data-editable="text">
+        <div class="article-text" id="article-body" data-editable="text" style="">
           Avengers Age of Ultron, the cherry on top of the MCU's first 2 phases. Well let's start with the villain Ultron. Ultron by all means is menacing. This man robot AI thing is bloody insane. The first scene where he is shown talking to Jarvis through what was small pixels accessing files, was insane. James Spader absolutely kills the role and he takes Ultron's wit from the comics and throws it right in our fanboy faces on the big screen. What Ultron brought to the MCU was a different type of villain. It wasn't just some dude who thinks he's a god killing humans because he's strong, no, this anger and hatred reached far deeper than that. He knew he was strong. He knew that he was stronger. He saw all of the "destruction" The Avengers caused. His rage grew as the film went further. His main focus through the movie was simply evolution. He said (I am paraphrasing of course) "I was designed to save the world."
           <br><br>
           Ultron believes in evolution. Just like the comics and main motivations of other villains, such as Magneto and Loki, he believes that he is essentially more evolved than the human race.
           <br><br>
           That Artificial intelligence is the next step in evolution. Even Vision
         </div>
-        <div class="continued-text" id="continued" data-editable="text">Continued on Page 2</div>
+        <div class="continued-text" id="continued" data-editable="text" style="">Continued on Page 2</div>
       </div>
 
       <div class="right-col">
         <div class="image-upload-box" id="poster-img" data-editable="image">
           <input type="file" class="image-file-input" accept="image/*">
-          <img class="image-preview" src="" alt="Movie Poster">
+          <div class="image-preview"></div>
           <div class="placeholder-state">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"></path></svg>
           </div>
         </div>
       </div>
     </div>
 
   </article>
-</body>
-</html>
+
+
+</body></html>

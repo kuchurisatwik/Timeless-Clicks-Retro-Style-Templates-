@@ -393,7 +393,7 @@ const EditorPage: React.FC = () => {
       loopCount++;
       editableElements.forEach((el) => {
         const htmlEl = el as HTMLElement;
-        let fontSize = parseFloat(htmlEl.style.fontSize || iframeDoc.defaultView?.getComputedStyle(htmlEl).fontSize || '16');
+        const fontSize = parseFloat(htmlEl.style.fontSize || iframeDoc.defaultView?.getComputedStyle(htmlEl).fontSize || '16');
         if (fontSize > 4) {
           htmlEl.style.fontSize = `${fontSize - 0.5}px`;
         }
@@ -515,7 +515,7 @@ const EditorPage: React.FC = () => {
                   }
                 }
               }
-            } catch(e) { /* ignore cross-origin stylesheet errors if any */ }
+            } catch { /* ignore cross-origin stylesheet errors if any */ }
           }
         } catch (e) {
           console.warn("Could not parse stylesheet variables", e);
@@ -564,7 +564,7 @@ const EditorPage: React.FC = () => {
         Only include keys in the JSON that need to be changed. If no theme changes, omit "theme". For visibility, set false to hide an element, true to show.`;
 
         const result = await generateWithFallback(prompt);
-        let responseText = result.response.text().trim();
+        const responseText = result.response.text().trim();
         
         // Clean up markdown if Gemini adds it
         let cleanText = responseText;
@@ -688,7 +688,74 @@ const EditorPage: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: isMobile ? 'column-reverse' : 'row', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: isMobile ? 'column-reverse' : 'row', height: '100vh', width: '100vw', overflow: 'hidden', position: 'relative' }}>
+      <style>{`
+        @keyframes floatParticle {
+          0% { transform: translateY(0) translateX(0); opacity: 0; }
+          20% { opacity: 0.5; }
+          80% { opacity: 0.5; }
+          100% { transform: translateY(-20vh) translateX(20px); opacity: 0; }
+        }
+        .particle {
+          position: absolute;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.8);
+          box-shadow: 0 0 8px rgba(255,255,255,0.8);
+        }
+        .premium-input:focus {
+          border-color: rgba(255, 77, 141, 0.5) !important;
+          box-shadow: 0 0 0 2px rgba(255, 77, 141, 0.2) !important;
+        }
+        .btn-gradient {
+          background: linear-gradient(135deg, #FF4D8D, #A855F7);
+          color: white;
+          border: none;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+        .btn-gradient:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(255, 77, 141, 0.4);
+        }
+        .btn-gradient::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+          transform: rotate(45deg);
+          transition: all 0.3s ease;
+          opacity: 0;
+        }
+        .btn-gradient:hover::after {
+          animation: shine 1.5s ease-out infinite;
+          opacity: 1;
+        }
+        @keyframes shine {
+          0% { transform: translateX(-100%) rotate(45deg); }
+          100% { transform: translateX(100%) rotate(45deg); }
+        }
+        .dropzone-hover:hover {
+          border-color: rgba(168, 85, 247, 0.8) !important;
+          background: rgba(168, 85, 247, 0.1) !important;
+          box-shadow: 0 0 15px rgba(168, 85, 247, 0.2) !important;
+        }
+        .color-swatch:hover {
+          transform: scale(1.15) translateY(-2px) !important;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+        }
+        .canvas-frame {
+          box-shadow: 0 0 80px rgba(255,77,141,0.25);
+          transition: transform 0.3s ease;
+        }
+        .canvas-frame:hover {
+          transform: scale(1.01);
+        }
+      `}</style>
+
       {/* Hidden file input */}
       <input 
         type="file" 
@@ -698,520 +765,173 @@ const EditorPage: React.FC = () => {
         style={{ display: 'none' }} 
       />
 
-      {/* Sidebar */}
-      <aside style={{
-        width: isMobile ? '100%' : '380px',
-        height: isMobile ? '45vh' : 'auto',
-        background: 'rgba(30, 41, 59, 0.5)',
-        backdropFilter: 'blur(16px)',
-        borderRight: isMobile ? 'none' : '1px solid var(--border-color)',
-        borderTop: isMobile ? '1px solid var(--border-color)' : 'none',
-        padding: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-        overflowY: 'auto',
-        flexShrink: 0
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
-          <button className="btn btn-secondary" onClick={() => navigate('/')} style={{ padding: '8px 12px' }}>
-            &larr; Back
-          </button>
-          <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 600 }}>Editor</h1>
-        </div>
-
-        {/* Assets Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Settings</label>
-            <input 
-              type="password"
-              className="glass-panel"
-              placeholder="Enter Gemini API Key..."
-              value={apiKey}
-              onChange={(e) => {
-                setApiKey(e.target.value);
-                localStorage.setItem('gemini_api_key', e.target.value);
-              }}
-              style={{
-                width: '100%',
-                padding: '8px 10px',
-                border: '1px solid var(--border-color)',
-                borderRadius: '8px',
-                background: 'rgba(0,0,0,0.2)',
-                color: 'white',
-                fontSize: '0.85rem',
-                outline: 'none',
-                marginBottom: '4px'
-              }}
-            />
-            
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-              <input 
-                type="text"
-                className="glass-panel"
-                placeholder="Model (e.g. gemini-1.5-flash)"
-                list="gemini-models"
-                value={apiModel}
-                onChange={(e) => {
-                  setApiModel(e.target.value);
-                  localStorage.setItem('gemini_model', e.target.value);
-                }}
-                style={{
-                  flex: 1,
-                  padding: '8px 10px',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: '8px',
-                  background: 'rgba(0,0,0,0.2)',
-                  color: 'white',
-                  fontSize: '0.85rem',
-                  outline: 'none'
-                }}
-              />
-              <button 
-                className="btn btn-secondary" 
-                title="Test API Key & List Available Models"
-                onClick={async () => {
-                  if (!apiKey) {
-                    alert("Please enter an API key first.");
-                    return;
-                  }
-                  try {
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                    const data = await res.json();
-                    if (data.error) {
-                      alert(`API Error: ${data.error.message} (${data.error.status})`);
-                    } else if (data.models) {
-                      const textModels = data.models
-                        .map((m: any) => m.name.replace('models/', ''))
-                        .filter((name: string) => name.includes('gemini'));
-                      alert(`Success! The API is working.\n\nAvailable Models for your key:\n- ${textModels.join('\n- ')}\n\nPlease pick one of these models and put it in the Model input box.`);
-                    }
-                  } catch (e) {
-                    alert("Network Error: Could not connect to Google Generative Language API. Check your internet or adblocker.");
-                  }
-                }}
-                style={{ padding: '0 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              >
-                Test API
-              </button>
-            </div>
-            <datalist id="gemini-models">
-              <option value="gemini-3.0-flash" />
-              <option value="gemini-2.5-flash" />
-              <option value="gemini-3.1-flash-lite" />
-              <option value="gemini-2.5-flash-lite" />
-            </datalist>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Assets</label>
-            <button 
-              className="btn btn-secondary" 
-              style={{ width: '100%', justifyContent: 'center', padding: '8px 12px' }}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" y1="3" x2="12" y2="15"></line>
-              </svg>
-              Upload Photo
-            </button>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <label style={{ fontSize: '0.82rem', fontWeight: 500, color: 'rgba(148,163,184,0.85)', letterSpacing: '0.03em' }}>Typography</label>
-
-            {/* Hint when nothing selected */}
-            {selectedFontSize === null && (
-              <div style={{
-                padding: '10px 14px',
-                borderRadius: '12px',
-                background: 'rgba(59,130,246,0.06)',
-                border: '1px dashed rgba(59,130,246,0.2)',
-                color: 'rgba(148,163,184,0.7)',
-                fontSize: '0.78rem',
-                textAlign: 'center',
-                lineHeight: 1.5,
-                fontWeight: 400
-              }}>
-                Click a text element on the poster to edit its size &amp; color
-              </div>
-            )}
-
-            {/* Size row — pill shape */}
-            <div style={{
-              display: 'flex', alignItems: 'center',
-              background: 'rgba(255,255,255,0.04)',
-              borderRadius: '14px',
-              border: '1px solid rgba(255,255,255,0.08)',
-              padding: '3px',
-              opacity: selectedFontSize === null ? 0.35 : 1,
-              pointerEvents: selectedFontSize === null ? 'none' : 'auto',
-              transition: 'opacity 0.3s ease'
-            }}>
-              <button
-                onClick={() => {
-                  if (selectedElementRef.current && selectedFontSize !== null) {
-                    const next = Math.max(1, selectedFontSize - 1);
-                    setSelectedFontSize(next);
-                    selectedElementRef.current.style.fontSize = `${next}px`;
-                    saveState();
-                  }
-                }}
-                style={{
-                  width: '30px', height: '30px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  border: 'none', borderRadius: '11px',
-                  background: 'transparent', color: 'rgba(255,255,255,0.5)',
-                  cursor: 'pointer', fontSize: '1rem', fontWeight: 300,
-                  flexShrink: 0, transition: 'all 0.15s'
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </button>
-              <input
-                type="number"
-                className="glass-panel"
-                value={selectedFontSize || ''}
-                placeholder="—"
-                disabled={selectedFontSize === null}
-                onChange={(e) => {
-                  const newSize = parseFloat(e.target.value);
-                  setSelectedFontSize(newSize);
-                  if (selectedElementRef.current && !isNaN(newSize)) {
-                    selectedElementRef.current.style.fontSize = `${newSize}px`;
-                    saveState();
-                  }
-                }}
-                style={{
-                  flex: 1,
-                  padding: '5px 4px',
-                  border: 'none',
-                  borderRadius: '10px',
-                  background: 'transparent',
-                  color: 'rgba(255,255,255,0.9)',
-                  fontSize: '0.82rem',
-                  fontWeight: 400,
-                  outline: 'none',
-                  textAlign: 'center',
-                  minWidth: 0
-                }}
-              />
-              <span style={{ color: 'rgba(148,163,184,0.45)', fontSize: '0.72rem', fontWeight: 400, flexShrink: 0, marginRight: '4px' }}>px</span>
-              <button
-                onClick={() => {
-                  if (selectedElementRef.current && selectedFontSize !== null) {
-                    const next = selectedFontSize + 1;
-                    setSelectedFontSize(next);
-                    selectedElementRef.current.style.fontSize = `${next}px`;
-                    saveState();
-                  }
-                }}
-                style={{
-                  width: '30px', height: '30px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  border: 'none', borderRadius: '11px',
-                  background: 'transparent', color: 'rgba(255,255,255,0.5)',
-                  cursor: 'pointer', fontSize: '1rem', fontWeight: 300,
-                  flexShrink: 0, transition: 'all 0.15s'
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </button>
-            </div>
-
-            {/* Color row */}
-            <div style={{ opacity: selectedFontSize === null ? 0.35 : 1, pointerEvents: selectedFontSize === null ? 'none' : 'auto', transition: 'opacity 0.3s ease' }}>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                <span style={{ fontSize: '0.78rem', fontWeight: 400, color: 'rgba(148,163,184,0.7)' }}>Color</span>
-                <span style={{ fontSize: '0.7rem', color: 'rgba(148,163,184,0.4)', marginLeft: 'auto', fontFamily: 'monospace', fontWeight: 400, letterSpacing: '0.04em' }}>{selectedFontColor.toUpperCase()}</span>
-              </div>
-              <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                {['#000000','#ffffff','#e62429','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899','#6b7280','#92400e'].map(c => (
-                  <button
-                    key={c}
-                    title={c}
-                    onClick={() => {
-                      setSelectedFontColor(c);
-                      if (selectedElementRef.current) {
-                        selectedElementRef.current.style.color = c;
-                        saveState();
-                      }
-                    }}
-                    style={{
-                      width: '22px', height: '22px',
-                      borderRadius: '50%',
-                      border: selectedFontColor === c ? '2px solid rgba(96,165,250,0.7)' : '1.5px solid rgba(255,255,255,0.1)',
-                      background: c,
-                      cursor: 'pointer',
-                      boxShadow: selectedFontColor === c ? '0 0 0 2px rgba(96,165,250,0.25)' : 'none',
-                      transition: 'all 0.2s ease',
-                      flexShrink: 0,
-                      transform: selectedFontColor === c ? 'scale(1.15)' : 'scale(1)',
-                      ...(c === '#ffffff' ? { boxShadow: selectedFontColor === c ? '0 0 0 2px rgba(96,165,250,0.25), inset 0 0 0 1px rgba(0,0,0,0.1)' : 'inset 0 0 0 1px rgba(0,0,0,0.1)' } : {})
-                    }}
-                  />
-                ))}
-                {/* Custom color picker trigger */}
-                <div style={{ position: 'relative', width: '22px', height: '22px', flexShrink: 0 }}>
-                  <input
-                    type="color"
-                    value={selectedFontColor}
-                    onChange={(e) => {
-                      const newColor = e.target.value;
-                      setSelectedFontColor(newColor);
-                      if (selectedElementRef.current) {
-                        selectedElementRef.current.style.color = newColor;
-                        saveState();
-                      }
-                    }}
-                    style={{
-                      position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                      opacity: 0, cursor: 'pointer'
-                    }}
-                  />
-                  <div style={{
-                    width: '22px', height: '22px', borderRadius: '50%',
-                    border: '1.5px solid rgba(255,255,255,0.1)',
-                    background: 'conic-gradient(from 0deg, #f87171, #fbbf24, #34d399, #60a5fa, #a78bfa, #f472b6, #f87171)',
-                    pointerEvents: 'none',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    opacity: 0.75, transition: 'opacity 0.2s'
-                  }}>
-                    <span style={{ fontSize: '10px', color: '#fff', textShadow: '0 0 4px rgba(0,0,0,0.6)', fontWeight: 400 }}>+</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
-            <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-secondary)' }}>AI Director</label>
-
-            <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <textarea 
-                className="glass-panel"
-                placeholder="e.g. Make this headline sound more dramatic..."
-                value={aiPrompt}
-                onChange={(e) => setAiPrompt(e.target.value)}
-                style={{ 
-                  width: '100%', 
-                  flex: 1, 
-                  resize: 'none', 
-                  padding: '10px',
-                  paddingBottom: '36px',
-                  color: 'var(--text-primary)',
-                  fontFamily: 'inherit',
-                  fontSize: '0.9rem',
-                  outline: 'none',
-                  minHeight: '70px'
-                }}
-              />
-              {recentPrompts.length > 0 && (
-                <div style={{ position: 'absolute', bottom: '8px', right: '8px' }}>
-                  <button 
-                    className="btn btn-secondary" 
-                    style={{ padding: '4px 8px', fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)' }}
-                    onClick={() => setShowPromptsPopup(!showPromptsPopup)}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '4px' }}>
-                      <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    Recent
-                  </button>
-                  {showPromptsPopup && (
-                    <div style={{
-                      position: 'absolute',
-                      bottom: '100%',
-                      right: 0,
-                      marginBottom: '4px',
-                      width: '250px',
-                      background: '#1f2937',
-                      border: '1px solid #374151',
-                      borderRadius: '6px',
-                      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)',
-                      zIndex: 50,
-                      maxHeight: '200px',
-                      overflowY: 'auto'
-                    }}>
-                      {recentPrompts.map((prompt, i) => (
-                        <div 
-                          key={i}
-                          onClick={() => {
-                            setAiPrompt(prompt);
-                            setShowPromptsPopup(false);
-                          }}
-                          style={{
-                            padding: '8px 12px',
-                            borderBottom: i < recentPrompts.length - 1 ? '1px solid #374151' : 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.85rem',
-                            color: '#d1d5db',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                          }}
-                          onMouseOver={(e) => e.currentTarget.style.background = '#374151'}
-                          onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                        >
-                          {prompt}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-            <button 
-              className="btn" 
-              style={{ width: '100%', justifyContent: 'center', padding: '10px' }}
-              onClick={handleAiSubmit}
-              disabled={isAiLoading}
-            >
-              {isAiLoading ? 'Generating...' : (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
-                    <path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/>
-                  </svg>
-                  AI Generate
-                </div>
-              )}
-            </button>
-          </div>
-        </div>
-
-        <div style={{ marginTop: 'auto' }}>
-          <button 
-            className="btn" 
-            style={{ width: '100%', justifyContent: 'center', padding: '12px', background: '#10b981' }}
-            onClick={handleExport}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 6 2 18 2 18 9"></polyline>
-              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-              <rect x="6" y="14" width="12" height="8"></rect>
-            </svg>
-            Print Poster
-          </button>
-        </div>
-      </aside>
+      {/* Background Layers */}
+      <div className="bg-layer blob blob-1" />
+      <div className="bg-layer blob blob-2" />
+      <div className="bg-layer blob blob-3" />
+      <div className="bg-layer aurora-waves" />
+      
+      {/* Particles Layer */}
+      <div className="bg-layer" style={{ zIndex: 0 }}>
+        {Array.from({ length: 30 }).map((_, i) => (
+          <div
+            key={i}
+            className="particle"
+            style={{
+              left: `${(i * 13) % 100}vw`,
+              top: `${(i * 27) % 100}vh`,
+              width: `${(i % 3) + 1}px`,
+              height: `${(i % 3) + 1}px`,
+              animation: `floatParticle ${(i % 15) + 15}s linear ${i % 5}s infinite`,
+              opacity: 0 // handled by animation keyframes
+            }}
+          />
+        ))}
+      </div>
+      
+      <div className="bg-layer noise-overlay" />
 
       {/* Main Canvas Area */}
       <main style={{ 
         flex: 1, 
         display: 'flex', 
         flexDirection: 'column',
-        overflow: 'hidden',
-        background: 'radial-gradient(circle at center, #1e293b, #0f172a)',
         position: 'relative',
+        zIndex: 5
       }}>
-        {/* Undo/Redo controls */}
+        {/* Top Status Bar */}
+        <div style={{
+          position: 'absolute',
+          top: '24px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          background: 'rgba(255,255,255,0.04)',
+          backdropFilter: 'blur(20px)',
+          padding: '8px 20px',
+          borderRadius: '20px',
+          border: '1px solid rgba(255,255,255,0.08)',
+          zIndex: 10,
+          color: 'var(--text-secondary)',
+          fontSize: '0.85rem',
+          fontWeight: 500
+        }}>
+          <span style={{ color: '#fff' }}>Template {templateId?.split('_')[1] || ''}</span>
+          <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+          <span>Timeless Clicks Studio</span>
+          <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+          <span style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            Auto Saved <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </span>
+        </div>
+
+        {/* Undo/Redo Controls - Floating Top Right */}
         <div style={{
           position: 'absolute',
           top: isMobile ? '12px' : '24px',
           right: isMobile ? '12px' : '24px',
           zIndex: 10,
           display: 'flex',
-          gap: '8px'
+          gap: '8px',
+          background: 'rgba(255,255,255,0.04)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '12px',
+          padding: '6px',
+          border: '1px solid rgba(255,255,255,0.08)',
         }}>
           <button 
-            className="btn btn-secondary" 
             onClick={undo} 
             disabled={!canUndo} 
             style={{ 
-              padding: '8px 16px', 
-              opacity: canUndo ? 1 : 0.4, 
+              padding: '8px 12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: 'none',
+              borderRadius: '8px',
+              background: 'transparent',
+              color: canUndo ? '#fff' : 'rgba(255,255,255,0.3)',
               cursor: canUndo ? 'pointer' : 'not-allowed',
-              background: 'rgba(30,41,59,0.85)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+              transition: 'all 0.2s',
+              fontSize: '0.85rem',
+              fontWeight: 500
             }}
+            onMouseEnter={e => { if(canUndo) { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}}
+            onMouseLeave={e => { if(canUndo) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'translateY(0)'; }}}
           >
-            Undo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+            <span className="hide-on-mobile">Undo</span>
           </button>
+          <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)', margin: '4px 0' }} />
           <button 
-            className="btn btn-secondary" 
             onClick={redo} 
             disabled={!canRedo} 
             style={{ 
-              padding: '8px 16px', 
-              opacity: canRedo ? 1 : 0.4, 
+              padding: '8px 12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: 'none',
+              borderRadius: '8px',
+              background: 'transparent',
+              color: canRedo ? '#fff' : 'rgba(255,255,255,0.3)',
               cursor: canRedo ? 'pointer' : 'not-allowed',
-              background: 'rgba(30,41,59,0.85)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+              transition: 'all 0.2s',
+              fontSize: '0.85rem',
+              fontWeight: 500
             }}
+            onMouseEnter={e => { if(canRedo) { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}}
+            onMouseLeave={e => { if(canRedo) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'translateY(0)'; }}}
           >
-            Redo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg>
+            <span className="hide-on-mobile">Redo</span>
           </button>
         </div>
 
-        {/* Zoom controls */}
+        {/* Zoom Controls - Floating Bottom Right */}
         <div style={{
           position: 'absolute',
-          bottom: isMobile ? '12px' : '24px',
-          right: isMobile ? '12px' : '24px',
+          bottom: isMobile ? '12px' : '32px',
+          right: isMobile ? '12px' : '32px',
           zIndex: 10,
           display: 'flex',
           alignItems: 'center',
           gap: '4px',
-          background: 'rgba(30,41,59,0.85)',
-          backdropFilter: 'blur(10px)',
-          borderRadius: '10px',
-          padding: '4px',
-          border: '1px solid rgba(255,255,255,0.1)',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+          background: 'rgba(255,255,255,0.04)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '24px',
+          padding: '6px',
+          border: '1px solid rgba(255,255,255,0.08)',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
         }}>
           <button
             onClick={zoomOut}
             style={{
-              width: '36px',
-              height: '36px',
-              border: 'none',
-              borderRadius: '8px',
-              background: 'transparent',
-              color: '#f8fafc',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '20px',
-              fontWeight: 600,
-              transition: 'background 0.15s',
+              width: '36px', height: '36px',
+              border: 'none', borderRadius: '50%',
+              background: 'transparent', color: '#fff',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'all 0.2s',
             }}
             onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-            title="Zoom Out"
           >
-            −
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
           </button>
 
           <button
             onClick={zoomReset}
             style={{
-              minWidth: '52px',
-              height: '36px',
-              border: 'none',
-              borderRadius: '8px',
-              background: 'transparent',
-              color: '#94a3b8',
-              cursor: 'pointer',
-              fontSize: '12px',
-              fontWeight: 600,
-              letterSpacing: '0.5px',
-              transition: 'background 0.15s',
+              minWidth: '52px', height: '36px',
+              border: 'none', borderRadius: '18px',
+              background: 'transparent', color: 'var(--text-secondary)',
+              cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
+              transition: 'all 0.2s', padding: '0 12px'
             }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-            title="Reset Zoom"
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
           >
             {Math.round(zoom * 100)}%
           </button>
@@ -1219,43 +939,41 @@ const EditorPage: React.FC = () => {
           <button
             onClick={zoomIn}
             style={{
-              width: '36px',
-              height: '36px',
-              border: 'none',
-              borderRadius: '8px',
-              background: 'transparent',
-              color: '#f8fafc',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '20px',
-              fontWeight: 600,
-              transition: 'background 0.15s',
+              width: '36px', height: '36px',
+              border: 'none', borderRadius: '50%',
+              background: 'transparent', color: '#fff',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'all 0.2s',
             }}
             onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-            title="Zoom In"
           >
-            +
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
           </button>
         </div>
 
-        {/* Scrollable canvas */}
+        {/* Scrollable canvas wrapper */}
         <div style={{
           flex: 1,
           overflow: 'auto',
-          padding: isMobile ? '16px' : '32px',
+          padding: isMobile ? '16px' : '64px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: 'min-content'
         }}>
-          <div style={{
-            width: `${794 * zoom}px`,
-            height: `${1123 * zoom}px`,
-            margin: '0 auto',
-            background: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
-            overflow: 'hidden',
-          }}>
+          <div 
+            className="canvas-frame"
+            style={{
+              width: `${794 * zoom}px`,
+              height: `${1123 * zoom}px`,
+              background: '#fff',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              flexShrink: 0,
+              border: '1px solid rgba(255,255,255,0.1)'
+            }}
+          >
             <iframe 
               ref={iframeRef}
               src={`/templates/${templateId}/template.html`}
@@ -1273,6 +991,472 @@ const EditorPage: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Floating Left Sidebar */}
+      <aside style={{
+        width: isMobile ? '100%' : '380px',
+        height: isMobile ? '45vh' : 'auto',
+        background: 'rgba(255,255,255,0.02)',
+        backdropFilter: 'blur(30px)',
+        borderLeft: isMobile ? 'none' : '1px solid rgba(255,255,255,0.08)',
+        borderTop: isMobile ? '1px solid rgba(255,255,255,0.08)' : 'none',
+        padding: '24px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px',
+        overflowY: 'auto',
+        flexShrink: 0,
+        zIndex: 10,
+        boxShadow: '-10px 0 30px rgba(0,0,0,0.2)'
+      }}>
+        {/* Header */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button 
+              onClick={() => navigate('/')} 
+              style={{ 
+                width: '36px', height: '36px', 
+                borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)', 
+                background: 'rgba(255,255,255,0.05)', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', transition: 'all 0.2s'
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </button>
+            <h1 className="heading-font" style={{ margin: 0, fontSize: '1.8rem', fontWeight: 600 }}>Editor</h1>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-2)', fontSize: '0.9rem', fontWeight: 500, paddingLeft: '48px' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            Design Studio
+          </div>
+        </div>
+
+        {/* API Settings Section */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Configuration</label>
+          </div>
+          
+          <input 
+            type="password"
+            className="premium-input"
+            placeholder="Enter Gemini API Key..."
+            value={apiKey}
+            onChange={(e) => {
+              setApiKey(e.target.value);
+              localStorage.setItem('gemini_api_key', e.target.value);
+            }}
+            style={{
+              width: '100%', padding: '10px 14px', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '12px', background: 'rgba(255,255,255,0.03)', color: 'white',
+              fontSize: '0.85rem', outline: 'none', transition: 'all 0.2s'
+            }}
+          />
+          
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input 
+              type="text"
+              className="premium-input"
+              placeholder="Model (e.g. gemini-1.5-flash)"
+              list="gemini-models"
+              value={apiModel}
+              onChange={(e) => {
+                setApiModel(e.target.value);
+                localStorage.setItem('gemini_model', e.target.value);
+              }}
+              style={{
+                flex: 1, padding: '10px 14px', border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '12px', background: 'rgba(255,255,255,0.03)', color: 'white',
+                fontSize: '0.85rem', outline: 'none', transition: 'all 0.2s'
+              }}
+            />
+            <button 
+              className="btn-gradient"
+              style={{ padding: '0 16px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
+              onClick={async () => {
+                if (!apiKey) {
+                  alert("Please enter an API key first.");
+                  return;
+                }
+                try {
+                  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+                  const data = await res.json();
+                  if (data.error) {
+                    alert(`API Error: ${data.error.message} (${data.error.status})`);
+                  } else if (data.models) {
+                    const textModels = data.models
+                      .map((m: { name: string }) => m.name.replace('models/', ''))
+                      .filter((name: string) => name.includes('gemini'));
+                    alert(`Success! The API is working.\\n\\nAvailable Models for your key:\\n- ${textModels.join('\\n- ')}\\n\\nPlease pick one of these models and put it in the Model input box.`);
+                  }
+                } catch {
+                  alert("Network Error: Could not connect to Google Generative Language API. Check your internet or adblocker.");
+                }
+              }}
+            >
+              Test API
+            </button>
+          </div>
+          <datalist id="gemini-models">
+            <option value="gemini-3.0-flash" />
+            <option value="gemini-2.5-flash" />
+            <option value="gemini-3.1-flash-lite" />
+            <option value="gemini-2.5-flash-lite" />
+          </datalist>
+        </div>
+
+        {/* Assets / Upload Section */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Assets
+          </label>
+          <button 
+            className="dropzone-hover"
+            onClick={() => fileInputRef.current?.click()}
+            style={{ 
+              width: '100%', 
+              padding: '24px 16px', 
+              border: '1px dashed rgba(255,255,255,0.2)', 
+              borderRadius: '16px',
+              background: 'rgba(255,255,255,0.02)',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <span style={{ fontSize: '0.9rem', fontWeight: 500, color: '#fff' }}>Upload Photo</span>
+            <span style={{ fontSize: '0.75rem' }}>Drag & drop or click to browse</span>
+          </button>
+        </div>
+
+        {/* Typography Controls */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+            Typography
+          </label>
+
+          {selectedFontSize === null && (
+            <div style={{
+              padding: '12px 16px',
+              borderRadius: '12px',
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.05)',
+              color: 'var(--text-secondary)',
+              fontSize: '0.8rem',
+              textAlign: 'center',
+              lineHeight: 1.5,
+            }}>
+              Select a text element on the poster to edit typography
+            </div>
+          )}
+
+          {/* Size Controller */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: 'rgba(0,0,0,0.2)',
+            borderRadius: '16px',
+            border: '1px solid rgba(255,255,255,0.05)',
+            padding: '6px',
+            opacity: selectedFontSize === null ? 0.35 : 1,
+            pointerEvents: selectedFontSize === null ? 'none' : 'auto',
+            transition: 'opacity 0.3s ease'
+          }}>
+            <button
+              onClick={() => {
+                if (selectedElementRef.current && selectedFontSize !== null) {
+                  const next = Math.max(1, selectedFontSize - 1);
+                  setSelectedFontSize(next);
+                  selectedElementRef.current.style.fontSize = `${next}px`;
+                  saveState();
+                }
+              }}
+              style={{
+                width: '36px', height: '36px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                border: 'none', borderRadius: '12px',
+                background: 'transparent', color: 'var(--text-secondary)',
+                cursor: 'pointer', transition: 'all 0.15s'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <input
+                type="number"
+                value={selectedFontSize || ''}
+                placeholder="-"
+                disabled={selectedFontSize === null}
+                onChange={(e) => {
+                  const newSize = parseFloat(e.target.value);
+                  setSelectedFontSize(newSize);
+                  if (selectedElementRef.current && !isNaN(newSize)) {
+                    selectedElementRef.current.style.fontSize = `${newSize}px`;
+                    saveState();
+                  }
+                }}
+                style={{
+                  width: '50px',
+                  border: 'none',
+                  background: 'transparent',
+                  color: '#fff',
+                  fontSize: '1.2rem',
+                  fontWeight: 600,
+                  outline: 'none',
+                  textAlign: 'center',
+                  fontFamily: 'inherit'
+                }}
+              />
+              <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500 }}>px</span>
+            </div>
+
+            <button
+              onClick={() => {
+                if (selectedElementRef.current && selectedFontSize !== null) {
+                  const next = selectedFontSize + 1;
+                  setSelectedFontSize(next);
+                  selectedElementRef.current.style.fontSize = `${next}px`;
+                  saveState();
+                }
+              }}
+              style={{
+                width: '36px', height: '36px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                border: 'none', borderRadius: '12px',
+                background: 'transparent', color: 'var(--text-secondary)',
+                cursor: 'pointer', transition: 'all 0.15s'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+
+          {/* Color row */}
+          <div style={{ 
+            opacity: selectedFontSize === null ? 0.35 : 1, 
+            pointerEvents: selectedFontSize === null ? 'none' : 'auto', 
+            transition: 'opacity 0.3s ease',
+            background: 'rgba(0,0,0,0.2)',
+            borderRadius: '16px',
+            border: '1px solid rgba(255,255,255,0.05)',
+            padding: '12px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 500, color: 'var(--text-secondary)' }}>Fill Color</span>
+              <span style={{ fontSize: '0.75rem', color: '#fff', marginLeft: 'auto', fontFamily: 'monospace', fontWeight: 500, background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px' }}>
+                {selectedFontColor.toUpperCase()}
+              </span>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+              {['#000000','#ffffff','#e62429','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899','#6b7280'].map(c => (
+                <button
+                  key={c}
+                  title={c}
+                  className="color-swatch"
+                  onClick={() => {
+                    setSelectedFontColor(c);
+                    if (selectedElementRef.current) {
+                      selectedElementRef.current.style.color = c;
+                      saveState();
+                    }
+                  }}
+                  style={{
+                    width: '24px', height: '24px',
+                    borderRadius: '50%',
+                    border: 'none',
+                    background: c,
+                    cursor: 'pointer',
+                    boxShadow: selectedFontColor === c ? `0 0 0 2px rgba(255,255,255,0.8), 0 0 10px ${c}` : 'inset 0 0 0 1px rgba(0,0,0,0.2)',
+                    transition: 'all 0.2s ease',
+                    flexShrink: 0,
+                    transform: selectedFontColor === c ? 'scale(1.15)' : 'scale(1)',
+                  }}
+                />
+              ))}
+              {/* Custom color picker */}
+              <div style={{ position: 'relative', width: '24px', height: '24px', flexShrink: 0 }} className="color-swatch">
+                <input
+                  type="color"
+                  value={selectedFontColor}
+                  onChange={(e) => {
+                    const newColor = e.target.value;
+                    setSelectedFontColor(newColor);
+                    if (selectedElementRef.current) {
+                      selectedElementRef.current.style.color = newColor;
+                      saveState();
+                    }
+                  }}
+                  style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    opacity: 0, cursor: 'pointer', zIndex: 2
+                  }}
+                />
+                <div style={{
+                  width: '24px', height: '24px', borderRadius: '50%',
+                  background: 'conic-gradient(from 0deg, #f87171, #fbbf24, #34d399, #60a5fa, #a78bfa, #f472b6, #f87171)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.2)'
+                }}>
+                  <span style={{ fontSize: '12px', color: '#fff', textShadow: '0 0 4px rgba(0,0,0,0.8)', fontWeight: 600 }}>+</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* AI Director Section - Hero Tool */}
+        <div style={{ 
+          display: 'flex', flexDirection: 'column', gap: '12px', flex: 1,
+          background: 'rgba(255, 77, 141, 0.05)',
+          border: '1px solid rgba(255, 77, 141, 0.2)',
+          borderRadius: '20px',
+          padding: '16px',
+          boxShadow: 'inset 0 0 20px rgba(255, 77, 141, 0.05)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <label className="heading-font" style={{ fontSize: '1.2rem', fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" strokeWidth="2"><defs><linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#FF4D8D" /><stop offset="100%" stopColor="#A855F7" /></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              AI Director
+            </label>
+            <span style={{ fontSize: '0.7rem', background: 'linear-gradient(135deg, rgba(255, 77, 141, 0.2), rgba(168, 85, 247, 0.2))', color: '#fff', padding: '2px 8px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>AI Assisted Editing</span>
+          </div>
+
+          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
+            <textarea 
+              placeholder="✨ Make this headline more emotional..."
+              value={aiPrompt}
+              className="premium-input"
+              onChange={(e) => setAiPrompt(e.target.value)}
+              style={{ 
+                width: '100%', 
+                resize: 'none', 
+                padding: '16px',
+                paddingBottom: '40px',
+                color: '#fff',
+                background: 'rgba(0,0,0,0.3)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '16px',
+                fontSize: '0.9rem',
+                outline: 'none',
+                minHeight: '120px',
+                lineHeight: 1.5,
+                transition: 'all 0.2s'
+              }}
+            />
+            {recentPrompts.length > 0 && (
+              <div style={{ position: 'absolute', bottom: '12px', right: '12px' }}>
+                <button 
+                  style={{ 
+                    padding: '6px 12px', fontSize: '0.75rem', background: 'rgba(255,255,255,0.1)', 
+                    border: 'none', borderRadius: '8px', color: '#fff', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+                  onClick={() => setShowPromptsPopup(!showPromptsPopup)}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Recent
+                </button>
+                {showPromptsPopup && (
+                  <div style={{
+                    position: 'absolute', bottom: '100%', right: 0, marginBottom: '8px',
+                    width: '250px', background: 'rgba(15, 10, 22, 0.95)',
+                    border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)', zIndex: 50,
+                    maxHeight: '200px', overflowY: 'auto', backdropFilter: 'blur(20px)'
+                  }}>
+                    {recentPrompts.map((prompt, i) => (
+                      <div 
+                        key={i}
+                        onClick={() => {
+                          setAiPrompt(prompt);
+                          setShowPromptsPopup(false);
+                        }}
+                        style={{
+                          padding: '10px 14px',
+                          borderBottom: i < recentPrompts.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                          cursor: 'pointer', fontSize: '0.8rem', color: '#d1d5db',
+                          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                          transition: 'background 0.2s'
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                        onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                      >
+                        {prompt}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          <button 
+            className="btn-gradient" 
+            style={{ 
+              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
+              padding: '16px', borderRadius: '16px', fontSize: '1rem', fontWeight: 600,
+              cursor: isAiLoading ? 'not-allowed' : 'pointer', opacity: isAiLoading ? 0.7 : 1
+            }}
+            onClick={handleAiSubmit}
+            disabled={isAiLoading}
+          >
+            {isAiLoading ? 'Generating...' : (
+              <>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+                  <path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/>
+                </svg>
+                AI Generate
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Print Button */}
+        <div style={{ marginTop: 'auto' }}>
+          <button 
+            style={{ 
+              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
+              padding: '16px', borderRadius: '16px', fontSize: '1rem', fontWeight: 600,
+              background: 'rgba(247, 201, 72, 0.1)', border: '1px solid rgba(247, 201, 72, 0.3)',
+              color: '#FFD166', cursor: 'pointer', transition: 'all 0.3s'
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(247, 201, 72, 0.2)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(247, 201, 72, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+            onClick={handleExport}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Export Keepsake
+          </button>
+        </div>
+      </aside>
     </div>
   );
 };
