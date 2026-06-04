@@ -1041,22 +1041,22 @@ const EditorPage: React.FC = () => {
         backdropFilter: 'blur(30px)',
         borderLeft: isMobile ? 'none' : '1px solid rgba(255,255,255,0.08)',
         borderTop: isMobile ? '1px solid rgba(255,255,255,0.08)' : 'none',
-        padding: '16px',
+        padding: '12px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px',
+        gap: '8px',
         overflowY: 'hidden',
         flexShrink: 0,
         zIndex: 10,
         boxShadow: '-10px 0 30px rgba(0,0,0,0.2)'
       }}>
         {/* Header */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '4px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '0px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <button 
               onClick={() => navigate('/')} 
               style={{ 
-                width: '32px', height: '32px', 
+                width: '28px', height: '28px', 
                 borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)', 
                 background: 'rgba(255,255,255,0.05)', color: '#fff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1076,7 +1076,7 @@ const EditorPage: React.FC = () => {
         </div>
 
         {/* API Settings Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Configuration</label>
@@ -1092,8 +1092,8 @@ const EditorPage: React.FC = () => {
               localStorage.setItem('gemini_api_key', e.target.value);
             }}
             style={{
-              width: '100%', padding: '8px 12px', border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '10px', background: 'rgba(255,255,255,0.03)', color: 'white',
+              width: '100%', padding: '6px 10px', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '8px', background: 'rgba(255,255,255,0.03)', color: 'white',
               fontSize: '0.8rem', outline: 'none', transition: 'all 0.2s'
             }}
           />
@@ -1110,14 +1110,14 @@ const EditorPage: React.FC = () => {
                 localStorage.setItem('gemini_model', e.target.value);
               }}
               style={{
-                flex: 1, padding: '8px 12px', border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '10px', background: 'rgba(255,255,255,0.03)', color: 'white',
+                flex: 1, padding: '6px 10px', border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '8px', background: 'rgba(255,255,255,0.03)', color: 'white',
                 fontSize: '0.8rem', outline: 'none', transition: 'all 0.2s'
               }}
             />
             <button 
               className="btn-gradient"
-              style={{ padding: '0 12px', borderRadius: '10px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+              style={{ padding: '0 10px', borderRadius: '8px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
               onClick={async () => {
                 if (!apiKey) {
                   alert("Please enter an API key first.");
@@ -1151,7 +1151,7 @@ const EditorPage: React.FC = () => {
         </div>
 
         {/* Assets / Upload Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             Assets
@@ -1161,29 +1161,27 @@ const EditorPage: React.FC = () => {
             onClick={() => fileInputRef.current?.click()}
             style={{ 
               width: '100%', 
-              padding: '16px 12px', 
+              padding: '8px 12px', 
               border: '1px dashed rgba(255,255,255,0.2)', 
-              borderRadius: '12px',
+              borderRadius: '10px',
               background: 'rgba(255,255,255,0.02)',
               color: 'var(--text-secondary)',
               cursor: 'pointer',
               display: 'flex',
-              flexDirection: 'column',
+              flexDirection: 'row',
               alignItems: 'center',
-              gap: '6px',
+              justifyContent: 'center',
+              gap: '8px',
               transition: 'all 0.3s ease'
             }}
           >
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <span style={{ fontSize: '0.85rem', fontWeight: 500, color: '#fff' }}>Upload Photo</span>
-            <span style={{ fontSize: '0.7rem' }}>Drag & drop or click to browse</span>
           </button>
         </div>
 
         {/* Typography Controls */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
             Typography
@@ -1191,14 +1189,14 @@ const EditorPage: React.FC = () => {
 
           {selectedFontSize === null && (
             <div style={{
-              padding: '10px 12px',
-              borderRadius: '10px',
+              padding: '8px 10px',
+              borderRadius: '8px',
               background: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,255,255,0.05)',
               color: 'var(--text-secondary)',
               fontSize: '0.75rem',
               textAlign: 'center',
-              lineHeight: 1.4,
+              lineHeight: 1.3,
             }}>
               Select a text element on the poster to edit typography
             </div>
@@ -1208,9 +1206,9 @@ const EditorPage: React.FC = () => {
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             background: 'rgba(0,0,0,0.2)',
-            borderRadius: '12px',
+            borderRadius: '10px',
             border: '1px solid rgba(255,255,255,0.05)',
-            padding: '4px',
+            padding: '2px',
             opacity: selectedFontSize === null ? 0.35 : 1,
             pointerEvents: selectedFontSize === null ? 'none' : 'auto',
             transition: 'opacity 0.3s ease'
@@ -1295,11 +1293,11 @@ const EditorPage: React.FC = () => {
             pointerEvents: selectedFontSize === null ? 'none' : 'auto', 
             transition: 'opacity 0.3s ease',
             background: 'rgba(0,0,0,0.2)',
-            borderRadius: '12px',
+            borderRadius: '10px',
             border: '1px solid rgba(255,255,255,0.05)',
-            padding: '10px'
+            padding: '8px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
               <span style={{ fontSize: '0.8rem', fontWeight: 500, color: 'var(--text-secondary)' }}>Fill Color</span>
               <span style={{ fontSize: '0.75rem', color: '#fff', marginLeft: 'auto', fontFamily: 'monospace', fontWeight: 500, background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px' }}>
                 {selectedFontColor.toUpperCase()}
@@ -1319,7 +1317,7 @@ const EditorPage: React.FC = () => {
                     }
                   }}
                   style={{
-                    width: '20px', height: '20px',
+                    width: '18px', height: '18px',
                     borderRadius: '50%',
                     border: 'none',
                     background: c,
@@ -1332,7 +1330,7 @@ const EditorPage: React.FC = () => {
                 />
               ))}
               {/* Custom color picker */}
-              <div style={{ position: 'relative', width: '20px', height: '20px', flexShrink: 0 }} className="color-swatch">
+              <div style={{ position: 'relative', width: '18px', height: '18px', flexShrink: 0 }} className="color-swatch">
                 <input
                   type="color"
                   value={selectedFontColor}
@@ -1350,7 +1348,7 @@ const EditorPage: React.FC = () => {
                   }}
                 />
                 <div style={{
-                  width: '20px', height: '20px', borderRadius: '50%',
+                  width: '18px', height: '18px', borderRadius: '50%',
                   background: 'conic-gradient(from 0deg, #f87171, #fbbf24, #34d399, #60a5fa, #a78bfa, #f472b6, #f87171)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.2)'
@@ -1364,11 +1362,11 @@ const EditorPage: React.FC = () => {
 
         {/* AI Director Section - Hero Tool */}
         <div style={{ 
-          display: 'flex', flexDirection: 'column', gap: '8px', flex: 1,
+          display: 'flex', flexDirection: 'column', gap: '6px', flex: 1,
           background: 'rgba(255, 77, 141, 0.05)',
           border: '1px solid rgba(255, 77, 141, 0.2)',
-          borderRadius: '16px',
-          padding: '12px',
+          borderRadius: '12px',
+          padding: '8px',
           boxShadow: 'inset 0 0 20px rgba(255, 77, 141, 0.05)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1388,21 +1386,21 @@ const EditorPage: React.FC = () => {
               style={{ 
                 width: '100%', 
                 resize: 'none', 
-                padding: '10px',
-                paddingBottom: '32px',
+                padding: '8px',
+                paddingBottom: '26px',
                 color: '#fff',
                 background: 'rgba(0,0,0,0.3)',
                 border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '12px',
+                borderRadius: '10px',
                 fontSize: '0.8rem',
                 outline: 'none',
-                minHeight: '80px',
-                lineHeight: 1.4,
+                minHeight: '40px',
+                lineHeight: 1.3,
                 transition: 'all 0.2s'
               }}
             />
             {recentPrompts.length > 0 && (
-              <div style={{ position: 'absolute', bottom: '12px', right: '12px' }}>
+              <div style={{ position: 'absolute', bottom: '6px', right: '6px' }}>
                 <button 
                   style={{ 
                     padding: '6px 12px', fontSize: '0.75rem', background: 'rgba(255,255,255,0.1)', 
@@ -1453,7 +1451,7 @@ const EditorPage: React.FC = () => {
             className="btn-gradient" 
             style={{ 
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              padding: '10px', borderRadius: '12px', fontSize: '0.9rem', fontWeight: 600,
+              padding: '8px', borderRadius: '10px', fontSize: '0.85rem', fontWeight: 600,
               cursor: isAiLoading ? 'not-allowed' : 'pointer', opacity: isAiLoading ? 0.7 : 1
             }}
             onClick={handleAiSubmit}
@@ -1475,7 +1473,7 @@ const EditorPage: React.FC = () => {
           <button 
             style={{ 
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              padding: '12px', borderRadius: '12px', fontSize: '0.9rem', fontWeight: 600,
+              padding: '10px', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600,
               background: 'rgba(247, 201, 72, 0.1)', border: '1px solid rgba(247, 201, 72, 0.3)',
               color: '#FFD166', cursor: 'pointer', transition: 'all 0.3s'
             }}
@@ -1489,7 +1487,7 @@ const EditorPage: React.FC = () => {
             }}
             onClick={handleExport}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
               <polyline points="6 9 6 2 18 2 18 9"></polyline>
               <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
               <rect x="6" y="14" width="12" height="8"></rect>
