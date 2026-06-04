@@ -1032,7 +1032,7 @@ const EditorPage: React.FC = () => {
           >
             <iframe 
               ref={iframeRef}
-              src={`/templates/${templateId}/template.html`}
+              src={`./templates/${templateId}/template.html`}
               title="Template Preview"
               onLoad={handleIframeLoad}
               style={{

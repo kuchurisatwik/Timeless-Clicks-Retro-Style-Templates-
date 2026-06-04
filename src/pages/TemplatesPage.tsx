@@ -206,7 +206,7 @@ const TemplateCard = React.memo(({
       {/* Iframe – only rendered when the card is near the viewport */}
       {isVisible ? (
         <iframe
-          src={`/templates/${id}/template.html`}
+          src={`./templates/${id}/template.html`}
           title={`${id} preview`}
           tabIndex={-1}
           loading="lazy"
