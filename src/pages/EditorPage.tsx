@@ -1371,7 +1371,7 @@ const EditorPage: React.FC = () => {
             <span style={{ fontSize: '0.65rem', background: 'linear-gradient(135deg, rgba(255, 77, 141, 0.2), rgba(168, 85, 247, 0.2))', color: '#fff', padding: '2px 6px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>AI Assisted Editing</span>
           </div>
 
-          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', flex: 1 }}>
             <textarea 
               placeholder="✨ Make this headline more emotional..."
               value={aiPrompt}
@@ -1379,6 +1379,7 @@ const EditorPage: React.FC = () => {
               onChange={(e) => setAiPrompt(e.target.value)}
               style={{ 
                 width: '100%', 
+                flex: 1,
                 resize: 'none', 
                 padding: '6px',
                 paddingBottom: '22px',
