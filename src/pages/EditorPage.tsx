@@ -24,9 +24,9 @@ const EditorPage: React.FC = () => {
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
   const [zoom, setZoom] = useState(() => {
     if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-      return Math.max(0.2, (window.innerWidth - 32) / 794); // fit width with small padding
+      return 0.3; // 30% for mobile
     }
-    return 0.6;
+    return 0.5; // 50% for PC
   });
 
   React.useEffect(() => {
@@ -58,7 +58,7 @@ const EditorPage: React.FC = () => {
 
   const zoomIn = () => setZoom(prev => Math.min(prev + 0.1, 1.5));
   const zoomOut = () => setZoom(prev => Math.max(prev - 0.1, 0.2));
-  const zoomReset = () => setZoom(0.6);
+  const zoomReset = () => setZoom(isMobile ? 0.3 : 0.5);
 
   const updateUndoRedoUI = () => {
     setCanUndo(historyIndexRef.current > 0);
@@ -729,7 +729,7 @@ const EditorPage: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: isMobile ? 'column-reverse' : 'row', height: '100vh', width: '100vw', overflow: 'hidden', position: 'relative' }}>
+    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: '100dvh', width: '100vw', overflow: 'hidden', position: 'relative' }}>
       <style>{`
         @keyframes floatParticle {
           0% { transform: translateY(0) translateX(0); opacity: 0; }
@@ -796,11 +796,18 @@ const EditorPage: React.FC = () => {
           transform: scale(1.01);
         }
         .editor-sidebar::-webkit-scrollbar {
-          display: none;
+          width: 6px;
         }
-        .editor-sidebar {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;  /* Firefox */
+        .editor-sidebar::-webkit-scrollbar-track {
+          background: rgba(255,255,255,0.02);
+          border-radius: 4px;
+        }
+        .editor-sidebar::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.15);
+          border-radius: 4px;
+        }
+        .editor-sidebar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255,255,255,0.25);
         }
       `}</style>
 
@@ -842,10 +849,11 @@ const EditorPage: React.FC = () => {
       {/* Main Canvas Area */}
       <main style={{ 
         flex: 1, 
-        display: 'flex', 
-        flexDirection: 'column',
         position: 'relative',
-        zIndex: 5
+        display: 'flex',
+        flexDirection: 'column',
+        height: isMobile ? '45dvh' : '100dvh',
+        overflow: 'hidden'
       }}>
         {/* Top Status Bar */}
         <div style={{
@@ -853,7 +861,7 @@ const EditorPage: React.FC = () => {
           top: '24px',
           left: '50%',
           transform: 'translateX(-50%)',
-          display: 'flex',
+          display: isMobile ? 'none' : 'flex',
           alignItems: 'center',
           gap: '12px',
           background: 'rgba(255,255,255,0.04)',
@@ -1004,7 +1012,7 @@ const EditorPage: React.FC = () => {
         <div style={{
           flex: 1,
           overflow: 'auto',
-          padding: isMobile ? '80px 16px 16px 16px' : '64px',
+          padding: isMobile ? '48px 4px 16px 4px' : '64px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -1043,7 +1051,7 @@ const EditorPage: React.FC = () => {
       {/* Floating Left Sidebar */}
       <aside className="editor-sidebar" style={{
         width: isMobile ? '100%' : '350px',
-        height: isMobile ? '45vh' : '100vh',
+        height: isMobile ? '55dvh' : '100dvh',
         background: 'rgba(255,255,255,0.02)',
         backdropFilter: 'blur(30px)',
         borderLeft: isMobile ? 'none' : '1px solid rgba(255,255,255,0.08)',
@@ -1078,7 +1086,7 @@ const EditorPage: React.FC = () => {
         </div>
 
         {/* API Settings Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Configuration</label>
@@ -1153,7 +1161,7 @@ const EditorPage: React.FC = () => {
         </div>
 
         {/* Assets / Upload Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flexShrink: 0 }}>
           <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             Assets
@@ -1183,7 +1191,7 @@ const EditorPage: React.FC = () => {
         </div>
 
         {/* Typography Controls */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flexShrink: 0 }}>
           <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
             Typography
@@ -1364,7 +1372,7 @@ const EditorPage: React.FC = () => {
 
         {/* AI Director Section - Hero Tool */}
         <div style={{ 
-          display: 'flex', flexDirection: 'column', gap: '4px', flex: 1,
+          display: 'flex', flexDirection: 'column', gap: '4px', flex: isMobile ? 'none' : 1, minHeight: isMobile ? '160px' : 'auto', flexShrink: 0,
           background: 'rgba(255, 77, 141, 0.05)',
           border: '1px solid rgba(255, 77, 141, 0.2)',
           borderRadius: '10px',
@@ -1472,7 +1480,7 @@ const EditorPage: React.FC = () => {
         </div>
 
         {/* Print Button */}
-        <div style={{ marginTop: 'auto' }}>
+        <div style={{ marginTop: isMobile ? '10px' : 'auto', flexShrink: 0 }}>
           <button 
             style={{ 
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
