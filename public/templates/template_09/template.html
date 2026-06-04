@@ -30,7 +30,7 @@
       font-family: var(--font-serif);
       color: var(--ink-color);
        
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     .poster-scale-container {
@@ -44,9 +44,9 @@
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      position: relative;
+      
       margin: 0 auto;
-    }
+     position: absolute; top: 0; left: 0; right: 0; margin: 0 auto;}
 
     [data-editable="text"] {
       outline: none;
@@ -244,7 +244,7 @@
         transform: none !important; position: static !important;
         width: 210mm !important; height: 297mm !important;
         box-shadow: none !important; border: none !important; margin: 0 !important;
-      }
+       position: absolute; top: 0; left: 0; right: 0; margin: 0 auto;}
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
   </style>

@@ -14,14 +14,14 @@
       --font-gothic: serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background-color: #dcd7ca; font-family: var(--font-serif); color: var(--ink-color);      overflow-x: hidden; }
+    body { background-color: #dcd7ca; font-family: var(--font-serif); color: var(--ink-color);      overflow: hidden; }
     
     
     .poster-scale-container {
       width: 794px; height: 1123px; overflow: hidden; background-size: cover; background-position: center; background-color: var(--paper-bg-fallback);
       border: 1px solid #c0b8ad; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); padding: 38px 44px; box-sizing: border-box;
-      display: grid; grid-template-rows: auto 1.48fr auto 0.52fr; gap: 12px; position: relative;  margin: 0 auto;
-    }
+      display: grid; grid-template-rows: auto 1.48fr auto 0.52fr; gap: 12px;   margin: 0 auto;
+     position: absolute; top: 0; left: 0; right: 0; margin: 0 auto;}
     [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; }
     [data-editable="text"]:hover { background-color: rgba(59, 53, 48, 0.05); border-radius: 2px; }
     [data-editable="text"]:focus { background-color: rgba(59, 53, 48, 0.08); border-radius: 2px; }
@@ -75,7 +75,7 @@
       body { background: #ffffff; margin: 0; padding: 0; }
       .image-upload-box::after, .image-file-input { display: none !important; }
       
-      .poster-scale-container { transform: none !important; position: static !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; margin: 0 !important; page-break-inside: avoid; page-break-after: avoid; }
+      .poster-scale-container { transform: none !important; position: static !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; margin: 0 !important; page-break-inside: avoid; page-break-after: avoid;  position: absolute; top: 0; left: 0; right: 0; margin: 0 auto;}
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
   </style>

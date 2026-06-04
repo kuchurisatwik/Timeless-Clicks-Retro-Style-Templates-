@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>\n<html lang="en"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>Daily Quote Spider-Men Template</title>
@@ -22,15 +20,15 @@
       color: var(--ink-color);
        
       padding: 20px 0;
-    }
+     overflow: hidden; }
 
     .poster-scale-container {
       width: 794px; height: 1123px; overflow: hidden;
       background: var(--paper-bg);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       padding: 20px 30px;
-      display: flex; flex-direction: column; position: relative;
-     margin: 0 auto; }
+      display: flex; flex-direction: column; 
+     margin: 0 auto;  position: absolute; top: 0; left: 0; right: 0; margin: 0 auto;}
 
     /* Simulate paper texture */
     .poster-scale-container::before {
@@ -184,7 +182,7 @@
 
     @media print {
       body { background: #fff; padding: 0; }
-      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; background-image: none !important;  margin: 0 auto; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; padding: 10mm; background-image: none !important;  margin: 0 auto;  position: absolute; top: 0; left: 0; right: 0; margin: 0 auto;}
       [data-editable="image"]::after, .image-file-input { display: none !important; }
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     }
@@ -194,41 +192,41 @@
   <article class="poster-scale-container">
     
     <div class="masthead">
-      <div class="masthead-box" id="mh-left" data-editable="text">
+      <div class="masthead-box" id="mh-left" data-editable="text" style="">
         BREAKING<br>NEWS
       </div>
       <div class="masthead-center">
         <span class="masthead-star">*</span>
-        <span id="mh-center" data-editable="text">Daily Quote</span>
+        <span id="mh-center" data-editable="text" style="">Daily Quote</span>
         <span class="masthead-star">*</span>
       </div>
-      <div class="masthead-box" id="mh-right" data-editable="text">
+      <div class="masthead-box" id="mh-right" data-editable="text" style="">
         SPECIAL<br>EDITION
       </div>
     </div>
 
     <div class="subheader-bar">
-      <span id="sub-left" data-editable="text">VOL. 10, NO. 4</span>
-      <span id="sub-center" data-editable="text">SPECIAL EDITION</span>
-      <span id="sub-right" data-editable="text">14 JULY 2025</span>
+      <span id="sub-left" data-editable="text" style="">VOL. 10, NO. 4</span>
+      <span id="sub-center" data-editable="text" style="">SPECIAL EDITION</span>
+      <span id="sub-right" data-editable="text" style="">14 JULY 2025</span>
     </div>
 
     <div class="main-grid">
       <!-- Left Column -->
       <div class="left-col">
-        <div class="exclusive-box" id="exc-left" data-editable="text">
+        <div class="exclusive-box" id="exc-left" data-editable="text" style="">
           EXCLUSIVE<br>EXCLUSIVE<br>EXCLUSIVE
         </div>
-        <div class="who-is-box" id="who-is" data-editable="text">
+        <div class="who-is-box" id="who-is" data-editable="text" style="">
           WHO IS<br>SPIDER-MAN??
         </div>
-        <div class="cursive-text" id="left-text" data-editable="text">
+        <div class="cursive-text" id="left-text" data-editable="text" style="">
           Spider-Man, one of the most iconic superheroes in the world, first appeared in Amazing Fantasy #15 in 1962, created by Stan Lee and Steve Ditko. Unlike most heroes of that time, Spider-Man was a teenager dealing...
         </div>
         <div class="left-image-box">
           <div class="image-upload-box" id="img-left" data-editable="image">
             <input type="file" class="image-file-input" accept="image/*">
-            <div  class="image-preview" ></div>
+            <div class="image-preview"></div>
             <div class="placeholder-state">Logo / Graphic</div>
           </div>
         </div>
@@ -236,32 +234,32 @@
 
       <!-- Center Column -->
       <div class="center-col">
-        <div class="huge-word" id="word-top" data-editable="text">SPIDER</div>
+        <div class="huge-word" id="word-top" data-editable="text" style="">SPIDER</div>
         <div class="center-image-box">
           <div class="image-upload-box" id="img-center" data-editable="image">
             <input type="file" class="image-file-input" accept="image/*">
-            <div  class="image-preview" ></div>
+            <div class="image-preview"></div>
             <div class="placeholder-state">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"></path></svg>
             </div>
           </div>
         </div>
-        <div class="huge-word" id="word-bottom" data-editable="text">MEN</div>
+        <div class="huge-word" id="word-bottom" data-editable="text" style="">MEN</div>
       </div>
 
       <!-- Right Column -->
       <div class="right-col">
-        <div class="exclusive-box" id="exc-right" data-editable="text">
+        <div class="exclusive-box" id="exc-right" data-editable="text" style="">
           EXCLUSIVE<br>EXCLUSIVE<br>EXCLUSIVE
         </div>
         <div class="right-image-box">
           <div class="image-upload-box" id="img-right-top" data-editable="image">
             <input type="file" class="image-file-input" accept="image/*">
-            <div  class="image-preview" ></div>
+            <div class="image-preview"></div>
             <div class="placeholder-state">Graphic</div>
           </div>
         </div>
-        <div class="drop-cap-p" id="right-text" data-editable="text">
+        <div class="drop-cap-p" id="right-text" data-editable="text" style="">
           Over the years, Spider-Man has been gifted with the realization that whether it's Peter Parker growing up, or Miles Morales taking up the mantle, the responsibility remains.
         </div>
       </div>
@@ -270,7 +268,7 @@
       <div class="overlap-image-box">
         <div class="image-upload-box" id="img-overlap" data-editable="image">
           <input type="file" class="image-file-input" accept="image/*">
-          <div  class="image-preview" ></div>
+          <div class="image-preview"></div>
           <!-- No placeholder state for the overlap, let it be invisible until uploaded -->
         </div>
       </div>
@@ -278,29 +276,30 @@
 
     <!-- Bottom Section -->
     <div class="bottom-text-row">
-      <div id="btm-txt-1" data-editable="text">Spider-Man, one of the most iconic superheroes in the world, first appeared in Amazing Fantasy...</div>
-      <div id="btm-txt-2" data-editable="text">After gaining incredible powers, Peter initially used them for personal gain — until the tragic death of his Uncle Ben.</div>
+      <div id="btm-txt-1" data-editable="text" style="">Spider-Man, one of the most iconic superheroes in the world, first appeared in Amazing Fantasy...</div>
+      <div id="btm-txt-2" data-editable="text" style="">After gaining incredible powers, Peter initially used them for personal gain — until the tragic death of his Uncle Ben.</div>
       <div id="btm-txt-3" data-editable="text" style="padding-right: 140px;">Since then, he has stood for justice in New York against villains like Green Goblin...</div>
     </div>
 
     <div class="bottom-strip-box">
       <div class="image-upload-box" id="img-strip" data-editable="image">
         <input type="file" class="image-file-input" accept="image/*">
-        <div  class="image-preview" ></div>
+        <div class="image-preview"></div>
         <div class="placeholder-state" style="color: #666;">COMIC STRIP BANNER</div>
       </div>
     </div>
 
     <div class="footer-bar">
-      <span id="foot-1" data-editable="text">FOCUS</span>
+      <span id="foot-1" data-editable="text" style="">FOCUS</span>
       <span class="footer-star">*</span>
-      <span id="foot-2" data-editable="text">FOCUS</span>
+      <span id="foot-2" data-editable="text" style="">FOCUS</span>
       <span class="footer-star">*</span>
-      <span id="foot-3" data-editable="text">FOCUS</span>
+      <span id="foot-3" data-editable="text" style="">FOCUS</span>
       <span class="footer-star">*</span>
-      <span id="foot-4" data-editable="text">FOCUS</span>
+      <span id="foot-4" data-editable="text" style="">FOCUS</span>
     </div>
 
   </article>
-</body>
-</html>
+
+
+</body></html>
