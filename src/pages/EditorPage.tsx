@@ -1041,10 +1041,10 @@ const EditorPage: React.FC = () => {
         backdropFilter: 'blur(30px)',
         borderLeft: isMobile ? 'none' : '1px solid rgba(255,255,255,0.08)',
         borderTop: isMobile ? '1px solid rgba(255,255,255,0.08)' : 'none',
-        padding: '12px',
+        padding: '8px 12px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px',
+        gap: '4px',
         overflowY: 'hidden',
         flexShrink: 0,
         zIndex: 10,
@@ -1076,10 +1076,10 @@ const EditorPage: React.FC = () => {
         </div>
 
         {/* API Settings Section */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: 'rgba(0,0,0,0.2)', padding: '8px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', background: 'rgba(0,0,0,0.2)', padding: '6px 8px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Configuration</label>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>API Configuration</label>
           </div>
           
           <input 
@@ -1092,9 +1092,9 @@ const EditorPage: React.FC = () => {
               localStorage.setItem('gemini_api_key', e.target.value);
             }}
             style={{
-              width: '100%', padding: '6px 10px', border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '8px', background: 'rgba(255,255,255,0.03)', color: 'white',
-              fontSize: '0.8rem', outline: 'none', transition: 'all 0.2s'
+              width: '100%', padding: '4px 8px', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '6px', background: 'rgba(255,255,255,0.03)', color: 'white',
+              fontSize: '0.75rem', outline: 'none', transition: 'all 0.2s'
             }}
           />
           
@@ -1110,14 +1110,14 @@ const EditorPage: React.FC = () => {
                 localStorage.setItem('gemini_model', e.target.value);
               }}
               style={{
-                flex: 1, padding: '6px 10px', border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '8px', background: 'rgba(255,255,255,0.03)', color: 'white',
-                fontSize: '0.8rem', outline: 'none', transition: 'all 0.2s'
+                flex: 1, padding: '4px 8px', border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '6px', background: 'rgba(255,255,255,0.03)', color: 'white',
+                fontSize: '0.75rem', outline: 'none', transition: 'all 0.2s'
               }}
             />
             <button 
               className="btn-gradient"
-              style={{ padding: '0 10px', borderRadius: '8px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+              style={{ padding: '0 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}
               onClick={async () => {
                 if (!apiKey) {
                   alert("Please enter an API key first.");
@@ -1161,9 +1161,9 @@ const EditorPage: React.FC = () => {
             onClick={() => fileInputRef.current?.click()}
             style={{ 
               width: '100%', 
-              padding: '8px 12px', 
+              padding: '6px 10px', 
               border: '1px dashed rgba(255,255,255,0.2)', 
-              borderRadius: '10px',
+              borderRadius: '8px',
               background: 'rgba(255,255,255,0.02)',
               color: 'var(--text-secondary)',
               cursor: 'pointer',
@@ -1189,14 +1189,14 @@ const EditorPage: React.FC = () => {
 
           {selectedFontSize === null && (
             <div style={{
-              padding: '8px 10px',
+              padding: '6px 8px',
               borderRadius: '8px',
               background: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,255,255,0.05)',
               color: 'var(--text-secondary)',
               fontSize: '0.75rem',
               textAlign: 'center',
-              lineHeight: 1.3,
+              lineHeight: 1.2,
             }}>
               Select a text element on the poster to edit typography
             </div>
@@ -1206,7 +1206,7 @@ const EditorPage: React.FC = () => {
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             background: 'rgba(0,0,0,0.2)',
-            borderRadius: '10px',
+            borderRadius: '8px',
             border: '1px solid rgba(255,255,255,0.05)',
             padding: '2px',
             opacity: selectedFontSize === null ? 0.35 : 1,
@@ -1293,11 +1293,11 @@ const EditorPage: React.FC = () => {
             pointerEvents: selectedFontSize === null ? 'none' : 'auto', 
             transition: 'opacity 0.3s ease',
             background: 'rgba(0,0,0,0.2)',
-            borderRadius: '10px',
+            borderRadius: '8px',
             border: '1px solid rgba(255,255,255,0.05)',
-            padding: '8px'
+            padding: '6px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px' }}>
               <span style={{ fontSize: '0.8rem', fontWeight: 500, color: 'var(--text-secondary)' }}>Fill Color</span>
               <span style={{ fontSize: '0.75rem', color: '#fff', marginLeft: 'auto', fontFamily: 'monospace', fontWeight: 500, background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px' }}>
                 {selectedFontColor.toUpperCase()}
@@ -1362,11 +1362,11 @@ const EditorPage: React.FC = () => {
 
         {/* AI Director Section - Hero Tool */}
         <div style={{ 
-          display: 'flex', flexDirection: 'column', gap: '6px', flex: 1,
+          display: 'flex', flexDirection: 'column', gap: '4px', flex: 1,
           background: 'rgba(255, 77, 141, 0.05)',
           border: '1px solid rgba(255, 77, 141, 0.2)',
-          borderRadius: '12px',
-          padding: '8px',
+          borderRadius: '10px',
+          padding: '6px 8px',
           boxShadow: 'inset 0 0 20px rgba(255, 77, 141, 0.05)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1386,16 +1386,16 @@ const EditorPage: React.FC = () => {
               style={{ 
                 width: '100%', 
                 resize: 'none', 
-                padding: '8px',
-                paddingBottom: '26px',
+                padding: '6px',
+                paddingBottom: '22px',
                 color: '#fff',
                 background: 'rgba(0,0,0,0.3)',
                 border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '10px',
-                fontSize: '0.8rem',
+                borderRadius: '8px',
+                fontSize: '0.75rem',
                 outline: 'none',
-                minHeight: '40px',
-                lineHeight: 1.3,
+                minHeight: '32px',
+                lineHeight: 1.2,
                 transition: 'all 0.2s'
               }}
             />
@@ -1403,8 +1403,8 @@ const EditorPage: React.FC = () => {
               <div style={{ position: 'absolute', bottom: '6px', right: '6px' }}>
                 <button 
                   style={{ 
-                    padding: '6px 12px', fontSize: '0.75rem', background: 'rgba(255,255,255,0.1)', 
-                    border: 'none', borderRadius: '8px', color: '#fff', cursor: 'pointer',
+                    padding: '4px 8px', fontSize: '0.7rem', background: 'rgba(255,255,255,0.1)', 
+                    border: 'none', borderRadius: '6px', color: '#fff', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s'
                   }}
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
@@ -1451,7 +1451,7 @@ const EditorPage: React.FC = () => {
             className="btn-gradient" 
             style={{ 
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              padding: '8px', borderRadius: '10px', fontSize: '0.85rem', fontWeight: 600,
+              padding: '6px', borderRadius: '8px', fontSize: '0.8rem', fontWeight: 600,
               cursor: isAiLoading ? 'not-allowed' : 'pointer', opacity: isAiLoading ? 0.7 : 1
             }}
             onClick={handleAiSubmit}
@@ -1473,7 +1473,7 @@ const EditorPage: React.FC = () => {
           <button 
             style={{ 
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              padding: '10px', borderRadius: '10px', fontSize: '0.9rem', fontWeight: 600,
+              padding: '8px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600,
               background: 'rgba(247, 201, 72, 0.1)', border: '1px solid rgba(247, 201, 72, 0.3)',
               color: '#FFD166', cursor: 'pointer', transition: 'all 0.3s'
             }}
