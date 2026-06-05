@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import html2canvas from 'html2canvas';
+import { injectBrandingOverlay, stripBrandingOverlay } from '../brandingOverlay';
 
 // Prioritized fallback model list — tried in order when the primary model hits a 429 rate limit
 const FALLBACK_MODELS = [
@@ -73,6 +74,10 @@ const EditorPage: React.FC = () => {
       const clone = iframeDoc.cloneNode(true) as Document;
       const editorStyles = clone.getElementById('editor-styles');
       if (editorStyles) editorStyles.remove();
+      // Strip branding overlay from saved HTML
+      clone.querySelectorAll('.tc-branding-overlay').forEach(el => el.remove());
+      const brandingStyles = clone.getElementById('tc-branding-styles');
+      if (brandingStyles) brandingStyles.remove();
       const editableElements = clone.querySelectorAll('[data-editable="text"]');
       editableElements.forEach(el => {
         el.removeAttribute('contenteditable');
@@ -96,6 +101,9 @@ const EditorPage: React.FC = () => {
     const iframeDoc = iframeRef.current?.contentDocument;
     if (!iframeDoc || !iframeDoc.body) return;
 
+    // Strip branding before capturing state so it stays out of undo history
+    stripBrandingOverlay(iframeDoc);
+
     if (selectedElementRef.current) {
       selectedElementRef.current.classList.remove('editor-selected');
     }
@@ -108,6 +116,9 @@ const EditorPage: React.FC = () => {
     if (selectedElementRef.current) {
       selectedElementRef.current.classList.add('editor-selected');
     }
+
+    // Re-inject branding after capturing state
+    injectBrandingOverlay(iframeDoc);
 
     const currentIndex = historyIndexRef.current;
     if (currentIndex >= 0 && currentIndex < historyRef.current.length) {
@@ -135,6 +146,8 @@ const EditorPage: React.FC = () => {
     iframeDoc.documentElement.style.cssText = state.cssText;
 
     setupIframeNodeInteractivity(iframeDoc);
+    // Re-inject branding after restoring state
+    injectBrandingOverlay(iframeDoc);
   };
 
   const undo = () => {
@@ -290,6 +303,9 @@ const EditorPage: React.FC = () => {
     });
 
     setupIframeNodeInteractivity(iframeDoc);
+
+    // Inject branding overlay (QR, logo, watermark, capture date)
+    injectBrandingOverlay(iframeDoc);
     
     // Save initial state if history is empty
     if (historyRef.current.length === 0) {

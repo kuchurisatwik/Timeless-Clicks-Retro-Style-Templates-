@@ -1,0 +1,517 @@
+<!DOCTYPE html>\n<html lang="en"><head></head><body>\n\n
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>Vintage Newspaper Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&amp;family=Cinzel:wght@500;700;900&amp;family=Oswald:wght@400;500;600&amp;family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --paper-bg: #e3dbcf; /* A slightly darker, warm vintage paper tone */
+      --ink-color: #1c1a17; /* Dark charcoal/brownish ink */
+      --font-headline: 'Cinzel', serif;
+      --font-serif: 'Old Standard TT', serif;
+      --font-sans: 'Oswald', sans-serif;
+      --font-body: 'Playfair Display', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #d1ccbf;
+      font-family: var(--font-body);
+      color: var(--ink-color);
+      overflow: hidden;
+    }
+
+    .poster-scale-container {
+      width: 794px; height: 1123px; overflow: hidden;
+      background: var(--paper-bg);
+      padding: 15px;
+      display: flex; flex-direction: column; 
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      position: absolute; top: 0; left: 0; right: 0;
+    }
+
+    /* Paper texture */
+    .poster-scale-container::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      opacity: 0.3;
+      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23noiseFilter)"/></svg>');
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Outer triple border */
+    .outer-border {
+      width: 100%; height: 100%;
+      border: 1px solid var(--ink-color);
+      padding: 3px;
+      position: relative;
+      display: flex; flex-direction: column;
+      z-index: 1;
+    }
+    .mid-border {
+      width: 100%; height: 100%;
+      border: 3px solid var(--ink-color);
+      padding: 3px;
+      display: flex; flex-direction: column;
+    }
+    .inner-border {
+      width: 100%; height: 100%;
+      border: 1px solid var(--ink-color);
+      padding: 15px;
+      display: flex; flex-direction: column;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; transition: background-color 0.2s ease; position: relative; z-index: 5; }
+    [data-editable="text"]:hover { background-color: rgba(28, 26, 23, 0.05); border-radius: 2px; }
+    [data-editable="text"]:focus { background-color: rgba(28, 26, 23, 0.08); border-radius: 2px; }
+
+    /* --- TOP SECTION (from Template 60) --- */
+    .top-section {
+      display: flex; justify-content: space-between; align-items: stretch;
+      padding-bottom: 15px;
+      margin-bottom: 5px;
+      position: relative; z-index: 5;
+    }
+
+    .top-left {
+      width: 25%; display: flex; align-items: center; justify-content: flex-start;
+      font-family: var(--font-serif); font-size: 10px; font-weight: 700; line-height: 1.4;
+      padding-top: 15px;
+    }
+    .top-left svg { width: 35px; margin-right: 10px; flex-shrink: 0; }
+
+    .top-center {
+      width: 50%; text-align: center; position: relative;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .top-center .logo-icon {
+      font-family: var(--font-serif); font-size: 32px; font-weight: 900;
+      border: 2px solid var(--ink-color); border-radius: 50% 50% 0 0;
+      padding: 15px 22px; background: var(--paper-bg);
+      position: relative; z-index: 2; margin-bottom: -15px;
+      margin-top: -15px;
+    }
+    .top-center .ribbon {
+      font-family: var(--font-serif); font-size: 10px; letter-spacing: 1px;
+      display: flex; justify-content: center; align-items: center; width: 100%;
+      border-top: 1px solid var(--ink-color); border-bottom: 1px solid var(--ink-color);
+      padding: 5px 0; margin-bottom: 8px; position: relative; z-index: 1;
+    }
+    .top-center .ribbon span { background: var(--paper-bg); padding: 0 10px; font-weight: 700; z-index: 3; }
+    .top-center .estd { font-family: var(--font-serif); font-size: 11px; letter-spacing: 2px; margin-top: 5px; }
+
+    .top-right {
+      width: 25%; text-align: center;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .bazaar-logo-hanger { font-size: 24px; color: #E9568B; margin-bottom: -5px; }
+    .bazaar-logo-top { font-family: var(--font-serif); font-size: 14px; color: #F5975A; font-weight: 500; letter-spacing: 1px; }
+    .bazaar-logo-main { font-family: var(--font-serif); font-size: 32px; font-weight: 600; line-height: 1; letter-spacing: -1px; }
+    .bazaar-logo-main .c-orange { color: #F5975A; }
+    .bazaar-logo-main .c-blue { color: #5AB2B2; }
+    .bazaar-logo-sub { font-family: var(--font-serif); font-size: 9px; color: #E9568B; letter-spacing: 0.5px; }
+
+    /* Main Header */
+    .header-main {
+      text-align: center; margin: 0px 0 5px;
+    }
+    .title-huge {
+      font-family: var(--font-headline); font-size: 64px; font-weight: 900; line-height: 1;
+      letter-spacing: -1px; text-transform: uppercase;
+      transform: scaleY(1.2); display: inline-block; margin-bottom: 15px;
+    }
+
+    .sub-edition {
+      font-family: var(--font-serif); font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 6px 0; border-top: 2px solid var(--ink-color); border-bottom: 1px solid var(--ink-color);
+      margin-bottom: 15px;
+    }
+
+    /* --- BODY LAYOUT --- */
+    .body-layout {
+      display: flex; flex: 1;
+      border-bottom: 2px solid var(--ink-color);
+      padding-bottom: 15px;
+      margin-bottom: 10px;
+    }
+
+    /* Left Main Column */
+    .main-col {
+      flex: 3; padding-right: 20px;
+      display: flex; flex-direction: column;
+    }
+    .side-col {
+      flex: 1; border-left: 1px solid var(--ink-color); padding-left: 20px;
+      display: flex; flex-direction: column;
+    }
+
+    /* Article Headline */
+    .article-headline {
+      text-align: center; margin-bottom: 10px;
+    }
+    .headline-title {
+      font-family: var(--font-sans); font-size: 46px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; transform: scaleY(1.15); display: inline-block;
+      display: flex; align-items: center; justify-content: center; gap: 15px;
+    }
+    .swirl {
+      font-family: serif; font-size: 24px; color: var(--ink-color);
+      font-weight: normal;
+    }
+    .headline-sub {
+      font-family: var(--font-serif); font-size: 14px; font-weight: 600; font-style: italic;
+      margin-top: 5px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 15px;
+    }
+    .headline-sub::before, .headline-sub::after {
+      content: ""; flex: 1; border-top: 1px solid var(--ink-color);
+    }
+
+    /* Photo Frame */
+    .photo-frame {
+      border: 1px solid var(--ink-color);
+      padding: 5px;
+      margin-top: 10px;
+      border-radius: 2px;
+      position: relative;
+    }
+    .photo-frame-inner {
+      border: 1px solid rgba(28, 26, 23, 0.3);
+      padding: 2px;
+    }
+    
+    .image-upload-box {
+      width: 100%; height: 310px;
+      background-color: #d0d0d0;
+      cursor: pointer; overflow: hidden; position: relative;
+    }
+    .image-file-input { display: none; }
+    .image-preview-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+    .image-preview {
+      width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat;
+      display: block; filter: sepia(0.6) contrast(1.2) grayscale(0.5); /* Vintage photo effect */
+    }
+    .image-upload-box::after {
+      content: 'UPLOAD PHOTO'; position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-family: sans-serif; font-size: 16px; letter-spacing: 2px;
+      opacity: 0; transition: opacity 0.2s ease; z-index: 5;
+    }
+    .image-upload-box:hover::after { opacity: 1; }
+    
+    .photo-caption {
+      text-align: center; margin-top: 15px;
+      font-family: var(--font-serif); font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      display: flex; flex-direction: column; align-items: center;
+      border-bottom: 1px solid var(--ink-color);
+      padding-bottom: 15px; margin-bottom: 15px;
+    }
+    .photo-caption svg { width: 30px; margin-bottom: 5px; }
+
+    /* About Us Section */
+    .about-us-header {
+      text-align: center; font-family: var(--font-headline); font-size: 16px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-bottom: 10px;
+    }
+    .about-us-columns {
+      display: flex; gap: 15px;
+    }
+    .col-text {
+      flex: 1; font-family: var(--font-body); font-size: 9.5px; line-height: 1.6; text-align: left;
+      position: relative;
+    }
+    .col-separator {
+      width: 1px; background-color: transparent; border-right: 1px dotted var(--ink-color);
+    }
+
+    /* Right Sidebar */
+    .sidebar-header {
+      text-align: center; font-family: var(--font-headline); font-size: 16px; font-weight: 900;
+      line-height: 1.2; letter-spacing: 1px;
+      border-bottom: 2px solid var(--ink-color);
+      padding-bottom: 10px; margin-bottom: 10px;
+    }
+    .sidebar-header-icon {
+      font-size: 14px; margin-bottom: 5px;
+    }
+    .highlights-list {
+      display: flex; flex-direction: column;
+    }
+    .highlight-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 0; border-bottom: 1px dotted var(--ink-color);
+      font-family: var(--font-serif); font-size: 12px; font-weight: 600; letter-spacing: 1px;
+    }
+    .highlight-item:last-child { border-bottom: none; }
+    .highlight-item svg { width: 16px; flex-shrink: 0; }
+
+    /* Sidebar Bottom Box */
+    .sidebar-box {
+      margin-top: auto; border: 1px solid var(--ink-color);
+      padding: 3px;
+    }
+    .sidebar-box-inner {
+      border: 1px dotted var(--ink-color); padding: 15px 10px; text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .box-title {
+      font-family: var(--font-headline); font-size: 14px; font-weight: 900; line-height: 1.4;
+      margin: 10px 0; letter-spacing: 0.5px;
+    }
+    .box-sub {
+      font-family: var(--font-body); font-size: 14px; font-style: italic;
+    }
+
+    /* Footer */
+    .footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 10px;
+    }
+    .footer-left { width: 15%; display: flex; align-items: center; }
+    .footer-left svg { width: 40px; }
+    .footer-center {
+      width: 70%; text-align: center;
+    }
+    .footer-center-title {
+      font-family: var(--font-headline); font-size: 15px; font-weight: 900; letter-spacing: 2px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      white-space: nowrap;
+    }
+    .footer-center-sub {
+      font-family: var(--font-body); font-size: 11px; font-style: italic; margin-top: 2px;
+    }
+    .footer-right { width: 15%; display: flex; align-items: center; justify-content: flex-end; }
+    .footer-right-line {
+      display: flex; align-items: center; width: 100%;
+    }
+    .footer-right-line::before, .footer-right-line::after {
+      content: ""; flex: 1; border-top: 1px solid var(--ink-color);
+    }
+    .footer-right-line span { padding: 0 5px; font-size: 10px; }
+
+    @media print {
+      body { background: #fff; }
+      .image-upload-box::after, .image-file-input { display: none !important; }
+      .poster-scale-container { transform: none !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border: none !important; position: absolute; top: 0; left: 0; right: 0; margin: 0 auto;}
+      .poster-scale-container::before { opacity: 0.15; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+
+
+
+  <article class="poster-scale-container">
+    <div class="outer-border">
+      <div class="mid-border">
+        <div class="inner-border">
+          
+          <!-- Top Section from Template 60 -->
+          <div class="top-section">
+            <div class="top-left" data-editable="text" style="">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"></rect><circle cx="12" cy="14" r="3"></circle><path d="M7 8v-2a2 2 0 012-2h6a2 2 0 012 2v2"></path></svg>
+              CAPTURING<br>MEMORIES<br>THAT LAST<br>FOREVER.
+            </div>
+            
+            <div class="top-center">
+              <div class="ribbon">
+                <span data-editable="text" style="">FREEZE TODAY</span>
+                <span style="opacity: 0;">TC TIMELESS CLICKS</span>
+                <span data-editable="text" style="">TREASURE FOREVER</span>
+              </div>
+              <div class="logo-icon" style="position:absolute; top:-20px; background-color: var(--paper-bg); display: flex; align-items: center; justify-content: center; padding: 15px 22px;">
+                <img src="/logo.png" style="width: 100px; height: 100px; object-fit: contain;" alt="Logo">
+              </div>
+              <div class="estd" data-editable="text" style="position: absolute; bottom: -25px; background: var(--paper-bg); padding: 0px 10px; z-index: 4;"><br></div>
+            </div>
+            
+            <div class="top-right">
+              <div class="bazaar-logo-hanger">♥</div>
+              <div class="bazaar-logo-top" data-editable="text" style="">THE DECCAN</div>
+              <div class="bazaar-logo-main" data-editable="text" style=""><span class="c-orange">BAZ</span><span class="c-blue">AAR</span></div>
+              <div class="bazaar-logo-sub" data-editable="text" style="">Fashion and Lifestyle Exhibition</div>
+            </div>
+          </div>
+
+          <!-- Main Header -->
+          <div class="header-main">
+            <div class="title-huge" data-editable="text" style="font-size: 50px;">TIMELESS CLICKS</div>
+          </div>
+
+          <!-- Sub Edition -->
+          <div class="sub-edition">
+            <span data-editable="text" style="">LOVE • LAUGHTER • MEMORIES</span>
+            <span data-editable="text" style="border-left: 1px solid var(--ink-color); border-right: 1px solid var(--ink-color); padding: 0px 15px;">MAKING MOMENTS TIMELESS</span>
+            <span data-editable="text" style="">ESTD. 2026</span>
+          </div>
+
+          <!-- Body Layout -->
+          <div class="body-layout">
+            <!-- Left Main Column -->
+            <div class="main-col">
+              
+              <!-- Article Headline -->
+              <div class="article-headline">
+                <div class="headline-title" data-editable="text" style="">
+                  <span class="swirl">❦</span>
+                  TODAY'S LOVE STORY
+                  <span class="swirl">❧</span>
+                </div>
+                <div class="headline-sub" data-editable="text" style="">
+                  A special keepsake celebrating moments shared together.
+                </div>
+              </div>
+
+              <!-- Photo Frame -->
+              <div class="photo-frame">
+                <div class="photo-frame-inner">
+                  <div class="image-upload-box" id="main-image-box" data-editable="image">
+                    <input type="file" id="main-image-input" class="image-file-input" accept="image/*">
+                    <div class="image-preview-container">
+                      <div id="main-image-img" class="image-preview" style="background-image: url('data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'&gt;&lt;rect width=\'100\' height=\'100\' fill=\'%23c0c0c0\'/&gt;&lt;text x=\'50\' y=\'50\' font-family=\'sans-serif\' font-size=\'10\' text-anchor=\'middle\' dominant-baseline=\'middle\' fill=\'%23666\'&gt;PHOTO HERE&lt;/text&gt;&lt;/svg&gt;');"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="photo-caption" data-editable="text" style="">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"></rect><circle cx="12" cy="14" r="3"></circle><path d="M7 8v-2a2 2 0 012-2h6a2 2 0 012 2v2"></path></svg>
+                YOUR FRONT PAGE MOMENT
+              </div>
+
+              <!-- About Us -->
+              <div class="about-us-header" data-editable="text" style="">
+                <span class="swirl" style="font-size: 16px;">❦</span>
+                ABOUT US
+                <span class="swirl" style="font-size: 16px;">❧</span>
+              </div>
+              
+              <div class="about-us-columns">
+                <div class="col-text" data-editable="text" style="font-size: 12px;">
+                  Some moments are planned, while others become special without even trying. From shared smiles and endless conversations to little adventures together, every memory tells a story worth remembering.
+                </div>
+                <div class="col-separator"></div>
+                <div class="col-text" data-editable="text" style="font-size: 12px;">
+                  Life feels brighter when experienced with someone who makes ordinary days extraordinary. Whether it's a casual day out or a special celebration, these moments become memories that stay forever.
+                </div>
+                <div class="col-separator"></div>
+                <div class="col-text" data-editable="text" style="font-size: 12px;">
+                  Captured by Timeless Clicks, this keepsake is a reminder of happiness, companionship, and countless reasons to smile.
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="side-col">
+              
+              <div class="sidebar-header" data-editable="text" style="">
+                <div class="sidebar-header-icon">❦</div>
+                TODAY'S<br>HIGHLIGHTS
+              </div>
+              
+              <div class="highlights-list">
+                <div class="highlight-item" data-editable="text" style="">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  SHARED SMILES
+                </div>
+                <div class="highlight-item" data-editable="text" style="">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  DATE DAY
+                </div>
+                <div class="highlight-item" data-editable="text" style="">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  BEAUTIFUL<br>MEMORIES
+                </div>
+                <div class="highlight-item" data-editable="text" style="">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  ENDLESS<br>CONVERSATIONS
+                </div>
+                <div class="highlight-item" data-editable="text" style="">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  TIMELESS LOVE
+                </div>
+              </div>
+
+              <!-- Sidebar Box -->
+              <div class="sidebar-box">
+                <div class="sidebar-box-inner">
+                  <div class="sidebar-header-icon">❦</div>
+                  <div class="box-title" data-editable="text" style="">
+                    TWO HEARTS<br>ONE STORY<br>ENDLESS MEMORIES
+                  </div>
+                  <div class="box-sub" data-editable="text" style="">
+                    Worth Remembering
+                  </div>
+                  <div class="sidebar-header-icon" style="margin-top: 5px;">❧</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="footer">
+            <div class="footer-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="8" width="18" height="12" rx="2"></rect><circle cx="12" cy="14" r="3"></circle><path d="M7 8v-2a2 2 0 012-2h6a2 2 0 012 2v2"></path></svg>
+            </div>
+            
+            <div class="footer-center">
+              <div class="footer-center-title" data-editable="text" style="">
+                <span class="swirl" style="font-size: 16px;">❦</span>
+                CAPTURED BY TIMELESS CLICKS
+                <span class="swirl" style="font-size: 16px;">❧</span>
+              </div>
+              <div class="footer-center-sub" data-editable="text" style="">
+                Where every moment becomes a headline.
+              </div>
+            </div>
+
+            <div class="footer-right">
+              <div class="footer-right-line">
+                <span>♥</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <script>
+    // Minimal script for image upload handling within the template
+    document.addEventListener('DOMContentLoaded', () => {
+      const uploadBox = document.getElementById('main-image-box');
+      const fileInput = document.getElementById('main-image-input');
+      const previewImg = document.getElementById('main-image-img');
+
+      if (uploadBox && fileInput && previewImg) {
+        uploadBox.addEventListener('click', () => {
+          fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              previewImg.style.backgroundImage = `url('${event.target.result}')`;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    });
+  </script>
+
+
+</body></html>

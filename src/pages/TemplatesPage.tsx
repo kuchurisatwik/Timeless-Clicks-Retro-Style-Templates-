@@ -6,7 +6,7 @@ import { Grid, Gift, Heart, BookOpen, Newspaper, Quote, GraduationCap, Zap, Eye,
 const templateCategories = [
   {
     name: 'All Templates',
-    templates: Array.from({ length: 60 }, (_, i) => `template_${String(i + 1).padStart(2, '0')}`).filter(id => id !== 'template_30' && id !== 'template_31')
+    templates: Array.from({ length: 61 }, (_, i) => `template_${String(i + 1).padStart(2, '0')}`).filter(id => id !== 'template_30' && id !== 'template_31')
   },
   {
     name: 'Birthday',
@@ -22,7 +22,7 @@ const templateCategories = [
   },
   {
     name: 'Newspaper & Editorial',
-    templates: ['template_01', 'template_02', 'template_03', 'template_04', 'template_05', 'template_06', 'template_07', 'template_08', 'template_10', 'template_16', 'template_17', 'template_18', 'template_23', 'template_26', 'template_29', 'template_33', 'template_34', 'template_35', 'template_36', 'template_37', 'template_41', 'template_42', 'template_47', 'template_60']
+    templates: ['template_01', 'template_02', 'template_03', 'template_04', 'template_05', 'template_06', 'template_07', 'template_08', 'template_10', 'template_16', 'template_17', 'template_18', 'template_23', 'template_26', 'template_29', 'template_33', 'template_34', 'template_35', 'template_36', 'template_37', 'template_41', 'template_42', 'template_47', 'template_60', 'template_61']
   },
   {
     name: 'Quotes & Motivation',
@@ -57,7 +57,7 @@ const A4_WIDTH = 794;
 const A4_HEIGHT = 1123;
 const A4_RATIO = A4_WIDTH / A4_HEIGHT;
 
-const AI_OPTIMIZED = new Set(['template_01', 'template_12', 'template_28', 'template_38', 'template_50', 'template_60']);
+const AI_OPTIMIZED = new Set(['template_01', 'template_12', 'template_28', 'template_38', 'template_50', 'template_60', 'template_61']);
 
 // ─────────────────────────────────────────────────
 // CSS-only Particles (no framer-motion, no state)
