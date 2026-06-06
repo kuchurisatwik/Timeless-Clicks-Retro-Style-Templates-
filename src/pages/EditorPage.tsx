@@ -97,6 +97,97 @@ const EditorPage: React.FC = () => {
     }, 1000);
   };
 
+  const loadImageElement = (src: string): Promise<HTMLImageElement> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Image load failed'));
+      img.src = src;
+    });
+  };
+
+  const getElementSize = (el: HTMLElement) => {
+    const rect = el.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      return { width: rect.width, height: rect.height };
+    }
+    const styles = window.getComputedStyle(el);
+    return {
+      width: parseFloat(styles.width) || 1,
+      height: parseFloat(styles.height) || 1
+    };
+  };
+
+  const drawImageCover = (ctx: CanvasRenderingContext2D, image: HTMLImageElement, width: number, height: number) => {
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const targetRatio = width / height;
+    let drawWidth = width;
+    let drawHeight = height;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (imageRatio > targetRatio) {
+      drawHeight = height;
+      drawWidth = height * imageRatio;
+      offsetX = (width - drawWidth) / 2;
+    } else {
+      drawWidth = width;
+      drawHeight = width / imageRatio;
+      offsetY = (height - drawHeight) / 2;
+    }
+
+    ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+  };
+
+  const drawImageContain = (ctx: CanvasRenderingContext2D, image: HTMLImageElement, width: number, height: number) => {
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const targetRatio = width / height;
+    let drawWidth = width;
+    let drawHeight = height;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (imageRatio > targetRatio) {
+      drawWidth = width;
+      drawHeight = width / imageRatio;
+      offsetY = (height - drawHeight) / 2;
+    } else {
+      drawHeight = height;
+      drawWidth = height * imageRatio;
+      offsetX = (width - drawWidth) / 2;
+    }
+
+    ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+  };
+
+  const getRenderedImageSource = async (sourceUrl: string, targetElement: HTMLElement) => {
+    try {
+      const image = await loadImageElement(sourceUrl);
+      const { width, height } = getElementSize(targetElement);
+      const pixelWidth = Math.max(1, Math.round(width));
+      const pixelHeight = Math.max(1, Math.round(height));
+      const dpr = window.devicePixelRatio || 1;
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(pixelWidth * dpr));
+      canvas.height = Math.max(1, Math.round(pixelHeight * dpr));
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return sourceUrl;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      const objectFit = window.getComputedStyle(targetElement).objectFit || 'cover';
+      if (objectFit === 'contain') {
+        drawImageContain(ctx, image, pixelWidth, pixelHeight);
+      } else {
+        drawImageCover(ctx, image, pixelWidth, pixelHeight);
+      }
+      return canvas.toDataURL('image/png');
+    } catch {
+      return sourceUrl;
+    }
+  };
+
   const saveState = () => {
     const iframeDoc = iframeRef.current?.contentDocument;
     if (!iframeDoc || !iframeDoc.body) return;
@@ -180,21 +271,22 @@ const EditorPage: React.FC = () => {
 
     const internalInputs = iframeDoc.querySelectorAll('.image-file-input');
     internalInputs.forEach(input => {
-      input.addEventListener('change', (e) => {
+      input.addEventListener('change', async (e) => {
         const inputTarget = e.target as HTMLInputElement;
         const file = inputTarget.files?.[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = (ev) => {
+        reader.onload = async (ev) => {
           const dataUrl = ev.target?.result as string;
           const container = inputTarget.closest('[data-editable="image"]');
           if (container) {
             const previewEl = container.querySelector('img, .image-preview') as HTMLElement;
             if (previewEl) {
+              const renderedUrl = await getRenderedImageSource(dataUrl, previewEl);
               if (previewEl.tagName === 'IMG') {
-                (previewEl as HTMLImageElement).src = dataUrl;
+                (previewEl as HTMLImageElement).src = renderedUrl;
               } else {
-                previewEl.style.backgroundImage = `url("${dataUrl}")`;
+                previewEl.style.backgroundImage = `url("${renderedUrl}")`;
               }
               previewEl.style.filter = 'none';
               previewEl.style.mixBlendMode = 'normal';
@@ -319,7 +411,7 @@ const EditorPage: React.FC = () => {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (ev) => {
+    reader.onload = async (ev) => {
       const dataUrl = ev.target?.result as string;
       const iframeDoc = iframeRef.current?.contentDocument;
       if (!iframeDoc) return;
@@ -338,10 +430,11 @@ const EditorPage: React.FC = () => {
       }
 
       if (imgToReplace) {
+        const renderedUrl = await getRenderedImageSource(dataUrl, imgToReplace);
         if (imgToReplace.tagName === 'IMG') {
-          (imgToReplace as HTMLImageElement).src = dataUrl;
+          (imgToReplace as HTMLImageElement).src = renderedUrl;
         } else {
-          imgToReplace.style.backgroundImage = `url("${dataUrl}")`;
+          imgToReplace.style.backgroundImage = `url("${renderedUrl}")`;
         }
         imgToReplace.style.filter = 'none';
         imgToReplace.style.mixBlendMode = 'normal';
@@ -362,10 +455,11 @@ const EditorPage: React.FC = () => {
         // Otherwise replace the first image in the document
         const firstImg = iframeDoc.querySelector('img, .image-preview') as HTMLElement;
         if (firstImg) {
+          const renderedUrl = await getRenderedImageSource(dataUrl, firstImg);
           if (firstImg.tagName === 'IMG') {
-            (firstImg as HTMLImageElement).src = dataUrl;
+            (firstImg as HTMLImageElement).src = renderedUrl;
           } else {
-            firstImg.style.backgroundImage = `url("${dataUrl}")`;
+            firstImg.style.backgroundImage = `url("${renderedUrl}")`;
           }
           firstImg.style.filter = 'none';
           firstImg.style.mixBlendMode = 'normal';
