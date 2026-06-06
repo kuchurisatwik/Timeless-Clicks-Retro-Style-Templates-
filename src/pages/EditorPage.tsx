@@ -684,20 +684,29 @@ const EditorPage: React.FC = () => {
     }
 
     try {
-      const canvas = await html2canvas(iframeDoc.body, {
+      // Capture the poster container specifically, or fallback to body
+      const posterEl = iframeDoc.querySelector('.poster-scale-container') || iframeDoc.body;
+      const canvas = await html2canvas(posterEl as HTMLElement, {
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff'
+        backgroundColor: null,
+        scale: 2,
+        width: 794,
+        height: 1123,
       });
       
       const dataUrl = canvas.toDataURL('image/png');
       
-      // Create a hidden iframe for printing
+      // Create an off-screen iframe with REAL dimensions (not 0x0, which causes blank prints)
       const printIframe = document.createElement('iframe');
-      printIframe.style.position = 'absolute';
-      printIframe.style.width = '0';
-      printIframe.style.height = '0';
+      printIframe.style.position = 'fixed';
+      printIframe.style.left = '-9999px';
+      printIframe.style.top = '0';
+      printIframe.style.width = '794px';
+      printIframe.style.height = '1123px';
       printIframe.style.border = 'none';
+      printIframe.style.opacity = '0';
+      printIframe.style.pointerEvents = 'none';
       document.body.appendChild(printIframe);
       
       const printDoc = printIframe.contentWindow?.document;
@@ -705,19 +714,38 @@ const EditorPage: React.FC = () => {
         printDoc.write(`
           <html>
             <head>
-              <title>Print Poster</title>
+              <title>Print Keepsake</title>
               <style>
-                @page { margin: 0; size: A4; }
-                body { margin: 0; display: flex; justify-content: center; align-items: center; background: white; }
-                img { width: 100%; height: 100%; object-fit: contain; }
+                @page { margin: 0; size: A4 portrait; }
+                * { margin: 0; padding: 0; }
+                html, body { width: 100%; height: 100%; background: white; }
+                body { display: flex; justify-content: center; align-items: flex-start; }
+                img { width: 210mm; height: 297mm; object-fit: contain; display: block; }
               </style>
             </head>
             <body>
-              <img src="${dataUrl}" onload="setTimeout(() => window.print(), 100);" />
+              <img id="print-img" src="${dataUrl}" />
             </body>
           </html>
         `);
         printDoc.close();
+        
+        // Wait for the image to load, then trigger print from the iframe
+        const printImg = printDoc.getElementById('print-img') as HTMLImageElement;
+        const triggerPrint = () => {
+          setTimeout(() => {
+            printIframe.contentWindow?.focus();
+            printIframe.contentWindow?.print();
+          }, 300);
+        };
+        
+        if (printImg) {
+          if (printImg.complete) {
+            triggerPrint();
+          } else {
+            printImg.onload = triggerPrint;
+          }
+        }
         
         // Clean up the iframe after printing
         printIframe.contentWindow?.addEventListener('afterprint', () => {
@@ -726,12 +754,12 @@ const EditorPage: React.FC = () => {
           }
         });
         
-        // Fallback cleanup just in case afterprint doesn't fire
+        // Fallback cleanup
         setTimeout(() => {
           if (document.body.contains(printIframe)) {
             document.body.removeChild(printIframe);
           }
-        }, 60000); // 1 minute
+        }, 120000);
       }
     } catch (error) {
       console.error("Export Error:", error);
