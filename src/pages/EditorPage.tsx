@@ -686,11 +686,12 @@ const EditorPage: React.FC = () => {
     try {
       // Capture the poster container specifically, or fallback to body
       const posterEl = iframeDoc.querySelector('.poster-scale-container') || iframeDoc.body;
+      const exportScale = (typeof window !== 'undefined' && window.devicePixelRatio) ? window.devicePixelRatio : 1;
       const canvas = await html2canvas(posterEl as HTMLElement, {
         useCORS: true,
         allowTaint: true,
         backgroundColor: null,
-        scale: 2,
+        scale: exportScale,
         width: 794,
         height: 1123,
       });
