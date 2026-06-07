@@ -780,7 +780,9 @@ const EditorPage: React.FC = () => {
     try {
       // Capture the poster container specifically, or fallback to body
       const posterEl = iframeDoc.querySelector('.poster-scale-container') || iframeDoc.body;
-      const exportScale = (typeof window !== 'undefined' && window.devicePixelRatio) ? window.devicePixelRatio : 1;
+      // Force a high resolution scale for printing (4x of 794x1123 = ~3176x4492)
+      // This ensures text and uploaded images stay perfectly crisp when printed
+      const exportScale = (typeof window !== 'undefined' && window.devicePixelRatio) ? Math.max(window.devicePixelRatio * 2, 4) : 4;
       const canvas = await html2canvas(posterEl as HTMLElement, {
         useCORS: true,
         allowTaint: true,
