@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Grid, Gift, Heart, BookOpen, Newspaper, Quote, GraduationCap, Zap, Eye, Sparkles, PenTool } from 'lucide-react';
@@ -171,7 +171,6 @@ interface CardProps {
   scale: number;
   isMobile: boolean;
   isFavorite: boolean;
-  isVisible: boolean;
   activeCategory: string;
   toggleFavorite: (e: React.MouseEvent, id: string) => void;
   onNavigate: (id: string) => void;
@@ -179,7 +178,7 @@ interface CardProps {
 
 const TemplateCard = React.memo(({
   id, cardWidth, cardHeight, overlay, scale, isMobile,
-  isFavorite, isVisible, activeCategory, toggleFavorite, onNavigate,
+  isFavorite, activeCategory, toggleFavorite, onNavigate,
 }: CardProps) => {
   const isAI = AI_OPTIMIZED.has(id);
 
@@ -203,37 +202,21 @@ const TemplateCard = React.memo(({
       }}
       onClick={() => onNavigate(id)}
     >
-      {/* Iframe – only rendered when the card is near the viewport */}
-      {isVisible ? (
-        <iframe
-          src={`./templates/${id}/template.html`}
-          title={`${id} preview`}
-          tabIndex={-1}
-          loading="lazy"
-          style={{
-            width: `${A4_WIDTH}px`,
-            height: `${A4_HEIGHT}px`,
-            border: 'none',
-            transform: `scale(${cardWidth / A4_WIDTH})`,
-            transformOrigin: 'top left',
-            pointerEvents: 'none',
-            background: '#fff',
-          }}
-        />
-      ) : (
-        <div style={{
+      {/* Static preview image — replaces expensive iframe rendering */}
+      <img
+        src={`./previews/${id}.webp`}
+        alt={`${id} preview`}
+        loading="lazy"
+        decoding="async"
+        style={{
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(160deg, #1e293b, #334155)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'rgba(255,255,255,0.3)',
-          fontSize: '0.9rem',
-        }}>
-          Loading...
-        </div>
-      )}
+          objectFit: 'cover',
+          objectPosition: 'top center',
+          background: '#fff',
+          display: 'block',
+        }}
+      />
 
       {/* Top Badges */}
       <div style={{
@@ -461,18 +444,8 @@ const TemplatesPage: React.FC = () => {
     return t * t * 0.8;
   }, [activeTemplates.length, cardWidth, containerWidth, scrollX]);
 
-  // ── Viewport culling: only load iframes for visible cards ±2 ──
-  const visibleRange = useMemo(() => {
-    if (containerWidth <= 0 || cardWidth <= 0) return { start: 0, end: 10 };
-    const cardStep = cardWidth + CARD_GAP;
-    // scrollX is negative when scrolled right
-    const firstVisible = Math.floor(-scrollX / cardStep) - 2;
-    const lastVisible = Math.ceil((-scrollX + containerWidth) / cardStep) + 2;
-    return {
-      start: Math.max(0, firstVisible),
-      end: Math.min(activeTemplates.length - 1, lastVisible),
-    };
-  }, [scrollX, containerWidth, cardWidth, activeTemplates.length]);
+
+
 
   const showArrows = !isMobile && (activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP) > containerWidth;
 
@@ -701,7 +674,6 @@ const TemplatesPage: React.FC = () => {
           {activeTemplates.map((id, index) => {
             const overlay = isMobile ? 0 : getOverlayOpacity(index);
             const scale = isMobile ? 1 : 1 - overlay * 0.06;
-            const isVisible = index >= visibleRange.start && index <= visibleRange.end;
 
             return (
               <TemplateCard
@@ -713,7 +685,6 @@ const TemplatesPage: React.FC = () => {
                 scale={scale}
                 isMobile={isMobile}
                 isFavorite={favorites.has(id)}
-                isVisible={isVisible}
                 activeCategory={activeCategory}
                 toggleFavorite={toggleFavorite}
                 onNavigate={handleNavigate}
