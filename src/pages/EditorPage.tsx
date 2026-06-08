@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import html2canvas from 'html2canvas';
+import { Capacitor } from '@capacitor/core';
 import { injectBrandingOverlay, stripBrandingOverlay } from '../brandingOverlay';
 import InboxModal from '../components/InboxModal';
 
@@ -802,21 +803,9 @@ const EditorPage: React.FC = () => {
       
       const dataUrl = canvas.toDataURL('image/png');
       
-      // Create an off-screen iframe with REAL dimensions (not 0x0, which causes blank prints)
-      const printIframe = document.createElement('iframe');
-      printIframe.style.position = 'fixed';
-      printIframe.style.left = '-9999px';
-      printIframe.style.top = '0';
-      printIframe.style.width = '794px';
-      printIframe.style.height = '1123px';
-      printIframe.style.border = 'none';
-      printIframe.style.opacity = '0';
-      printIframe.style.pointerEvents = 'none';
-      document.body.appendChild(printIframe);
-      
-      const printDoc = printIframe.contentWindow?.document;
-      if (printDoc) {
-        printDoc.write(`
+      if (Capacitor.isNativePlatform()) {
+        // Native Android / iOS Print Spooler using cordova-plugin-printer
+        const htmlContent = `
           <html>
             <head>
               <title>Print Keepsake</title>
@@ -832,33 +821,73 @@ const EditorPage: React.FC = () => {
               <img id="print-img" src="${dataUrl}" />
             </body>
           </html>
-        `);
-        printDoc.close();
+        `;
         
-        // Wait for the image to load, then trigger print from the iframe
-        const printImg = printDoc.getElementById('print-img') as HTMLImageElement;
-        const triggerPrint = () => {
-          setTimeout(() => {
-            printIframe.contentWindow?.focus();
-            printIframe.contentWindow?.print();
-          }, 300);
-        };
-        
-        if (printImg) {
-          if (printImg.complete) {
-            triggerPrint();
-          } else {
-            printImg.onload = triggerPrint;
-          }
+        const cordova = (window as any).cordova;
+        if (cordova && cordova.plugins && cordova.plugins.printer) {
+          cordova.plugins.printer.print(htmlContent, { name: 'Timeless Clicks' });
+        } else {
+          alert('Printer plugin not available on this device.');
         }
+      } else {
+        // Web / Electron Fallback Print
+        // Create an off-screen iframe with REAL dimensions (not 0x0, which causes blank prints)
+        const printIframe = document.createElement('iframe');
+        printIframe.style.position = 'fixed';
+        printIframe.style.left = '-9999px';
+        printIframe.style.top = '0';
+        printIframe.style.width = '794px';
+        printIframe.style.height = '1123px';
+        printIframe.style.border = 'none';
+        printIframe.style.opacity = '0';
+        printIframe.style.pointerEvents = 'none';
+        document.body.appendChild(printIframe);
         
-        // Clean up the iframe after printing
-        printIframe.contentWindow?.addEventListener('afterprint', () => {
-          if (document.body.contains(printIframe)) {
-            document.body.removeChild(printIframe);
+        const printDoc = printIframe.contentWindow?.document;
+        if (printDoc) {
+          printDoc.write(`
+            <html>
+              <head>
+                <title>Print Keepsake</title>
+                <style>
+                  @page { margin: 0; size: A4 portrait; }
+                  * { margin: 0; padding: 0; }
+                  html, body { width: 100%; height: 100%; background: white; }
+                  body { display: flex; justify-content: center; align-items: flex-start; }
+                  img { width: 210mm; height: 297mm; object-fit: contain; display: block; }
+                </style>
+              </head>
+              <body>
+                <img id="print-img" src="${dataUrl}" />
+              </body>
+            </html>
+          `);
+          printDoc.close();
+          
+          // Wait for the image to load, then trigger print from the iframe
+          const printImg = printDoc.getElementById('print-img') as HTMLImageElement;
+          const triggerPrint = () => {
+            setTimeout(() => {
+              printIframe.contentWindow?.focus();
+              printIframe.contentWindow?.print();
+            }, 300);
+          };
+          
+          if (printImg) {
+            if (printImg.complete) {
+              triggerPrint();
+            } else {
+              printImg.onload = triggerPrint;
+            }
           }
-        });
-        
+          
+          // Clean up the iframe after printing
+          printIframe.contentWindow?.addEventListener('afterprint', () => {
+            if (document.body.contains(printIframe)) {
+              document.body.removeChild(printIframe);
+            }
+          });
+        }
         // Fallback cleanup
         setTimeout(() => {
           if (document.body.contains(printIframe)) {
