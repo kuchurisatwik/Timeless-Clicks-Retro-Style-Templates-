@@ -815,27 +815,11 @@ const EditorPage: React.FC = () => {
       
       if (Capacitor.isNativePlatform()) {
         // Native Android / iOS Print Spooler using cordova-plugin-printer
-        const htmlContent = `
-          <html>
-            <head>
-              <title>Print Keepsake</title>
-              <style>
-                @page { margin: 0; size: A4 portrait; }
-                * { margin: 0; padding: 0; }
-                html, body { width: 100%; height: 100%; background: white; }
-                body { display: flex; justify-content: center; align-items: flex-start; }
-                img { width: 210mm; height: 297mm; object-fit: contain; display: block; }
-              </style>
-            </head>
-            <body>
-              <img id="print-img" src="${dataUrl}" />
-            </body>
-          </html>
-        `;
+        const base64Data = dataUrl.split('base64,')[1];
         
         const cordova = (window as any).cordova;
         if (cordova && cordova.plugins && cordova.plugins.printer) {
-          cordova.plugins.printer.print(htmlContent, { name: 'Timeless Clicks' });
+          cordova.plugins.printer.print(`base64://${base64Data}`, { name: 'Timeless_Clicks' });
         } else {
           alert('Printer plugin not available on this device.');
         }
