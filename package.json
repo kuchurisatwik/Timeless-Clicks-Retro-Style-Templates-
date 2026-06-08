@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build",
     "build:win": "vite build && electron-builder --win --publish never",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "npx jetifier"
   },
   "dependencies": {
     "@awesome-cordova-plugins/background-mode": "^9.2.0",
