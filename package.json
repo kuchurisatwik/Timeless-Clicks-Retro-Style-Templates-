@@ -12,8 +12,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@awesome-cordova-plugins/background-mode": "^9.2.0",
+    "@awesome-cordova-plugins/core": "^9.2.0",
     "@capacitor/core": "^8.4.0",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capacitor/preferences": "^8.0.1",
     "@google/generative-ai": "^0.24.1",
+    "cordova-plugin-background-mode": "^0.7.3",
     "framer-motion": "^12.40.0",
     "html2canvas": "^1.4.1",
     "lucide-react": "^1.17.0",
