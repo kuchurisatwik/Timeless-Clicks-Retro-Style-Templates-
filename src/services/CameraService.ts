@@ -21,7 +21,7 @@ const notifyStatus = () => {
 };
 
 // Set to true to test the ingestion pipeline without the physical camera
-export const MOCK_MODE = true;
+export const MOCK_MODE = false;
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 

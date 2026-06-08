@@ -59,6 +59,7 @@ const EditorPage: React.FC = () => {
   const [showPromptsPopup, setShowPromptsPopup] = useState(false);
   const [selectedFontSize, setSelectedFontSize] = useState<number | null>(null);
   const [selectedFontColor, setSelectedFontColor] = useState<string>('#000000');
+  const [isExporting, setIsExporting] = useState(false);
 
   const zoomIn = () => setZoom(prev => Math.min(prev + 0.1, 1.5));
   const zoomOut = () => setZoom(prev => Math.max(prev - 0.1, 0.2));
@@ -778,8 +779,11 @@ const EditorPage: React.FC = () => {
 
   // Export Poster Logic
   const handleExport = async () => {
+    if (isExporting) return;
     const iframeDoc = iframeRef.current?.contentDocument;
     if (!iframeDoc || !iframeDoc.body) return;
+
+    setIsExporting(true);
 
     // Remove selection outline temporarily
     if (selectedElementRef.current) {
@@ -789,19 +793,25 @@ const EditorPage: React.FC = () => {
     try {
       // Capture the poster container specifically, or fallback to body
       const posterEl = iframeDoc.querySelector('.poster-scale-container') || iframeDoc.body;
-      // Force a high resolution scale for printing (4x of 794x1123 = ~3176x4492)
-      // This ensures text and uploaded images stay perfectly crisp when printed
-      const exportScale = (typeof window !== 'undefined' && window.devicePixelRatio) ? Math.max(window.devicePixelRatio * 2, 4) : 4;
+      
+      // On native mobile, rendering a 14-Megapixel canvas crashes the CPU. Use 1.5x scale.
+      // On PC, use higher scale for maximum quality.
+      let exportScale = Capacitor.isNativePlatform() ? 1.5 : 4;
+      if (!Capacitor.isNativePlatform() && typeof window !== 'undefined' && window.devicePixelRatio) {
+        exportScale = Math.max(window.devicePixelRatio * 2, 4);
+      }
+      
       const canvas = await html2canvas(posterEl as HTMLElement, {
         useCORS: true,
         allowTaint: true,
-        backgroundColor: null,
+        backgroundColor: '#ffffff',
         scale: exportScale,
         width: 794,
         height: 1123,
       });
       
-      const dataUrl = canvas.toDataURL('image/png');
+      // Use JPEG format to dramatically reduce base64 string size for mobile native bridge
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
       
       if (Capacitor.isNativePlatform()) {
         // Native Android / iOS Print Spooler using cordova-plugin-printer
@@ -898,6 +908,8 @@ const EditorPage: React.FC = () => {
     } catch (error) {
       console.error("Export Error:", error);
       alert("Failed to export poster.");
+    } finally {
+      setIsExporting(false);
     }
 
     // Restore selection outline
@@ -1660,28 +1672,36 @@ const EditorPage: React.FC = () => {
         {/* Print Button */}
         <div style={{ marginTop: isMobile ? '10px' : 'auto', flexShrink: 0 }}>
           <button 
+            onClick={handleExport}
+            disabled={isExporting}
             style={{ 
               width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', 
               padding: '8px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600,
               background: 'rgba(247, 201, 72, 0.1)', border: '1px solid rgba(247, 201, 72, 0.3)',
-              color: '#FFD166', cursor: 'pointer', transition: 'all 0.3s'
+              color: '#FFD166', cursor: isExporting ? 'not-allowed' : 'pointer', transition: 'all 0.3s',
+              opacity: isExporting ? 0.7 : 1
             }}
             onMouseEnter={e => {
+              if (isExporting) return;
               e.currentTarget.style.background = 'rgba(247, 201, 72, 0.2)';
               e.currentTarget.style.transform = 'translateY(-2px)';
             }}
             onMouseLeave={e => {
+              if (isExporting) return;
               e.currentTarget.style.background = 'rgba(247, 201, 72, 0.1)';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
-            onClick={handleExport}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
-              <polyline points="6 9 6 2 18 2 18 9"></polyline>
-              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-              <rect x="6" y="14" width="12" height="8"></rect>
-            </svg>
-            Export Keepsake
+            {isExporting ? 'Exporting...' : (
+              <>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+                  <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                  <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                Export Keepsake
+              </>
+            )}
           </button>
         </div>
       </aside>
