@@ -324,9 +324,8 @@ const TemplateCard = React.memo(({
   );
 });
 
-// ─────────────────────────────────────────────────
-// Main Page
-// ─────────────────────────────────────────────────
+import { startCameraAutomation, stopCameraAutomation, isCameraAutomationRunning, addCameraStatusListener } from '../services/CameraService';
+
 const TemplatesPage: React.FC = () => {
   const navigate = useNavigate();
   const trackRef = useRef<HTMLDivElement>(null);
@@ -338,6 +337,22 @@ const TemplatesPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All Templates');
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [isPolling, setIsPolling] = useState(isCameraAutomationRunning());
+
+  useEffect(() => {
+    const removeListener = addCameraStatusListener((status) => {
+      setIsPolling(status);
+    });
+    return () => removeListener();
+  }, []);
+
+  const togglePolling = () => {
+    if (isPolling) {
+      stopCameraAutomation();
+    } else {
+      startCameraAutomation();
+    }
+  };
 
   const activeTemplates = templateCategories.find(c => c.name === activeCategory)?.templates || templateCategories[0].templates;
 
@@ -496,6 +511,26 @@ const TemplatesPage: React.FC = () => {
           </h1>
           <Sparkles color="var(--accent-3)" size={24} />
         </div>
+
+        <button 
+          onClick={togglePolling}
+          title={isPolling ? "Stop Camera Polling" : "Start Camera Polling"}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            width: '16px',
+            height: '16px',
+            borderRadius: '50%',
+            backgroundColor: isPolling ? '#10B981' : '#EF4444',
+            border: '2px solid rgba(255,255,255,0.8)',
+            boxShadow: isPolling ? '0 0 10px #10B981' : '0 0 10px #EF4444',
+            cursor: 'pointer',
+            padding: 0,
+            transition: 'all 0.3s ease',
+            zIndex: 100
+          }}
+        />
 
         <p style={{
           color: 'var(--text-secondary)',

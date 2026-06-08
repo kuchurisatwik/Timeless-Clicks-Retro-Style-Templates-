@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import html2canvas from 'html2canvas';
 import { injectBrandingOverlay, stripBrandingOverlay } from '../brandingOverlay';
+import InboxModal from '../components/InboxModal';
 
 // Prioritized fallback model list — tried in order when the primary model hits a 429 rate limit
 const FALLBACK_MODELS = [
@@ -22,6 +23,7 @@ const EditorPage: React.FC = () => {
   
   const [aiPrompt, setAiPrompt] = useState("");
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [showInboxModal, setShowInboxModal] = useState(false);
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
   const [zoom, setZoom] = useState(() => {
     if (typeof window !== 'undefined' && window.innerWidth <= 768) {
@@ -378,12 +380,9 @@ const EditorPage: React.FC = () => {
         
         // Trigger the iframe's internal file input
         if (imageContainer) {
-          const internalInput = imageContainer.querySelector('.image-file-input');
-          if (internalInput) {
-            (internalInput as HTMLInputElement).click();
-          }
+          setShowInboxModal(true);
         } else {
-          fileInputRef.current?.click();
+          setShowInboxModal(true);
         }
         setSelectedFontSize(null);
         setSelectedFontColor('#000000');
@@ -405,6 +404,82 @@ const EditorPage: React.FC = () => {
     }
   };
 
+  const processImageReplacement = async (dataUrl: string) => {
+    const iframeDoc = iframeRef.current?.contentDocument;
+    if (!iframeDoc) return;
+    const target = selectedElementRef.current;
+    let imgToReplace: HTMLElement | null = null;
+    
+    if (target) {
+      if (target.tagName === 'IMG' || target.classList.contains('image-preview')) {
+        imgToReplace = target as HTMLElement;
+      } else {
+        const container = target.closest('[data-editable="image"]');
+        if (container) {
+          imgToReplace = container.querySelector('img, .image-preview') as HTMLElement;
+        }
+      }
+    }
+
+    if (imgToReplace) {
+      const renderedUrl = await getRenderedImageSource(dataUrl, imgToReplace);
+      if (imgToReplace.tagName === 'IMG') {
+        (imgToReplace as HTMLImageElement).src = renderedUrl;
+      } else {
+        imgToReplace.style.backgroundImage = `url("${renderedUrl}")`;
+      }
+      imgToReplace.style.filter = 'none';
+      imgToReplace.style.mixBlendMode = 'normal';
+      imgToReplace.style.opacity = '1';
+      
+      const container = imgToReplace.closest('[data-editable="image"]');
+      if (container) {
+        (container as HTMLElement).style.filter = 'none';
+        (container as HTMLElement).style.mixBlendMode = 'normal';
+      }
+
+      // Hide placeholder state if it exists
+      const placeholder = imgToReplace.closest('[data-editable="image"]')?.querySelector('.placeholder-state');
+      if (placeholder) {
+        (placeholder as HTMLElement).style.display = 'none';
+      }
+    } else {
+      // Otherwise replace the first image in the document
+      const firstImg = iframeDoc.querySelector('img, .image-preview') as HTMLElement;
+      if (firstImg) {
+        const renderedUrl = await getRenderedImageSource(dataUrl, firstImg);
+        if (firstImg.tagName === 'IMG') {
+          (firstImg as HTMLImageElement).src = renderedUrl;
+        } else {
+          firstImg.style.backgroundImage = `url("${renderedUrl}")`;
+        }
+        firstImg.style.filter = 'none';
+        firstImg.style.mixBlendMode = 'normal';
+        firstImg.style.opacity = '1';
+
+        const container = firstImg.closest('[data-editable="image"]');
+        if (container) {
+          (container as HTMLElement).style.filter = 'none';
+          (container as HTMLElement).style.mixBlendMode = 'normal';
+        }
+
+        const placeholder = firstImg.closest('[data-editable="image"]')?.querySelector('.placeholder-state');
+        if (placeholder) {
+          (placeholder as HTMLElement).style.display = 'none';
+        }
+      } else {
+        alert("No image found in template to replace.");
+      }
+    }
+    
+    saveState();
+  };
+
+  const handleInboxPhotoSelect = async (photoUrl: string) => {
+    setShowInboxModal(false);
+    await processImageReplacement(photoUrl);
+  };
+
   // Upload Photo logic
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -413,74 +488,7 @@ const EditorPage: React.FC = () => {
     const reader = new FileReader();
     reader.onload = async (ev) => {
       const dataUrl = ev.target?.result as string;
-      const iframeDoc = iframeRef.current?.contentDocument;
-      if (!iframeDoc) return;
-      const target = selectedElementRef.current;
-      let imgToReplace: HTMLElement | null = null;
-      
-      if (target) {
-        if (target.tagName === 'IMG' || target.classList.contains('image-preview')) {
-          imgToReplace = target as HTMLElement;
-        } else {
-          const container = target.closest('[data-editable="image"]');
-          if (container) {
-            imgToReplace = container.querySelector('img, .image-preview') as HTMLElement;
-          }
-        }
-      }
-
-      if (imgToReplace) {
-        const renderedUrl = await getRenderedImageSource(dataUrl, imgToReplace);
-        if (imgToReplace.tagName === 'IMG') {
-          (imgToReplace as HTMLImageElement).src = renderedUrl;
-        } else {
-          imgToReplace.style.backgroundImage = `url("${renderedUrl}")`;
-        }
-        imgToReplace.style.filter = 'none';
-        imgToReplace.style.mixBlendMode = 'normal';
-        imgToReplace.style.opacity = '1';
-        
-        const container = imgToReplace.closest('[data-editable="image"]');
-        if (container) {
-          (container as HTMLElement).style.filter = 'none';
-          (container as HTMLElement).style.mixBlendMode = 'normal';
-        }
-
-        // Hide placeholder state if it exists
-        const placeholder = imgToReplace.closest('[data-editable="image"]')?.querySelector('.placeholder-state');
-        if (placeholder) {
-          (placeholder as HTMLElement).style.display = 'none';
-        }
-      } else {
-        // Otherwise replace the first image in the document
-        const firstImg = iframeDoc.querySelector('img, .image-preview') as HTMLElement;
-        if (firstImg) {
-          const renderedUrl = await getRenderedImageSource(dataUrl, firstImg);
-          if (firstImg.tagName === 'IMG') {
-            (firstImg as HTMLImageElement).src = renderedUrl;
-          } else {
-            firstImg.style.backgroundImage = `url("${renderedUrl}")`;
-          }
-          firstImg.style.filter = 'none';
-          firstImg.style.mixBlendMode = 'normal';
-          firstImg.style.opacity = '1';
-
-          const container = firstImg.closest('[data-editable="image"]');
-          if (container) {
-            (container as HTMLElement).style.filter = 'none';
-            (container as HTMLElement).style.mixBlendMode = 'normal';
-          }
-
-          const placeholder = firstImg.closest('[data-editable="image"]')?.querySelector('.placeholder-state');
-          if (placeholder) {
-            (placeholder as HTMLElement).style.display = 'none';
-          }
-        } else {
-          alert("No image found in template to replace.");
-        }
-      }
-      
-      saveState();
+      await processImageReplacement(dataUrl);
     };
     reader.readAsDataURL(file);
     
@@ -1648,6 +1656,17 @@ const EditorPage: React.FC = () => {
           </button>
         </div>
       </aside>
+
+      {showInboxModal && (
+        <InboxModal 
+          onClose={() => setShowInboxModal(false)}
+          onSelectPhoto={handleInboxPhotoSelect}
+          onUploadFromDevice={() => {
+            setShowInboxModal(false);
+            fileInputRef.current?.click();
+          }}
+        />
+      )}
     </div>
   );
 };

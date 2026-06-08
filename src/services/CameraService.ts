@@ -5,6 +5,20 @@ import { Preferences } from '@capacitor/preferences';
 const CAMERA_IP = '192.168.1.2';
 const CCAPI_BASE_URL = `http://${CAMERA_IP}:8080/ccapi/ver110`;
 let isRunning = false;
+let statusListeners: ((status: boolean) => void)[] = [];
+
+export const isCameraAutomationRunning = () => isRunning;
+
+export const addCameraStatusListener = (listener: (status: boolean) => void) => {
+  statusListeners.push(listener);
+  return () => {
+    statusListeners = statusListeners.filter(l => l !== listener);
+  };
+};
+
+const notifyStatus = () => {
+  statusListeners.forEach(listener => listener(isRunning));
+};
 
 // Set to true to test the ingestion pipeline without the physical camera
 export const MOCK_MODE = true;
@@ -128,6 +142,7 @@ export const pollCameraEvents = async (delayMs: number = 2000) => {
 export const startCameraAutomation = async () => {
   if (isRunning) return;
   isRunning = true;
+  notifyStatus();
   console.log("Phase 1: Background Polling Started.");
 
   if (Capacitor.isNativePlatform()) {
@@ -157,6 +172,7 @@ export const startCameraAutomation = async () => {
 
 export const stopCameraAutomation = async () => {
   isRunning = false;
+  notifyStatus();
   console.log("Phase 1: Background Polling Stopped.");
 
   if (Capacitor.isNativePlatform()) {
