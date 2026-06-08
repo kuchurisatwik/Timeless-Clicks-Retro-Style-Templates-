@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, X, Upload } from 'lucide-react';
 import { Preferences } from '@capacitor/preferences';
+import { Capacitor } from '@capacitor/core';
 
 interface InboxModalProps {
   onClose: () => void;
@@ -132,10 +133,12 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
               gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
               gap: '16px'
             }}>
-              {photos.map((url, i) => (
+              {photos.map((url, i) => {
+                const displayUrl = Capacitor.isNativePlatform() ? Capacitor.convertFileSrc(url) : url;
+                return (
                 <div 
                   key={i}
-                  onClick={() => onSelectPhoto(url)}
+                  onClick={() => onSelectPhoto(displayUrl)}
                   style={{
                     aspectRatio: '1',
                     borderRadius: '12px',
@@ -148,7 +151,7 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
                   className="inbox-photo-card"
                 >
                   <img 
-                    src={url} 
+                    src={displayUrl} 
                     alt={`Downloaded ${i}`}
                     style={{
                       width: '100%',
@@ -178,7 +181,8 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
                     }}>Use Photo</span>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
