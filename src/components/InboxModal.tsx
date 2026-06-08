@@ -36,6 +36,12 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
     const interval = setInterval(loadPhotos, 2000);
     return () => clearInterval(interval);
   }, []);
+  const handleClearInbox = async () => {
+    if (confirm("Are you sure you want to delete all photos from the inbox?")) {
+      await Preferences.remove({ key: '@downloaded_photos' });
+      setPhotos([]);
+    }
+  };
 
   return (
     <div style={{
@@ -199,23 +205,43 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
           <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
             {photos.length} photos in inbox
           </span>
-          <button
-            onClick={onUploadFromDevice}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '8px',
-              backgroundColor: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              color: '#fff',
-              padding: '10px 16px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              transition: 'all 0.2s'
-            }}
-          >
-            <Upload size={16} />
-            Upload from Device
-          </button>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            {photos.length > 0 && (
+              <button
+                onClick={handleClearInbox}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  backgroundColor: 'rgba(255, 77, 141, 0.1)',
+                  border: '1px solid rgba(255, 77, 141, 0.3)',
+                  color: '#FF4D8D',
+                  padding: '10px 16px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Clear All
+              </button>
+            )}
+            <button
+              onClick={onUploadFromDevice}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                backgroundColor: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                color: '#fff',
+                padding: '10px 16px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                transition: 'all 0.2s'
+              }}
+            >
+              <Upload size={16} />
+              Upload from Device
+            </button>
+          </div>
         </div>
       </motion.div>
       <style>{`
