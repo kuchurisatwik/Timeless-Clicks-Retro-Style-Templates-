@@ -324,7 +324,7 @@ const TemplateCard = React.memo(({
   );
 });
 
-import { startCameraAutomation, stopCameraAutomation, isCameraAutomationRunning, addCameraStatusListener } from '../services/CameraService';
+import { startCameraAutomation, stopCameraAutomation, isCameraAutomationRunning, addCameraStatusListener, getCameraIp, setCameraIp } from '../services/CameraService';
 
 const TemplatesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -346,11 +346,16 @@ const TemplatesPage: React.FC = () => {
     return () => removeListener();
   }, []);
 
-  const togglePolling = () => {
+  const togglePolling = async () => {
     if (isPolling) {
       stopCameraAutomation();
     } else {
-      startCameraAutomation();
+      const currentIp = await getCameraIp();
+      const ip = window.prompt('Enter Canon R50 IP Address:', currentIp);
+      if (ip && ip.trim().length > 0) {
+        await setCameraIp(ip.trim());
+        startCameraAutomation();
+      }
     }
   };
 

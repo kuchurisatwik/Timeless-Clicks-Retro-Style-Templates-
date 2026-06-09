@@ -2,8 +2,21 @@ import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 
-const CAMERA_IP = '192.168.1.2';
-const CCAPI_BASE_URL = `http://${CAMERA_IP}:8080/ccapi/ver110`;
+export let currentCameraIp = '192.168.1.2';
+
+export const setCameraIp = async (ip: string) => {
+  currentCameraIp = ip;
+  await Preferences.set({ key: '@camera_ip', value: ip });
+};
+
+export const getCameraIp = async () => {
+  const { value } = await Preferences.get({ key: '@camera_ip' });
+  if (value) {
+    currentCameraIp = value;
+  }
+  return currentCameraIp;
+};
+
 let isRunning = false;
 let statusListeners: ((status: boolean) => void)[] = [];
 
@@ -118,7 +131,8 @@ export const pollCameraEvents = async (delayMs: number = 2000) => {
           await downloadPhotoInBackground(`https://picsum.photos/1200/800`);
         }
       } else {
-        const response = await fetch(`${CCAPI_BASE_URL}/event/polling?continue=on`, { 
+        const ccapiUrl = `http://${currentCameraIp}:8080/ccapi/ver110`;
+        const response = await fetch(`${ccapiUrl}/event/polling?continue=on`, { 
           method: 'GET',
         });
         
@@ -126,7 +140,7 @@ export const pollCameraEvents = async (delayMs: number = 2000) => {
           const data = await response.json();
           
           if (data.addedcontents && data.addedcontents.length > 0) {
-            await downloadPhotoInBackground(`http://${CAMERA_IP}:8080${data.addedcontents[0]}`);
+            await downloadPhotoInBackground(`http://${currentCameraIp}:8080${data.addedcontents[0]}`);
           }
         }
       }
