@@ -324,7 +324,8 @@ const TemplateCard = React.memo(({
   );
 });
 
-import { startCameraAutomation, stopCameraAutomation, isCameraAutomationRunning, addCameraStatusListener, getCameraIp, setCameraIp } from '../services/CameraService';
+// CCAPI camera automation disabled — uncomment when camera integration is needed
+// import { startCameraAutomation, stopCameraAutomation, isCameraAutomationRunning, addCameraStatusListener, getCameraIp, setCameraIp } from '../services/CameraService';
 
 const TemplatesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -337,27 +338,28 @@ const TemplatesPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All Templates');
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const [isPolling, setIsPolling] = useState(isCameraAutomationRunning());
+  // CCAPI camera automation disabled — uncomment when camera integration is needed
+  // const [isPolling, setIsPolling] = useState(isCameraAutomationRunning());
 
-  useEffect(() => {
-    const removeListener = addCameraStatusListener((status) => {
-      setIsPolling(status);
-    });
-    return () => removeListener();
-  }, []);
+  // useEffect(() => {
+  //   const removeListener = addCameraStatusListener((status) => {
+  //     setIsPolling(status);
+  //   });
+  //   return () => removeListener();
+  // }, []);
 
-  const togglePolling = async () => {
-    if (isPolling) {
-      stopCameraAutomation();
-    } else {
-      const currentIp = await getCameraIp();
-      const ip = window.prompt('Enter Canon R50 IP Address:', currentIp);
-      if (ip && ip.trim().length > 0) {
-        await setCameraIp(ip.trim());
-        startCameraAutomation();
-      }
-    }
-  };
+  // const togglePolling = async () => {
+  //   if (isPolling) {
+  //     stopCameraAutomation();
+  //   } else {
+  //     const currentIp = await getCameraIp();
+  //     const ip = window.prompt('Enter Canon R50 IP Address:', currentIp);
+  //     if (ip && ip.trim().length > 0) {
+  //       await setCameraIp(ip.trim());
+  //       startCameraAutomation();
+  //     }
+  //   }
+  // };
 
   const activeTemplates = templateCategories.find(c => c.name === activeCategory)?.templates || templateCategories[0].templates;
 
@@ -517,7 +519,8 @@ const TemplatesPage: React.FC = () => {
           <Sparkles color="var(--accent-3)" size={24} />
         </div>
 
-        <button 
+        {/* CCAPI camera automation disabled — uncomment when camera integration is needed */}
+        {/* <button 
           onClick={togglePolling}
           title={isPolling ? "Stop Camera Polling" : "Start Camera Polling"}
           style={{
@@ -535,7 +538,7 @@ const TemplatesPage: React.FC = () => {
             transition: 'all 0.3s ease',
             zIndex: 100
           }}
-        />
+        /> */}
 
         <p style={{
           color: 'var(--text-secondary)',

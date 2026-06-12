@@ -16,11 +16,33 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
 
   const loadPhotos = async () => {
     try {
-      const { value } = await Preferences.get({ key: '@downloaded_photos' });
-      if (value) {
-        const parsed = JSON.parse(value);
-        setPhotos(parsed);
+      const allPhotos: string[] = [];
+
+      // 1. Load from local pictures/ folder via API (web only)
+      if (!Capacitor.isNativePlatform()) {
+        try {
+          const res = await fetch('/api/pictures');
+          if (res.ok) {
+            const pictureUrls: string[] = await res.json();
+            allPhotos.push(...pictureUrls);
+          }
+        } catch (e) {
+          console.warn('Could not fetch pictures from /api/pictures', e);
+        }
       }
+
+      // 2. Also load any previously downloaded/stored photos from Preferences
+      try {
+        const { value } = await Preferences.get({ key: '@downloaded_photos' });
+        if (value) {
+          const parsed = JSON.parse(value);
+          allPhotos.push(...parsed);
+        }
+      } catch (e) {
+        console.warn('Could not load photos from Preferences', e);
+      }
+
+      setPhotos(allPhotos);
     } catch (e) {
       console.error("Failed to load photos", e);
     } finally {
@@ -32,10 +54,11 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
     // Initial load
     loadPhotos();
 
-    // Poll every 2 seconds while modal is open
-    const interval = setInterval(loadPhotos, 2000);
+    // Poll every 3 seconds while modal is open
+    const interval = setInterval(loadPhotos, 3000);
     return () => clearInterval(interval);
   }, []);
+
   const handleClearInbox = async () => {
     if (confirm("Are you sure you want to delete all photos from the inbox?")) {
       await Preferences.remove({ key: '@downloaded_photos' });
@@ -95,7 +118,7 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
             <div>
               <h2 style={{ margin: 0, fontSize: '1.2rem', color: '#fff' }} className="heading-font">Camera Inbox</h2>
               <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                Photos downloaded from Canon R50
+                Your Photo Library
               </p>
             </div>
           </div>
@@ -130,8 +153,8 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
           ) : photos.length === 0 ? (
             <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', gap: '16px' }}>
               <Camera size={48} opacity={0.2} />
-              <p>No photos downloaded yet.</p>
-              <p style={{ fontSize: '0.85rem', maxWidth: '300px', textAlign: 'center' }}>Make sure your camera is connected and background polling is active.</p>
+              <p>No photos found.</p>
+              <p style={{ fontSize: '0.85rem', maxWidth: '300px', textAlign: 'center' }}>Add images to your <strong>Pictures</strong> folder, or upload from your device.</p>
             </div>
           ) : (
             <div style={{
@@ -158,7 +181,7 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
                 >
                   <img 
                     src={displayUrl} 
-                    alt={`Downloaded ${i}`}
+                    alt={`Photo ${i + 1}`}
                     style={{
                       width: '100%',
                       height: '100%',
@@ -206,7 +229,8 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
             {photos.length} photos in inbox
           </span>
           <div style={{ display: 'flex', gap: '12px' }}>
-            {photos.length > 0 && (
+            {/* Clear All button disabled */}
+            {/* photos.length > 0 && (
               <button
                 onClick={handleClearInbox}
                 style={{
@@ -223,7 +247,7 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
               >
                 Clear All
               </button>
-            )}
+            ) */}
             <button
               onClick={onUploadFromDevice}
               style={{
