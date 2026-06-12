@@ -59,12 +59,12 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
     return () => clearInterval(interval);
   }, []);
 
-  const handleClearInbox = async () => {
-    if (confirm("Are you sure you want to delete all photos from the inbox?")) {
-      await Preferences.remove({ key: '@downloaded_photos' });
-      setPhotos([]);
-    }
-  };
+  // const handleClearInbox = async () => {
+  //   if (confirm("Are you sure you want to delete all photos from the inbox?")) {
+  //     await Preferences.remove({ key: '@downloaded_photos' });
+  //     setPhotos([]);
+  //   }
+  // };
 
   return (
     <div style={{

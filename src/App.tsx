@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import TemplatesPage from './pages/TemplatesPage';
 import EditorPage from './pages/EditorPage';
