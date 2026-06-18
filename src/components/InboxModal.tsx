@@ -1,8 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, X, Upload } from 'lucide-react';
 import { Preferences } from '@capacitor/preferences';
 import { Capacitor } from '@capacitor/core';
+
+// Type declaration for Electron preload API
+declare global {
+  interface Window {
+    electronAPI?: {
+      getPictures: () => Promise<string[]>;
+      onPicturesChanged: (callback: (photos: string[]) => void) => () => void;
+    };
+  }
+}
 
 interface InboxModalProps {
   onClose: () => void;
@@ -13,13 +23,23 @@ interface InboxModalProps {
 const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploadFromDevice }) => {
   const [photos, setPhotos] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const cleanupRef = useRef<(() => void) | null>(null);
 
   const loadPhotos = async () => {
     try {
       const allPhotos: string[] = [];
 
-      // 1. Load from local pictures/ folder via API (web only)
-      if (!Capacitor.isNativePlatform()) {
+      // ─── Electron Desktop App ───
+      if (window.electronAPI) {
+        try {
+          const electronPhotos = await window.electronAPI.getPictures();
+          allPhotos.push(...electronPhotos);
+        } catch (e) {
+          console.warn('Could not fetch pictures from Electron IPC', e);
+        }
+      }
+      // ─── Web (Vite dev server) ───
+      else if (!Capacitor.isNativePlatform()) {
         try {
           const res = await fetch('/api/pictures');
           if (res.ok) {
@@ -31,7 +51,7 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
         }
       }
 
-      // 2. Also load any previously downloaded/stored photos from Preferences
+      // Also load any previously downloaded/stored photos from Preferences
       try {
         const { value } = await Preferences.get({ key: '@downloaded_photos' });
         if (value) {
@@ -54,7 +74,17 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
     // Initial load
     loadPhotos();
 
-    // Poll every 3 seconds while modal is open
+    // ─── Electron: use real-time IPC events (no polling needed) ───
+    if (window.electronAPI) {
+      cleanupRef.current = window.electronAPI.onPicturesChanged((updatedPhotos) => {
+        setPhotos(updatedPhotos);
+      });
+      return () => {
+        if (cleanupRef.current) cleanupRef.current();
+      };
+    }
+
+    // ─── Web/Mobile: fall back to polling every 3 seconds ───
     const interval = setInterval(loadPhotos, 3000);
     return () => clearInterval(interval);
   }, []);
