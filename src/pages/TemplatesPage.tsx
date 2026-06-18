@@ -553,8 +553,6 @@ const TemplatesPage: React.FC = () => {
           <Settings size={20} />
         </button>
 
-        <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
-
         {/* CCAPI camera automation disabled — uncomment when camera integration is needed */}
         {/* <button 
           onClick={togglePolling}
@@ -795,6 +793,8 @@ const TemplatesPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
   );
 };
