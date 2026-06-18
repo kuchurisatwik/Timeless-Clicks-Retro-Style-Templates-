@@ -2,9 +2,8 @@ name: Build Windows EXE
 
 on:
   push:
-    branches:
-      - main
-      - master
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -26,8 +25,10 @@ jobs:
       - name: Build Web App
         run: npm run build
 
-      - name: Build Electron App
-        run: npm run build:win
+      - name: Build Electron App and Publish Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --win --publish always
 
       - name: Upload EXE Artifact
         uses: actions/upload-artifact@v4

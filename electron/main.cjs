@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, protocol, net } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
 const chokidar = require('chokidar');
@@ -128,8 +129,63 @@ function startWatching() {
 
 // ─── IPC handlers ──────────────────────────────────
 function setupIPC() {
-  ipcMain.handle('pictures:get-list', () => {
-    return getSortedImageList();
+  ipcMain.handle('pictures:get-list', getSortedImageList);
+
+  // ─── Auto Updater IPC Handlers ───────────────────────
+  
+  // Return current version
+  ipcMain.handle('app:get-version', () => app.getVersion());
+
+  // Prevent automatic download so we can prompt the user first
+  autoUpdater.autoDownload = false;
+
+  // Manual trigger to check for updates
+  ipcMain.on('updater:check', () => {
+    autoUpdater.checkForUpdates().catch(err => {
+      mainWindow?.webContents.send('updater:error', err.message);
+    });
+  });
+
+  // Manual trigger to download an update
+  ipcMain.on('updater:download', () => {
+    autoUpdater.downloadUpdate().catch(err => {
+      mainWindow?.webContents.send('updater:error', err.message);
+    });
+  });
+
+  // Manual trigger to quit and install
+  ipcMain.on('updater:install', () => {
+    autoUpdater.quitAndInstall(false, true); // (isSilent, isForceRunAfter)
+  });
+
+  // Forward updater events to renderer
+  autoUpdater.on('checking-for-update', () => {
+    mainWindow?.webContents.send('updater:checking');
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    mainWindow?.webContents.send('updater:update-available', info);
+  });
+
+  autoUpdater.on('update-not-available', (info) => {
+    mainWindow?.webContents.send('updater:update-not-available', info);
+  });
+
+  autoUpdater.on('error', (err) => {
+    mainWindow?.webContents.send('updater:error', err.message);
+  });
+
+  autoUpdater.on('download-progress', (progressObj) => {
+    mainWindow?.webContents.send('updater:download-progress', progressObj);
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    mainWindow?.webContents.send('updater:update-downloaded', info);
+  });
+  
+  // Optionally check for updates immediately on startup
+  autoUpdater.checkForUpdates().catch(() => {
+    // Ignore error if offline
   });
 }
 

@@ -11,4 +11,37 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Return a cleanup function
     return () => ipcRenderer.removeListener('pictures:changed', handler);
   },
+  // Updater APIs
+  updater: {
+    check: () => ipcRenderer.send('updater:check'),
+    download: () => ipcRenderer.send('updater:download'),
+    install: () => ipcRenderer.send('updater:install'),
+    getVersion: () => ipcRenderer.invoke('app:get-version'),
+    onEvent: (callback) => {
+      const handler = (event, type, data) => callback({ type, data });
+      
+      // Wire up all updater channels
+      const channels = [
+        'updater:checking',
+        'updater:update-available',
+        'updater:update-not-available',
+        'updater:error',
+        'updater:download-progress',
+        'updater:update-downloaded'
+      ];
+
+      const listeners = channels.map(channel => {
+        const listener = (_e, data) => callback({ type: channel.replace('updater:', ''), data });
+        ipcRenderer.on(channel, listener);
+        return { channel, listener };
+      });
+
+      // Cleanup function
+      return () => {
+        listeners.forEach(({ channel, listener }) => {
+          ipcRenderer.removeListener(channel, listener);
+        });
+      };
+    }
+  }
 });

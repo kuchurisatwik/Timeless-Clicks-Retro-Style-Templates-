@@ -4,6 +4,7 @@ import TemplatesPage from './pages/TemplatesPage';
 import EditorPage from './pages/EditorPage';
 // CCAPI camera automation disabled — uncomment when camera integration is needed
 // import { startCameraAutomation, stopCameraAutomation } from './services/CameraService';
+import AutoUpdater from './components/AutoUpdater';
 import './index.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <>
+      <AutoUpdater />
       <Router>
         <Routes>
           <Route path="/" element={<TemplatesPage />} />

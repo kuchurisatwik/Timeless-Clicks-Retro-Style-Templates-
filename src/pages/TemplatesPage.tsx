@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Grid, Gift, Heart, BookOpen, Newspaper, Quote, GraduationCap, Zap, Eye, Sparkles, PenTool } from 'lucide-react';
+import { Grid, Gift, Heart, BookOpen, Newspaper, Quote, GraduationCap, Zap, Eye, Sparkles, PenTool, Settings } from 'lucide-react';
+import SettingsModal from '../components/SettingsModal';
 
 const templateCategories = [
   {
@@ -338,6 +339,7 @@ const TemplatesPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All Templates');
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   // CCAPI camera automation disabled — uncomment when camera integration is needed
   // const [isPolling, setIsPolling] = useState(isCameraAutomationRunning());
 
@@ -518,6 +520,40 @@ const TemplatesPage: React.FC = () => {
           </h1>
           <Sparkles color="var(--accent-3)" size={24} />
         </div>
+
+        {/* Global Settings Button */}
+        <button 
+          onClick={() => setIsSettingsOpen(true)}
+          style={{
+            position: 'absolute',
+            top: '24px',
+            right: '24px',
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#fff',
+            zIndex: 100,
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+            e.currentTarget.style.transform = 'rotate(30deg)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+            e.currentTarget.style.transform = 'rotate(0deg)';
+          }}
+        >
+          <Settings size={20} />
+        </button>
+
+        <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
 
         {/* CCAPI camera automation disabled — uncomment when camera integration is needed */}
         {/* <button 
