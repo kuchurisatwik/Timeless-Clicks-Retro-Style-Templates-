@@ -3,6 +3,20 @@ const path = require('path');
 const fs = require('fs');
 const chokidar = require('chokidar');
 
+// Register custom protocol as privileged before app is ready
+protocol.registerSchemesAsPrivileged([
+  { 
+    scheme: 'pictures', 
+    privileges: { 
+      standard: true, 
+      secure: true, 
+      supportFetchAPI: true, 
+      corsEnabled: true,
+      bypassCSP: true 
+    } 
+  }
+]);
+
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp']);
 
 // ─── State ─────────────────────────────────────────

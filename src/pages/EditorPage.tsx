@@ -824,70 +824,80 @@ const EditorPage: React.FC = () => {
           alert('Printer plugin not available on this device.');
         }
       } else {
-        // Web / Electron Fallback Print
-        // Create an off-screen iframe with REAL dimensions (not 0x0, which causes blank prints)
-        const printIframe = document.createElement('iframe');
-        printIframe.style.position = 'fixed';
-        printIframe.style.left = '-9999px';
-        printIframe.style.top = '0';
-        printIframe.style.width = '794px';
-        printIframe.style.height = '1123px';
-        printIframe.style.border = 'none';
-        printIframe.style.opacity = '0';
-        printIframe.style.pointerEvents = 'none';
-        document.body.appendChild(printIframe);
+        // Web / Electron Fallback
+        const isElectron = typeof window !== 'undefined' && (window.navigator.userAgent.includes('Electron') || (window as any).electronAPI);
         
-        const printDoc = printIframe.contentWindow?.document;
-        if (printDoc) {
-          printDoc.write(`
-            <html>
-              <head>
-                <title>Print Keepsake</title>
-                <style>
-                  @page { margin: 0; size: A4 portrait; }
-                  * { margin: 0; padding: 0; }
-                  html, body { width: 100%; height: 100%; background: white; }
-                  body { display: flex; justify-content: center; align-items: flex-start; }
-                  img { width: 210mm; height: 297mm; object-fit: contain; display: block; }
-                </style>
-              </head>
-              <body>
-                <img id="print-img" src="${dataUrl}" />
-              </body>
-            </html>
-          `);
-          printDoc.close();
+        if (isElectron) {
+          // Electron lacks a native Chromium print preview. 
+          // Downloading the high-res image directly provides a much better user experience.
+          const link = document.createElement('a');
+          link.download = `Timeless_Clicks_${Date.now()}.jpg`;
+          link.href = dataUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          // Standard Web Browser (Vercel) Print - triggers beautiful Chromium Print Preview
+          const printIframe = document.createElement('iframe');
+          printIframe.style.position = 'fixed';
+          printIframe.style.left = '-9999px';
+          printIframe.style.top = '0';
+          printIframe.style.width = '794px';
+          printIframe.style.height = '1123px';
+          printIframe.style.border = 'none';
+          printIframe.style.opacity = '0';
+          printIframe.style.pointerEvents = 'none';
+          document.body.appendChild(printIframe);
           
-          // Wait for the image to load, then trigger print from the iframe
-          const printImg = printDoc.getElementById('print-img') as HTMLImageElement;
-          const triggerPrint = () => {
-            setTimeout(() => {
-              printIframe.contentWindow?.focus();
-              printIframe.contentWindow?.print();
-            }, 300);
-          };
-          
-          if (printImg) {
-            if (printImg.complete) {
-              triggerPrint();
-            } else {
-              printImg.onload = triggerPrint;
+          const printDoc = printIframe.contentWindow?.document;
+          if (printDoc) {
+            printDoc.write(`
+              <html>
+                <head>
+                  <title>Print Keepsake</title>
+                  <style>
+                    @page { margin: 0; size: A4 portrait; }
+                    * { margin: 0; padding: 0; }
+                    html, body { width: 100%; height: 100%; background: white; }
+                    body { display: flex; justify-content: center; align-items: flex-start; }
+                    img { width: 210mm; height: 297mm; object-fit: contain; display: block; }
+                  </style>
+                </head>
+                <body>
+                  <img id="print-img" src="${dataUrl}" />
+                </body>
+              </html>
+            `);
+            printDoc.close();
+            
+            const printImg = printDoc.getElementById('print-img') as HTMLImageElement;
+            const triggerPrint = () => {
+              setTimeout(() => {
+                printIframe.contentWindow?.focus();
+                printIframe.contentWindow?.print();
+              }, 300);
+            };
+            
+            if (printImg) {
+              if (printImg.complete) {
+                triggerPrint();
+              } else {
+                printImg.onload = triggerPrint;
+              }
             }
+            
+            printIframe.contentWindow?.addEventListener('afterprint', () => {
+              if (document.body.contains(printIframe)) {
+                document.body.removeChild(printIframe);
+              }
+            });
           }
-          
-          // Clean up the iframe after printing
-          printIframe.contentWindow?.addEventListener('afterprint', () => {
+          setTimeout(() => {
             if (document.body.contains(printIframe)) {
               document.body.removeChild(printIframe);
             }
-          });
+          }, 120000);
         }
-        // Fallback cleanup
-        setTimeout(() => {
-          if (document.body.contains(printIframe)) {
-            document.body.removeChild(printIframe);
-          }
-        }, 120000);
       }
     } catch (error) {
       console.error("Export Error:", error);
