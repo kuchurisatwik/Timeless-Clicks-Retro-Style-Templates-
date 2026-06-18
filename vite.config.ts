@@ -73,6 +73,10 @@ const collectImages = (dir: string, baseDir: string): ImageFile[] => {
 
 // Resolve the system Pictures folder path
 const getSystemPicturesDir = (): string => {
+  // Default Inbox folder: Vineeth reddy's OneDrive Pictures
+  const defaultPictures = 'C:\\Users\\Vineeth reddy\\OneDrive\\Pictures';
+  if (fs.existsSync(defaultPictures)) return defaultPictures;
+
   const homeDir = os.homedir();
 
   // OneDrive-synced Pictures folder (common on Windows with OneDrive)
