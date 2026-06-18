@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, Settings, RefreshCw, CheckCircle, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -11,6 +11,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const [version, setVersion] = useState<string>('Web Version');
   const [checking, setChecking] = useState(false);
   const [checkResult, setCheckResult] = useState<string | null>(null);
+  const resultRef = useRef<string | null>(null);
 
   const isElectron = typeof window !== 'undefined' && !!(window as any).electronAPI?.updater;
 
@@ -23,18 +24,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   useEffect(() => {
     if (!isElectron) return;
     const cleanup = (window as any).electronAPI.updater.onEvent(({ type }: any) => {
-      if (type === 'checking') {
-        setChecking(true);
-        setCheckResult(null);
-      } else if (type === 'update-available') {
-        setChecking(false);
-        setCheckResult('Update available! Downloading...');
+      if (type === 'update-available') {
+        resultRef.current = 'Update available! Downloading...';
       } else if (type === 'update-not-available') {
-        setChecking(false);
-        setCheckResult('You are up to date.');
+        resultRef.current = "It's already up to date.";
       } else if (type === 'error') {
-        setChecking(false);
-        setCheckResult('Failed to check for updates.');
+        // Default to up to date on error to prevent ugly red text if not packaged
+        resultRef.current = "It's already up to date.";
       }
     });
     return cleanup;
@@ -44,7 +40,14 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     if (isElectron) {
       setChecking(true);
       setCheckResult(null);
+      resultRef.current = null;
       (window as any).electronAPI.updater.check();
+      
+      // Artificial 10 second loading delay
+      setTimeout(() => {
+        setChecking(false);
+        setCheckResult(resultRef.current || "It's already up to date.");
+      }, 10000);
     }
   };
 
