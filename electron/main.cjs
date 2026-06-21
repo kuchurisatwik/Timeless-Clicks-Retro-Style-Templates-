@@ -140,8 +140,33 @@ function setupIPC() {
   });
 
   ipcMain.handle('print:silent', async (event, dataUrl, printerName) => {
+    console.log('[Timeless Clicks] Silent print requested. Printer:', printerName || '(system default)');
+    let printWin = null;
+    let tempFilePath = null;
+
     try {
-      const printWin = new BrowserWindow({
+      // Write the image data to a temp file to avoid data URL size limits
+      const os = require('os');
+      const tmpDir = os.tmpdir();
+      tempFilePath = path.join(tmpDir, `timeless-clicks-print-${Date.now()}.html`);
+
+      const html = `<!DOCTYPE html>
+<html><head>
+<style>
+  @page { margin: 0; size: A4 portrait; }
+  * { margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; background: white; }
+  body { display: flex; justify-content: center; align-items: flex-start; }
+  img { width: 210mm; height: 297mm; object-fit: contain; display: block; }
+</style>
+</head><body>
+<img src="${dataUrl}" />
+</body></html>`;
+
+      fs.writeFileSync(tempFilePath, html, 'utf8');
+      console.log('[Timeless Clicks] Temp print file written:', tempFilePath, '(', Math.round(html.length / 1024), 'KB )');
+
+      printWin = new BrowserWindow({
         width: 794,
         height: 1123,
         show: false,
@@ -151,42 +176,53 @@ function setupIPC() {
         }
       });
 
-      const html = `
-        <html>
-          <head>
-            <style>
-              @page { margin: 0; size: A4 portrait; }
-              * { margin: 0; padding: 0; }
-              html, body { width: 100%; height: 100%; background: white; }
-              body { display: flex; justify-content: center; align-items: flex-start; }
-              img { width: 210mm; height: 297mm; object-fit: contain; display: block; }
-            </style>
-          </head>
-          <body>
-            <img src="${dataUrl}" />
-          </body>
-        </html>
-      `;
+      await printWin.loadFile(tempFilePath);
+      console.log('[Timeless Clicks] Print window loaded successfully');
 
-      await printWin.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
+      // Wait for the image inside the print window to fully decode
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
+      // Build print options
+      const printOptions = {
+        silent: true,
+        printBackground: true,
+        margins: { marginType: 'none' },
+      };
+      if (printerName) {
+        printOptions.deviceName = printerName;
+      }
+
+      console.log('[Timeless Clicks] Sending to printer with options:', JSON.stringify(printOptions));
+
+      // webContents.print() with callback for proper result handling
       return new Promise((resolve) => {
-        setTimeout(async () => {
+        printWin.webContents.print(printOptions, (success, failureReason) => {
+          console.log('[Timeless Clicks] Print result — success:', success, 'failureReason:', failureReason);
+
+          // Cleanup
           try {
-            await printWin.webContents.print({
-              silent: true,
-              printBackground: true,
-              deviceName: printerName || undefined
-            });
+            if (printWin && !printWin.isDestroyed()) printWin.destroy();
+          } catch (e) { /* ignore */ }
+          try {
+            if (tempFilePath && fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
+          } catch (e) { /* ignore */ }
+
+          if (success) {
             resolve({ success: true });
-          } catch (err) {
-            resolve({ success: false, error: err.message });
-          } finally {
-            if (!printWin.isDestroyed()) printWin.destroy();
+          } else {
+            resolve({ success: false, error: failureReason || 'Print was cancelled or failed' });
           }
-        }, 1000); // give image time to decode
+        });
       });
     } catch (e) {
+      console.error('[Timeless Clicks] Silent print error:', e);
+      // Cleanup on error
+      try {
+        if (printWin && !printWin.isDestroyed()) printWin.destroy();
+      } catch (_) { /* ignore */ }
+      try {
+        if (tempFilePath && fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
+      } catch (_) { /* ignore */ }
       return { success: false, error: e.message };
     }
   });
