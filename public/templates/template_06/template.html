@@ -1,7 +1,8 @@
-<!DOCTYPE html>\n<html lang="en" style=""><head></head><body>\n\n\n\n\n\n\n\n\n\n\n\n
+<!DOCTYPE html>\n<html lang="en" style=""><head></head><body>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
   <meta charset="UTF-8">
   <meta name="viewport" content="width=794, initial-scale=1.0">
   <title>Vintage Newspaper Poster Template 6</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&amp;display=swap" rel="stylesheet">
   <style>
     :root {
       --paper-bg: radial-gradient(circle at center, #faf6ef 0%, #ebdccb 100%);
@@ -57,10 +58,12 @@
     .quote-center-text { flex-grow: 1; text-align: center; font-family: var(--font-serif); font-size: 10px; font-weight: 700; letter-spacing: 0.5px; line-height: 1.25; padding: 0 16px; text-transform: uppercase; color: var(--ink-color); }
     .names-headline-container { text-align: center; width: 100%; padding-top: 4px; }
     .names-headline-text { font-family: var(--font-serif); font-size: 44px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; line-height: 0.95; display: inline-block; width: 100%; }
-    .footer-row { display: flex; justify-content: center; align-items: center; width: 100%; padding: 4px 6px; font-family: var(--font-serif); font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
+    .footer-row { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; padding: 4px 6px; font-family: var(--font-serif); font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
     .footer-item { text-transform: uppercase; }
-    .footer-center { text-align: center; }
-    .footer-right { text-align: right; }
+    .footer-left { display: flex; align-items: flex-end; font-size: 11px; line-height: 1; margin-bottom: 9px; }
+    .footer-right { display: flex; align-items: center; gap: 6px; }
+    .insta-text { font-family: 'Dancing Script', cursive; font-size: 32px; font-weight: 700; text-transform: none; letter-spacing: 0; line-height: 0.8; }
+    .qr-code { width: 64px; height: 64px; object-fit: contain; }
     @media print {
       body { background: #ffffff; margin: 0; padding: 0; }
       .image-upload-box::after, .image-file-input { display: none !important; }
@@ -82,7 +85,7 @@
               <circle cx="50" cy="12" r="1.5" fill="var(--ink-color)"></circle>
             </svg>
           </div>
-          <div class="meta-right" id="meta-right" data-editable="text" style="">22/06/2026&nbsp;</div>
+          <div class="meta-right" id="meta-right" data-editable="text" style="">22/06/2026 | MON</div>
         </div>
         <div class="divider-single-thin"></div>
         <div class="masthead-row">
@@ -197,7 +200,11 @@
       <div class="divider-thick-thin"></div>
 
       <footer class="footer-row">
-        <div class="footer-item" id="footer-phone" data-editable="text" style="">Timeless clicks memories</div>
+        <div class="footer-left footer-item" id="footer-left" data-editable="text" style="">Captured By- Timeless Clicks Memories</div>
+        <div class="footer-right">
+          <div class="insta-text" id="footer-insta" data-editable="text" style="">Instagram</div>
+          <img src="../../assets/qr-code.png" class="qr-code" alt="QR Code">
+        </div>
       </footer>
 
     </article>
