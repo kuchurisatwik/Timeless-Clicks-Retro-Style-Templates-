@@ -131,6 +131,66 @@ function startWatching() {
 function setupIPC() {
   ipcMain.handle('pictures:get-list', getSortedImageList);
 
+  // ─── Auto Mode Printing IPC Handlers ─────────────────
+  ipcMain.handle('printers:get', async () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      return await mainWindow.webContents.getPrintersAsync();
+    }
+    return [];
+  });
+
+  ipcMain.handle('print:silent', async (event, dataUrl, printerName) => {
+    try {
+      const printWin = new BrowserWindow({
+        width: 794,
+        height: 1123,
+        show: false,
+        webPreferences: {
+          nodeIntegration: false,
+          contextIsolation: true
+        }
+      });
+
+      const html = `
+        <html>
+          <head>
+            <style>
+              @page { margin: 0; size: A4 portrait; }
+              * { margin: 0; padding: 0; }
+              html, body { width: 100%; height: 100%; background: white; }
+              body { display: flex; justify-content: center; align-items: flex-start; }
+              img { width: 210mm; height: 297mm; object-fit: contain; display: block; }
+            </style>
+          </head>
+          <body>
+            <img src="${dataUrl}" />
+          </body>
+        </html>
+      `;
+
+      await printWin.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
+
+      return new Promise((resolve) => {
+        setTimeout(async () => {
+          try {
+            await printWin.webContents.print({
+              silent: true,
+              printBackground: true,
+              deviceName: printerName || undefined
+            });
+            resolve({ success: true });
+          } catch (err) {
+            resolve({ success: false, error: err.message });
+          } finally {
+            if (!printWin.isDestroyed()) printWin.destroy();
+          }
+        }, 1000); // give image time to decode
+      });
+    } catch (e) {
+      return { success: false, error: e.message };
+    }
+  });
+
   // ─── Auto Updater IPC Handlers ───────────────────────
   
   // Return current version

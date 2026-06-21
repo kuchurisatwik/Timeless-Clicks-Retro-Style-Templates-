@@ -1,64 +1,15 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Grid, Gift, Heart, BookOpen, Newspaper, Quote, GraduationCap, Zap, Eye, Sparkles, PenTool, Settings } from 'lucide-react';
+import { Eye, Sparkles, PenTool, Settings, Zap, Heart } from 'lucide-react';
 import SettingsModal from '../components/SettingsModal';
-
-const templateCategories = [
-  {
-    name: 'All Templates',
-    templates: Array.from({ length: 61 }, (_, i) => `template_${String(i + 1).padStart(2, '0')}`).filter(id => id !== 'template_30' && id !== 'template_31')
-  },
-  {
-    name: 'Birthday',
-    templates: ['template_09', 'template_11', 'template_13', 'template_14', 'template_15', 'template_32']
-  },
-  {
-    name: 'Wedding & Romance',
-    templates: ['template_28', 'template_38', 'template_40']
-  },
-  {
-    name: 'Magazine & Fashion',
-    templates: ['template_12', 'template_19', 'template_20', 'template_21', 'template_22', 'template_24', 'template_25', 'template_27', 'template_39', 'template_43', 'template_44']
-  },
-  {
-    name: 'Newspaper & Editorial',
-    templates: ['template_01', 'template_02', 'template_03', 'template_04', 'template_05', 'template_06', 'template_07', 'template_08', 'template_10', 'template_16', 'template_17', 'template_18', 'template_23', 'template_26', 'template_29', 'template_33', 'template_34', 'template_35', 'template_36', 'template_37', 'template_41', 'template_42', 'template_47', 'template_60', 'template_61']
-  },
-  {
-    name: 'Quotes & Motivation',
-    templates: ['template_45', 'template_46']
-  },
-  {
-    name: 'Graduation',
-    templates: ['template_48', 'template_49']
-  },
-  {
-    name: 'Comics & Superheroes',
-    templates: ['template_50', 'template_51', 'template_52', 'template_53', 'template_54', 'template_55', 'template_56', 'template_57', 'template_58', 'template_59']
-  }
-];
-
-const getCategoryIcon = (name: string) => {
-  switch (name) {
-    case 'All Templates': return <Grid size={16} />;
-    case 'Birthday': return <Gift size={16} />;
-    case 'Wedding & Romance': return <Heart size={16} />;
-    case 'Magazine & Fashion': return <BookOpen size={16} />;
-    case 'Newspaper & Editorial': return <Newspaper size={16} />;
-    case 'Quotes & Motivation': return <Quote size={16} />;
-    case 'Graduation': return <GraduationCap size={16} />;
-    case 'Comics & Superheroes': return <Zap size={16} />;
-    default: return <Grid size={16} />;
-  }
-};
+import AutoModePickerModal from '../components/AutoModePickerModal';
+import { templateCategories, getCategoryIcon, AI_OPTIMIZED } from '../data/templateData';
 
 const CARD_GAP = 32;
 const A4_WIDTH = 794;
 const A4_HEIGHT = 1123;
 const A4_RATIO = A4_WIDTH / A4_HEIGHT;
-
-const AI_OPTIMIZED = new Set(['template_01', 'template_12', 'template_28', 'template_38', 'template_50', 'template_60', 'template_61']);
 
 // ─────────────────────────────────────────────────
 // CSS-only Particles (no framer-motion, no state)
@@ -340,6 +291,7 @@ const TemplatesPage: React.FC = () => {
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAutoModePickerOpen, setIsAutoModePickerOpen] = useState(false);
   // CCAPI camera automation disabled — uncomment when camera integration is needed
   // const [isPolling, setIsPolling] = useState(isCameraAutomationRunning());
 
@@ -521,37 +473,76 @@ const TemplatesPage: React.FC = () => {
           <Sparkles color="var(--accent-3)" size={24} />
         </div>
 
-        {/* Global Settings Button */}
-        <button 
-          onClick={() => setIsSettingsOpen(true)}
-          style={{
-            position: 'absolute',
-            top: '24px',
-            right: '24px',
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: '#fff',
-            zIndex: 100,
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-            e.currentTarget.style.transform = 'rotate(30deg)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-            e.currentTarget.style.transform = 'rotate(0deg)';
-          }}
-        >
-          <Settings size={20} />
-        </button>
+        {/* Top-right action buttons */}
+        <div style={{
+          position: 'absolute',
+          top: '24px',
+          right: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          zIndex: 100,
+        }}>
+          {/* Auto Mode Button */}
+          <button
+            id="auto-mode-btn"
+            onClick={() => setIsAutoModePickerOpen(true)}
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,122,89,0.9), rgba(255,77,141,0.9))',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: '24px',
+              padding: '8px 18px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              cursor: 'pointer',
+              color: '#fff',
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              transition: 'all 0.3s',
+              boxShadow: '0 4px 20px rgba(255,77,141,0.4)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 8px 30px rgba(255,77,141,0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0) scale(1)';
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(255,77,141,0.4)';
+            }}
+          >
+            <Zap size={16} />
+            Auto Mode
+          </button>
+
+          {/* Global Settings Button */}
+          <button 
+            onClick={() => setIsSettingsOpen(true)}
+            style={{
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: '#fff',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+              e.currentTarget.style.transform = 'rotate(30deg)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+              e.currentTarget.style.transform = 'rotate(0deg)';
+            }}
+          >
+            <Settings size={20} />
+          </button>
+        </div>
 
         {/* CCAPI camera automation disabled — uncomment when camera integration is needed */}
         {/* <button 
@@ -795,6 +786,7 @@ const TemplatesPage: React.FC = () => {
       </div>
 
       <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+      <AutoModePickerModal isOpen={isAutoModePickerOpen} onClose={() => setIsAutoModePickerOpen(false)} />
     </div>
   );
 };

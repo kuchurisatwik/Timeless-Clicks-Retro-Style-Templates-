@@ -1,18 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, X, Upload } from 'lucide-react';
-import { Preferences } from '@capacitor/preferences';
-import { Capacitor } from '@capacitor/core';
-
-// Type declaration for Electron preload API
-declare global {
-  interface Window {
-    electronAPI?: {
-      getPictures: () => Promise<string[]>;
-      onPicturesChanged: (callback: (photos: string[]) => void) => () => void;
-    };
-  }
-}
+import { fetchPhotos, subscribeToPhotoChanges, getDisplayUrl } from '../services/photoService';
 
 interface InboxModalProps {
   onClose: () => void;
@@ -25,68 +14,18 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
   const [loading, setLoading] = useState(true);
   const cleanupRef = useRef<(() => void) | null>(null);
 
-  const loadPhotos = async () => {
-    try {
-      const allPhotos: string[] = [];
-
-      // ─── Electron Desktop App ───
-      if (window.electronAPI) {
-        try {
-          const electronPhotos = await window.electronAPI.getPictures();
-          allPhotos.push(...electronPhotos);
-        } catch (e) {
-          console.warn('Could not fetch pictures from Electron IPC', e);
-        }
-      }
-      // ─── Web (Vite dev server) ───
-      else if (!Capacitor.isNativePlatform()) {
-        try {
-          const res = await fetch('/api/pictures');
-          if (res.ok) {
-            const pictureUrls: string[] = await res.json();
-            allPhotos.push(...pictureUrls);
-          }
-        } catch (e) {
-          console.warn('Could not fetch pictures from /api/pictures', e);
-        }
-      }
-
-      // Also load any previously downloaded/stored photos from Preferences
-      try {
-        const { value } = await Preferences.get({ key: '@downloaded_photos' });
-        if (value) {
-          const parsed = JSON.parse(value);
-          allPhotos.push(...parsed);
-        }
-      } catch (e) {
-        console.warn('Could not load photos from Preferences', e);
-      }
-
-      setPhotos(allPhotos);
-    } catch (e) {
-      console.error("Failed to load photos", e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     // Initial load
-    loadPhotos();
+    fetchPhotos().then(p => { setPhotos(p); setLoading(false); }).catch(() => setLoading(false));
 
-    // ─── Electron: use real-time IPC events (no polling needed) ───
-    if (window.electronAPI) {
-      cleanupRef.current = window.electronAPI.onPicturesChanged((updatedPhotos) => {
-        setPhotos(updatedPhotos);
-      });
-      return () => {
-        if (cleanupRef.current) cleanupRef.current();
-      };
-    }
+    // Subscribe to changes
+    cleanupRef.current = subscribeToPhotoChanges((updatedPhotos) => {
+      setPhotos(updatedPhotos);
+    });
 
-    // ─── Web/Mobile: fall back to polling every 3 seconds ───
-    const interval = setInterval(loadPhotos, 3000);
-    return () => clearInterval(interval);
+    return () => {
+      if (cleanupRef.current) cleanupRef.current();
+    };
   }, []);
 
   // const handleClearInbox = async () => {
@@ -193,7 +132,7 @@ const InboxModal: React.FC<InboxModalProps> = ({ onClose, onSelectPhoto, onUploa
               gap: '16px'
             }}>
               {photos.map((url, i) => {
-                const displayUrl = Capacitor.isNativePlatform() ? Capacitor.convertFileSrc(url) : url;
+                const displayUrl = getDisplayUrl(url);
                 return (
                 <div 
                   key={i}

@@ -11,6 +11,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Return a cleanup function
     return () => ipcRenderer.removeListener('pictures:changed', handler);
   },
+
+  // Auto Mode Print APIs
+  silentPrint: (dataUrl, printerName) => ipcRenderer.invoke('print:silent', dataUrl, printerName),
+  getPrinters: () => ipcRenderer.invoke('printers:get'),
+
   // Updater APIs
   updater: {
     check: () => ipcRenderer.send('updater:check'),

@@ -2,6 +2,62 @@ import { useState, useEffect, useRef } from 'react';
 import { X, Settings, RefreshCw, CheckCircle, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface Printer {
+  name: string;
+  isDefault: boolean;
+}
+
+function PrinterSelect() {
+  const [printers, setPrinters] = useState<Printer[]>([]);
+  const [selectedPrinter, setSelectedPrinter] = useState<string>('');
+  
+  useEffect(() => {
+    if ((window as any).electronAPI?.getPrinters) {
+      (window as any).electronAPI.getPrinters().then((list: Printer[]) => {
+        setPrinters(list);
+        const saved = localStorage.getItem('auto_mode_printer');
+        if (saved && list.find(p => p.name === saved)) {
+          setSelectedPrinter(saved);
+        } else {
+          const def = list.find(p => p.isDefault);
+          if (def) setSelectedPrinter(def.name);
+          else if (list.length > 0) setSelectedPrinter(list[0].name);
+        }
+      }).catch(console.error);
+    }
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    setSelectedPrinter(val);
+    localStorage.setItem('auto_mode_printer', val);
+  };
+
+  return (
+    <select
+      value={selectedPrinter}
+      onChange={handleChange}
+      style={{
+        width: '100%',
+        padding: '10px',
+        borderRadius: '8px',
+        border: '1px solid rgba(255,255,255,0.1)',
+        background: 'rgba(0,0,0,0.3)',
+        color: '#fff',
+        outline: 'none',
+        fontSize: '0.85rem'
+      }}
+    >
+      {printers.length === 0 && <option value="">Loading printers...</option>}
+      {printers.map(p => (
+        <option key={p.name} value={p.name}>
+          {p.name} {p.isDefault ? '(Default)' : ''}
+        </option>
+      ))}
+    </select>
+  );
+}
+
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -147,6 +203,21 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 </div>
               )}
             </div>
+
+            {/* Auto Mode Printer Selection */}
+            {isElectron && (
+              <div style={{
+                background: 'rgba(255,255,255,0.03)',
+                borderRadius: '12px',
+                padding: '16px',
+                marginBottom: '20px'
+              }}>
+                <div style={{ marginBottom: '8px', fontSize: '0.9rem', fontWeight: 600 }}>
+                  Auto Mode Printer
+                </div>
+                <PrinterSelect />
+              </div>
+            )}
 
             <style>{`
               .spin { animation: spin 1s linear infinite; }
