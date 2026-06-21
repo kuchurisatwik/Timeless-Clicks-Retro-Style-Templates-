@@ -812,7 +812,6 @@ const EditorPage: React.FC = () => {
       
       // Use JPEG format to dramatically reduce base64 string size for mobile native bridge
       const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-      
       if (Capacitor.isNativePlatform()) {
         // Native Android / iOS Print Spooler using cordova-plugin-printer
         const base64Data = dataUrl.split('base64,')[1];
@@ -823,75 +822,30 @@ const EditorPage: React.FC = () => {
         } else {
           alert('Printer plugin not available on this device.');
         }
-      } else {
-        // Web / Electron Fallback Print
-        const printIframe = document.createElement('iframe');
-        printIframe.style.position = 'fixed';
-        printIframe.style.left = '-9999px';
-        printIframe.style.top = '0';
-        printIframe.style.width = '794px';
-        printIframe.style.height = '1123px';
-        printIframe.style.border = 'none';
-        printIframe.style.opacity = '0';
-        printIframe.style.pointerEvents = 'none';
-        document.body.appendChild(printIframe);
-        
-        const printDoc = printIframe.contentWindow?.document;
-        if (printDoc) {
-          printDoc.write(`
-            <html>
-              <head>
-                <title>Print Keepsake</title>
-                <style>
-                  @page { margin: 0; size: A4 portrait; }
-                  * { margin: 0; padding: 0; }
-                  html, body { width: 100%; height: 100%; background: white; }
-                  body { display: flex; justify-content: center; align-items: flex-start; }
-                  img { width: 210mm; height: 297mm; object-fit: contain; display: block; }
-                </style>
-              </head>
-              <body>
-                <img id="print-img" src="${dataUrl}" />
-              </body>
-            </html>
-          `);
-          printDoc.close();
-          
-          // Wait for the image to load, then trigger print from the iframe
-          const printImg = printDoc.getElementById('print-img') as HTMLImageElement;
-          const triggerPrint = () => {
-            setTimeout(() => {
-              printIframe.contentWindow?.focus();
-              printIframe.contentWindow?.print();
-            }, 300);
-          };
-          
-          if (printImg) {
-            if (printImg.complete) {
-              triggerPrint();
-            } else {
-              printImg.onload = triggerPrint;
-            }
-          }
-          
-          // Clean up the iframe after printing
-          printIframe.contentWindow?.addEventListener('afterprint', () => {
-            if (document.body.contains(printIframe)) {
-              document.body.removeChild(printIframe);
-            }
-          });
+        setIsExporting(false);
+      } else if (window.electronAPI?.silentPrint) {
+        // Silently print using the globally saved printer
+        const selectedPrinter = localStorage.getItem('auto_mode_printer') || undefined;
+        const result = await window.electronAPI.silentPrint(dataUrl, selectedPrinter);
+        if (result.success) {
+          setIsExporting(false);
+          // Optional: Add a success toast if you have one
+        } else {
+          alert('Failed to print: ' + (result.error || 'Unknown error'));
+          setIsExporting(false);
         }
-        // Fallback cleanup
-        setTimeout(() => {
-          if (document.body.contains(printIframe)) {
-            document.body.removeChild(printIframe);
-          }
-        }, 120000);
+      } else {
+        // Web fallback (just open it in a new window)
+        const win = window.open();
+        if (win) {
+          win.document.write(`<img src="${dataUrl}" style="width:100%" />`);
+          win.print();
+        }
+        setIsExporting(false);
       }
     } catch (error) {
       console.error("Export Error:", error);
       alert("Failed to export poster.");
-    } finally {
       setIsExporting(false);
     }
 
