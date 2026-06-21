@@ -69,7 +69,8 @@
       {
         "provider": "github",
         "owner": "kuchurisatwik",
-        "repo": "Timeless-Clicks-Retro-Style-Templates-"
+        "repo": "Timeless-Clicks-Retro-Style-Templates-",
+        "releaseType": "release"
       }
     ],
     "win": {
