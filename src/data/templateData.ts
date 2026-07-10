@@ -4,7 +4,7 @@ import { Grid, Gift, Heart, BookOpen, Newspaper, Quote, GraduationCap, Zap } fro
 export const templateCategories = [
   {
     name: 'All Templates',
-    templates: Array.from({ length: 61 }, (_, i) => `template_${String(i + 1).padStart(2, '0')}`).filter(id => id !== 'template_30' && id !== 'template_31')
+    templates: Array.from({ length: 63 }, (_, i) => `template_${String(i + 1).padStart(2, '0')}`).filter(id => id !== 'template_30' && id !== 'template_31')
   },
   {
     name: 'Birthday',
@@ -20,7 +20,7 @@ export const templateCategories = [
   },
   {
     name: 'Newspaper & Editorial',
-    templates: ['template_01', 'template_02', 'template_03', 'template_04', 'template_05', 'template_06', 'template_07', 'template_08', 'template_10', 'template_16', 'template_17', 'template_18', 'template_23', 'template_26', 'template_29', 'template_33', 'template_34', 'template_35', 'template_36', 'template_37', 'template_41', 'template_42', 'template_47', 'template_60', 'template_61']
+    templates: ['template_01', 'template_02', 'template_03', 'template_04', 'template_05', 'template_06', 'template_07', 'template_08', 'template_10', 'template_16', 'template_17', 'template_18', 'template_23', 'template_26', 'template_29', 'template_33', 'template_34', 'template_35', 'template_36', 'template_37', 'template_41', 'template_42', 'template_47', 'template_60', 'template_61', 'template_62', 'template_63']
   },
   {
     name: 'Quotes & Motivation',
@@ -48,6 +48,7 @@ export const getCategoryIcon = (name: string): React.ReactElement => {
     case 'Quotes & Motivation': return React.createElement(Quote, { size: 16 });
     case 'Graduation': return React.createElement(GraduationCap, { size: 16 });
     case 'Comics & Superheroes': return React.createElement(Zap, { size: 16 });
+    case 'Liked': return React.createElement(Heart, { size: 16, fill: 'currentColor' });
     default: return React.createElement(Grid, { size: 16 });
   }
 };

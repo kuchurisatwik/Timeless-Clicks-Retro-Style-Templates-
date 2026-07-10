@@ -179,6 +179,7 @@ const TemplateCard = React.memo(({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+        zIndex: 10,
       }}>
         {isAI ? (
           <div style={{
@@ -200,6 +201,8 @@ const TemplateCard = React.memo(({
         <button
           className={`fav-btn${isFavorite ? ' fav-active' : ''}`}
           onClick={(e) => toggleFavorite(e, id)}
+          onPointerDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
           style={{
             background: 'rgba(0,0,0,0.4)',
             border: '1px solid rgba(255,255,255,0.2)',
@@ -289,7 +292,18 @@ const TemplatesPage: React.FC = () => {
   const [containerHeight, setContainerHeight] = useState(0);
   const [activeCategory, setActiveCategory] = useState('All Templates');
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [favorites, setFavorites] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem('timeless_favorites');
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('timeless_favorites', JSON.stringify(Array.from(favorites)));
+  }, [favorites]);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAutoModePickerOpen, setIsAutoModePickerOpen] = useState(false);
   // CCAPI camera automation disabled — uncomment when camera integration is needed
@@ -315,7 +329,9 @@ const TemplatesPage: React.FC = () => {
   //   }
   // };
 
-  const activeTemplates = templateCategories.find(c => c.name === activeCategory)?.templates || templateCategories[0].templates;
+  const activeTemplates = activeCategory === 'Liked'
+    ? Array.from(favorites).sort()
+    : templateCategories.find(c => c.name === activeCategory)?.templates || templateCategories[0].templates;
 
   const cardHeight = Math.max(220, containerHeight - 80);
   const cardWidth = Math.round(cardHeight * A4_RATIO);
@@ -426,6 +442,7 @@ const TemplatesPage: React.FC = () => {
   const showArrows = !isMobile && (activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP) > containerWidth;
 
   const toggleFavorite = useCallback((e: React.MouseEvent, id: string) => {
+    e.preventDefault();
     e.stopPropagation();
     setFavorites(prev => {
       const next = new Set(prev);
@@ -590,7 +607,7 @@ const TemplatesPage: React.FC = () => {
           maxWidth: '1100px',
           margin: '0 auto',
         }}>
-          {templateCategories.map(cat => {
+          {[{ name: 'Liked', templates: Array.from(favorites) }, ...templateCategories].map(cat => {
             const isActive = activeCategory === cat.name;
             return (
               <button
@@ -761,28 +778,45 @@ const TemplatesPage: React.FC = () => {
           })}
         </div>
 
-        {/* Scroll indicator dots */}
-        {showArrows && (
-          <div style={{
-            position: 'absolute',
-            bottom: '10px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            gap: '8px',
-            zIndex: 20,
-          }}>
-            {[0, 1, 2, 3, 4].map(i => (
-              <div key={i} style={{
-                width: i === 0 ? '24px' : '8px',
-                height: '8px',
-                borderRadius: '4px',
-                background: i === 0 ? 'var(--accent-2)' : 'var(--surface-color)',
-                transition: 'all 0.3s',
-              }} />
-            ))}
-          </div>
-        )}
+        {/* Interactive Scrollbar */}
+        {showArrows && (() => {
+          const totalTrackWidth = activeTemplates.length * (cardWidth + CARD_GAP) - CARD_GAP;
+          const maxScroll = Math.max(0, totalTrackWidth - containerWidth);
+          return (
+            <div style={{
+              position: 'absolute',
+              bottom: '24px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '40%',
+              minWidth: '300px',
+              maxWidth: '600px',
+              zIndex: 30,
+              display: 'flex',
+              alignItems: 'center',
+              background: 'rgba(0,0,0,0.4)',
+              padding: '8px 16px',
+              borderRadius: '20px',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.1)'
+            }}>
+              <input
+                type="range"
+                min={0}
+                max={maxScroll}
+                value={-scrollX}
+                onChange={(e) => setScrollX(-Number(e.target.value))}
+                onPointerDown={(e) => e.stopPropagation()} 
+                style={{
+                  width: '100%',
+                  accentColor: '#FF4D8D',
+                  cursor: 'pointer',
+                  height: '4px',
+                }}
+              />
+            </div>
+          );
+        })()}
       </div>
 
       <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />

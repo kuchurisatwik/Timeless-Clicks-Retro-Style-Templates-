@@ -1,0 +1,426 @@
+<!DOCTYPE html>\n<html lang="en"><head></head><body>\n\n\n\n\n\n
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=794, initial-scale=1.0">
+  <title>The Times - Style Edition Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&amp;family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&amp;family=Oswald:wght@400;500;600;700&amp;family=Dancing+Script:wght@400;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper-bg: #ddd5c3;
+      --ink: #1a1a1a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #b5ad9e;
+      font-family: 'Old Standard TT', Georgia, serif;
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    .page {
+      width: 794px;
+      height: 1123px;
+      overflow: hidden;
+      background: var(--paper-bg);
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    [data-editable="text"] { outline: none; cursor: text; }
+    [data-editable="text"]:hover,
+    [data-editable="image"]:hover { background-color: rgba(0,0,0,0.04); }
+
+    /* ========== MASTHEAD ========== */
+    .masthead {
+      padding: 28px 40px 0;
+      text-align: center;
+    }
+
+    .masthead-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .masthead-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 105px;
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .crest {
+      width: 70px;
+      height: 70px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Old Standard TT', serif;
+      line-height: 1.1;
+    }
+
+    .crest-top { font-size: 7px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+    .crest-icon { font-size: 20px; margin: 1px 0; }
+    .crest-bottom { font-size: 7px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    .masthead-lines {
+      margin-top: 6px;
+      border-top: 3px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      height: 5px;
+    }
+
+    /* ========== META ========== */
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 40px 5px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    /* ========== HEADLINE ========== */
+    .headline-area {
+      padding: 20px 50px 0;
+      text-align: center;
+    }
+
+    .headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.0;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+
+    .headline-rule {
+      width: 50px;
+      height: 2px;
+      background: var(--ink);
+      margin: 14px auto 10px;
+    }
+
+    .headline-sub {
+      font-family: 'Old Standard TT', serif;
+      font-style: italic;
+      font-size: 16.5px;
+      line-height: 1.45;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    /* ========== 3-COL CONTENT ========== */
+    .cols {
+      display: grid;
+      grid-template-columns: 175px 1fr 185px;
+      flex: 1;
+      border-top: 2px solid var(--ink);
+      margin-top: 14px;
+      min-height: 0;
+    }
+
+    .col-l {
+      border-right: 1px solid var(--ink);
+      padding: 12px 12px 10px 40px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .col-c {
+      padding: 12px 14px 10px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .col-r {
+      border-left: 1px solid var(--ink);
+      padding: 12px 40px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    /* -- Shared section styles -- */
+    .sec-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .sec-body {
+      font-size: 10.5px;
+      line-height: 1.55;
+    }
+
+    .sec-rule {
+      border: none;
+      border-top: 1px solid var(--ink);
+      margin: 10px 0;
+    }
+
+    .italic-closer {
+      font-style: italic;
+      font-size: 10.5px;
+      line-height: 1.5;
+      margin-top: auto;
+      padding-top: 8px;
+    }
+
+    /* -- Center image -- */
+    .img-wrap {
+      background: rgba(0,0,0,0.06);
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.05);
+    }
+
+    .big-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      line-height: 1.4;
+      letter-spacing: 0.3px;
+      margin-top: auto;
+      padding-top: 12px;
+    }
+
+    /* -- Right highlights -- */
+    .hl-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .hl-list li {
+      font-family: 'Oswald', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .hl-list li:last-child { border-bottom: none; }
+
+    .style-notes {
+      font-style: italic;
+      font-size: 10.5px;
+      line-height: 1.5;
+    }
+
+    /* ========== BOTTOM STRIP ========== */
+    .bottom-strip {
+      border-top: 2px solid var(--ink);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .bot-col {
+      padding: 10px 14px 10px 14px;
+    }
+
+    .bot-col:first-child { padding-left: 40px; }
+    .bot-col:last-child { padding-right: 40px; }
+
+    .bot-col + .bot-col { border-left: 1px solid var(--ink); }
+
+    .bot-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .bot-text {
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    /* ========== BRAND FOOTER ========== */
+    .brand-foot {
+      border-top: 2px solid var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 25px;
+    }
+
+    .brand-left {
+      font-family: 'Oswald', sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-ig { text-align: right; line-height: 1.15; }
+    .brand-ig-label { font-family: 'Dancing Script', cursive; font-size: 17px; }
+    .brand-ig-handle { font-style: italic; font-size: 10.5px; }
+
+    .brand-qr {
+      width: 78px;
+      height: 78px;
+      border: 1.5px solid var(--ink);
+      padding: 2px;
+    }
+  </style>
+
+
+  <div class="page">
+
+    <!-- MASTHEAD -->
+    <div class="masthead">
+      <div class="masthead-row">
+        <span class="masthead-text" data-editable="text" style="">THE TIMES</span>
+      </div>
+      <div class="masthead-lines"></div>
+    </div>
+
+    <!-- META -->
+    <div class="meta">
+      <span data-editable="text" style="">VOL. 01</span>
+      <span data-editable="text" style="">SPECIAL EDITION</span>
+      <span data-editable="text" style="" class="">11/07/2026, sATURDAY</span>
+    </div>
+
+    <!-- HEADLINE -->
+    <div class="headline-area">
+      <div class="headline" data-editable="text" style="">STYLE NEVER GOES<br>OUT OF FASHION.</div>
+      <div class="headline-rule"></div>
+      <div class="headline-sub" data-editable="text" style="">A celebration of fashion, lifestyle, creativity and timeless experiences.</div>
+    </div>
+
+    <!-- 3-COL -->
+    <div class="cols">
+
+      <!-- LEFT -->
+      <div class="col-l">
+        <div class="sec-label" data-editable="text" style="">TREND WATCH</div>
+        <div class="sec-body" data-editable="text" style="">Fashion is no longer about following trends. It’s about discovering brands that tell a story, celebrating craftsmanship, and expressing your own style with confidence.</div>
+
+        <hr class="sec-rule">
+
+        <div class="sec-label" data-editable="text" style="">FEATURE STORY</div>
+        <div class="sec-title" data-editable="text" style="">Where Style<br>Meets Lifestyle</div>
+        <div class="sec-body" data-editable="text" style="">Step into a world where independent brands, handcrafted collections, statement jewellery, curated décor, beauty, gourmet treats and creative experiences come together under one roof.</div>
+
+        <div class="italic-closer" data-editable="text" style="">Every corner is designed to inspire. Every brand has a story worth discovering.</div>
+      </div>
+
+      <!-- CENTER -->
+      <div class="col-c">
+        <div class="img-wrap" data-editable="image">
+          <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&amp;q=80" alt="Fashion Editorial">
+        </div>
+        <div class="big-quote" data-editable="text" style="">“STYLE IS TEMPORARY.<br>A GREAT EXPERIENCE IS TIMELESS.”</div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="col-r">
+        <div class="sec-label" data-editable="text" style="">EDITOR’S NOTE</div>
+        <div class="sec-title" data-editable="text" style="font-style: italic;">Flea Chic</div>
+        <div class="sec-body" data-editable="text" style="">More than an exhibition. A destination for fashion lovers, lifestyle enthusiasts and creative minds looking for something beautifully different.</div>
+
+        <hr class="sec-rule">
+
+        <div class="sec-label" data-editable="text" style="">TODAY’S HIGHLIGHTS</div>
+        <ul class="hl-list">
+          <li data-editable="text" style="">FASHION</li>
+          <li data-editable="text" style="">LIFESTYLE</li>
+          <li data-editable="text" style="">JEWELLERY</li>
+          <li data-editable="text" style="">ACCESSORIES</li>
+          <li data-editable="text" style="">HOME DÉCOR</li>
+          <li data-editable="text" style="">BEAUTY</li>
+          <li data-editable="text" style="">FOOD &amp; BEVERAGES</li>
+          <li data-editable="text" style="">ARTISANS</li>
+          <li data-editable="text" style="">LOCAL BRANDS</li>
+        </ul>
+
+        <hr class="sec-rule">
+
+        <div class="sec-label" data-editable="text" style="">STYLE NOTES</div>
+        <div class="style-notes" data-editable="text" style="">Minimal.<br>Meaningful.<br>Curated.<br>Timeless.</div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM STRIP -->
+    <div class="bottom-strip">
+      <div class="bot-col">
+        <div class="bot-title" data-editable="text" style="">FASHION</div>
+        <div class="bot-text" data-editable="text" style="">Timeless pieces, thoughtfully chosen brands and trends that speak your language.</div>
+      </div>
+      <div class="bot-col">
+        <div class="bot-title" data-editable="text" style="">LIFESTYLE</div>
+        <div class="bot-text" data-editable="text" style="">Beautiful living, unique finds, handcrafted with passion and perfect for you.</div>
+      </div>
+      <div class="bot-col">
+        <div class="bot-title" data-editable="text" style="">EXPERIENCE</div>
+        <div class="bot-text" data-editable="text" style="">More than just shopping – it’s about the people, the stories and the memories you take home.</div>
+      </div>
+    </div>
+
+    <!-- BRAND FOOTER -->
+    <div class="brand-foot">
+      <div class="brand-left" data-editable="text" style="">CAPTURED BY- TIMELESS CLICKS MEMORIES</div>
+      <div class="brand-right">
+        <div class="brand-ig">
+          <div class="brand-ig-label" data-editable="text" style="">Instagram</div>
+          <div class="brand-ig-handle" data-editable="text" style="">timelessclicks__photobooth</div>
+        </div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=https://instagram.com/timelessclicks__photobooth" alt="QR Code" class="brand-qr">
+      </div>
+    </div>
+
+  </div>
+
+</body></html>
