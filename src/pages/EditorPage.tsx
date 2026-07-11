@@ -801,6 +801,21 @@ const EditorPage: React.FC = () => {
         exportScale = Math.max(window.devicePixelRatio * 2, 4);
       }
       
+      // Pre-load Google Fonts into main document to warm browser font cache
+      const iframeFontLinks = iframeDoc.querySelectorAll('link[rel="stylesheet"]');
+      for (const link of Array.from(iframeFontLinks)) {
+        const href = (link as HTMLLinkElement).href;
+        if (href && href.includes('fonts.googleapis.com')) {
+          if (!document.querySelector(`link[href="${href}"]`)) {
+            const mainLink = document.createElement('link');
+            mainLink.rel = 'stylesheet';
+            mainLink.href = href;
+            document.head.appendChild(mainLink);
+          }
+        }
+      }
+      await document.fonts.ready;
+
       const canvas = await html2canvas(posterEl as HTMLElement, {
         useCORS: true,
         allowTaint: true,
@@ -808,6 +823,28 @@ const EditorPage: React.FC = () => {
         scale: exportScale,
         width: 794,
         height: 1123,
+        onclone: async (clonedDoc) => {
+          // Wait for ALL stylesheet <link> elements in cloned doc to finish loading
+          // (html2canvas clones the full document including <link> tags, but they
+          //  need to be re-fetched; fonts.ready resolves prematurely if CSS isn't parsed yet)
+          const allLinks = clonedDoc.querySelectorAll('link[rel="stylesheet"]');
+          await Promise.all(
+            Array.from(allLinks).map(
+              (link) =>
+                new Promise<void>((resolve) => {
+                  const el = link as HTMLLinkElement;
+                  if (el.sheet) { resolve(); return; }
+                  el.addEventListener('load', () => resolve());
+                  el.addEventListener('error', () => resolve());
+                  setTimeout(() => resolve(), 5000);
+                })
+            )
+          );
+          // Now CSS is parsed and @font-face rules are known — wait for font files
+          await clonedDoc.fonts.ready;
+          // Safety delay for font rendering to fully settle
+          await new Promise(resolve => setTimeout(resolve, 500));
+        },
       });
       
       // Use JPEG format to dramatically reduce base64 string size for mobile native bridge
