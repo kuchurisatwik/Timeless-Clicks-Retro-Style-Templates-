@@ -187,6 +187,7 @@ function setupIPC() {
         silent: true,
         printBackground: true,
         margins: { marginType: 'none' },
+        pageSize: 'A4',
       };
       if (printerName) {
         printOptions.deviceName = printerName;
