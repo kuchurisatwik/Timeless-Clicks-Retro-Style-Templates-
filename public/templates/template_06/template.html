@@ -287,6 +287,26 @@
       color: #E9568B;
       letter-spacing: 0.5px;
     }
+
+    @media print {
+      @page {
+        margin: 0;
+        size: A4;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: transparent !important;
+      }
+      .poster-scale-container {
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        top: 0;
+        left: 0;
+        position: relative;
+      }
+    }
   </style>
 
 

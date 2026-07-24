@@ -370,7 +370,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 7px 25px;
+      padding: 5px 25px;
     }
 
     .brand-left {
@@ -403,10 +403,30 @@
     }
 
     .brand-qr {
-      width: 78px;
-      height: 78px;
+      width: 65px;
+      height: 65px;
       border: 1.5px solid var(--ink);
-      padding: 2px;
+      padding: 3px;
+    }
+
+    @media print {
+      @page {
+        margin: 0;
+        size: A4;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: transparent !important;
+      }
+      .poster-scale-container {
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        top: 0;
+        left: 0;
+        position: relative;
+      }
     }
   </style>
 

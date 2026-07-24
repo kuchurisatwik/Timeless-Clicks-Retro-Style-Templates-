@@ -842,8 +842,6 @@ const EditorPage: React.FC = () => {
           );
           // Now CSS is parsed and @font-face rules are known — wait for font files
           await clonedDoc.fonts.ready;
-          // Safety delay for font rendering to fully settle
-          await new Promise(resolve => setTimeout(resolve, 500));
         },
       });
       
