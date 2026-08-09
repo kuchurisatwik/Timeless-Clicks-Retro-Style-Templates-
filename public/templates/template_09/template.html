@@ -236,6 +236,48 @@
       text-align: justify;
     }
 
+    /* ========== BRAND FOOTER ========== */
+    .brand-foot {
+      border-top: 2px solid var(--ink-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 8px;
+    }
+    .brand-left {
+      font-family: var(--font-sans);
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .brand-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-ig {
+      text-align: right;
+      line-height: 1.2;
+    }
+    .brand-ig-label {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 16px;
+    }
+    .brand-ig-handle {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 10.5px;
+    }
+    .brand-qr {
+      width: 62px;
+      height: 62px;
+      border: 1.5px solid var(--ink-color);
+      padding: 3px;
+    }
+
     /* Print styling */
     @media print {
       body { background: #fff; margin: 0; padding: 0; }
@@ -254,13 +296,13 @@
     
     <div class="top-header-box">
       <div class="header-side left" id="meta-left" data-editable="text" style="">
-        123 Central Park<br>
-        New York 567
+        Bikkumalla Family<br>
+        Est. 10 August 2025
       </div>
       <div class="header-center" id="site-title" data-editable="text" style="">Birthday Wish</div>
       <div class="header-side right" id="meta-right" data-editable="text" style="">
-        Saturday<br>
-        19 July 2025
+        Monday<br>
+        10 August 2026
       </div>
     </div>
 
@@ -273,16 +315,16 @@
     <div class="double-line-divider-reverse"></div>
 
     <div class="sub-meta-row">
-      <div id="sub-meta-1" data-editable="text" style="">Central Park</div>
-      <div id="sub-meta-2" data-editable="text" style="">July 19th</div>
-      <div id="sub-meta-3" data-editable="text" style="">7:00 o'clock pm</div>
+      <div id="sub-meta-1" data-editable="text" style="">Vatsala Bikkumalla</div>
+      <div id="sub-meta-2" data-editable="text" style="">August 10th</div>
+      <div id="sub-meta-3" data-editable="text" style="">One year old</div>
     </div>
 
     <div class="double-line-divider-reverse" style="border-top-width: 1.5px; border-bottom-width: 4px; margin-top: 5px;"></div>
 
     <div class="event-header-section">
-      <div class="event-title" id="event-title" data-editable="text" style="">SATWIK IS 22</div>
-      <div class="event-subtitle" id="event-subtitle" data-editable="text" style="">JOIN US TO CELEBRATE THE BIG DAY</div>
+      <div class="event-title" id="event-title" data-editable="text" style="">VATSALA IS ONE</div>
+      <div class="event-subtitle" id="event-subtitle" data-editable="text" style="">JOIN US TO CELEBRATE HER FIRST YEAR</div>
     </div>
 
     <div class="content-columns">
@@ -301,10 +343,24 @@
       </div>
 
       <div class="text-column">
-        <div class="quote-text" id="quote-text" data-editable="text" style="">"Celebrate another<br>great year!"</div>
-        <div class="body-text-block" id="body-text-1" data-editable="text" style="">Join us for Satwik's 22nd birthday! We'll have music and drinks. Let's make this day special and celebrate together. We hope to see you for an evening of joy, laughter, and fun!</div>
-        <div class="body-text-block" id="body-text-2" data-editable="text" style="">Venue located at 123 Central Park, New York City, 94568</div>
-        <div class="body-text-block" id="body-text-3" data-editable="text" style="">Bring your energy! We really hope you can make it and celebrate with us.</div>
+        <div class="quote-text" id="quote-text" data-editable="text" style="">"One whole year<br>of Vatsala!"</div>
+        <div class="body-text-block" id="body-text-1" data-editable="text" style="">Join us for Vatsala Bikkumalla's first birthday! Born on the 10th of August 2025, she has filled our home with first smiles, tiny footsteps and endless joy. Let's celebrate her very first year together.</div>
+        <div class="body-text-block" id="body-text-2" data-editable="text" style="">Daughter of Adarsh Bikkumalla and Ravali Bikkumalla</div>
+        <div class="body-text-block" id="body-text-3" data-editable="text" style="">Granddaughter of Ravinder Bikkumalla and Lalitha Bikkumalla. Bring your love and blessings &mdash; we really hope you can make it and celebrate with us.</div>
+      </div>
+    </div>
+
+    <!-- BRAND FOOTER -->
+    <div class="brand-foot">
+      <div class="brand-left" data-editable="text" style="">CAPTURED BY- TIMELESS CLICKS MEMORIES</div>
+      <div class="brand-right">
+        <div class="brand-ig">
+          <div class="brand-ig-label" data-editable="text" style="">Instagram</div>
+          <div class="brand-ig-handle" data-editable="text" style="">timelessclicks__photobooth</div>
+        </div>
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=https://instagram.com/timelessclicks__photobooth"
+          alt="QR Code" class="brand-qr">
       </div>
     </div>
 

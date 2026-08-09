@@ -119,14 +119,8 @@
     /* Bottom Layout */
     .bottom-content {
       display: grid;
-      grid-template-columns: 0.3fr 1fr;
-      gap: 20px;
-      margin-bottom: 15px;
-    }
-    .small-image-container {
-      width: 100%;
-      height: 160px;
-      position: relative;
+      grid-template-columns: 1fr;
+      margin-bottom: 10px;
     }
 
     /* Shared Image Styles */
@@ -205,7 +199,49 @@
       font-size: 13px;
       line-height: 1.6;
       text-align: justify;
-      margin-top: 10px;
+      margin-top: 6px;
+    }
+
+    /* ========== BRAND FOOTER ========== */
+    .brand-foot {
+      border-top: 2px solid var(--ink-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 8px;
+    }
+    .brand-left {
+      font-family: var(--font-sans);
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .brand-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-ig {
+      text-align: right;
+      line-height: 1.2;
+    }
+    .brand-ig-label {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 16px;
+    }
+    .brand-ig-handle {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 10.5px;
+    }
+    .brand-qr {
+      width: 62px;
+      height: 62px;
+      border: 1.5px solid var(--ink-color);
+      padding: 3px;
     }
 
     @media print {
@@ -222,7 +258,7 @@
     <div class="top-meta">
       <div id="meta-left" data-editable="text" style="">Special Edition</div>
       <div class="ornament">❦</div>
-      <div id="meta-right" data-editable="text" style="">New York</div>
+      <div id="meta-right" data-editable="text" style="">Bikkumalla Family</div>
     </div>
     
     <div class="line-thin"></div>
@@ -230,7 +266,7 @@
     <div class="double-line-top"></div>
     
     <div class="sub-headline" id="sub-headline" data-editable="text" style="">
-      ELENA GILBERT<br>TURNS TWENTY TWO
+      VATSALA BIKKUMALLA<br>TURNS ONE
     </div>
     
     <div class="double-line-bottom"></div>
@@ -238,10 +274,10 @@
     <div class="middle-content">
       <div class="left-col-text">
         <div class="left-col-bold" id="lc-bold" data-editable="text" style="">
-          EMBRACE EVERY<br>JOURNEY AHEAD,<br>TRUST IN YOUR<br>INNER STRENGTH.
+          ONE YEAR OF<br>TINY FOOTSTEPS,<br>FIRST SMILES,<br>AND PURE JOY.
         </div>
         <div id="lc-text" data-editable="text" style="">
-          Unlock the doors of possibility with the key of self-belief. Embrace your inner strength and trust in your abilities to conquer challenges that come your way. With self-belief as your guiding light, you have the power to unlock doors leading to growth, success, and fulfillment. Believe in yourself, for you hold the key to a future filled with endless possibilities.
+          Vatsala Bikkumalla was born on the 10th of August 2025, and in a single year she has changed everything. Daughter of Adarsh and Ravali Bikkumalla, granddaughter of Ravinder and Lalitha Bikkumalla, she has grown up surrounded by love from every corner of the family. Today we celebrate her first birthday, and every little milestone that brought her here.
         </div>
       </div>
       <div class="main-image-container">
@@ -263,38 +299,22 @@
     <div class="line-thin"></div>
 
     <div class="bottom-content">
-      <!-- Left: Small Image -->
-      <div class="small-image-container">
-        <div class="image-upload-box" id="sub-image-box" data-editable="image">
-          <input type="file" id="sub-image-input" class="image-file-input" accept="image/*">
-          <div class="image-preview-container">
-            <div id="sub-image-img" class="image-preview"></div>
-          </div>
-          <div class="placeholder-state" style="display: none;">
-            <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="opacity: 0.5;">
-              <circle cx="12" cy="12" r="3.2"></circle>
-              <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: Ticket Box -->
+      <!-- Ticket Box -->
       <div class="ticket-box">
         <div class="ticket-box-tl"></div>
         <div class="ticket-box-bl"></div>
         <div class="ticket-left">
-          <div class="t-day" id="t-day" data-editable="text" style="">22</div>
-          <div class="t-month" id="t-month" data-editable="text" style="">NOV</div>
+          <div class="t-day" id="t-day" data-editable="text" style="">10</div>
+          <div class="t-month" id="t-month" data-editable="text" style="">AUG</div>
         </div>
         <div class="ticket-right">
-          <div class="t-loc" id="t-loc" data-editable="text" style="">AT DEJA VU CLUB HONGKONG,<br>STREET 1234</div>
+          <div class="t-loc" id="t-loc" data-editable="text" style="">DAUGHTER OF ADARSH &amp; RAVALI<br>BIKKUMALLA</div>
           <div class="t-time-row">
-            <span id="t-time" data-editable="text" style="">8 PM</span>
+            <span id="t-time" data-editable="text" style="">2026</span>
             <span class="t-time-line">-----</span>
-            <span id="t-dayname" data-editable="text" style="">SATURDAY</span>
+            <span id="t-dayname" data-editable="text" style="">MONDAY</span>
           </div>
-          <div class="t-dress" id="t-dress" data-editable="text" style="">DRESS CODE: WEAR 90S ATTIRE</div>
+          <div class="t-dress" id="t-dress" data-editable="text" style="">GRANDDAUGHTER OF RAVINDER<br>&amp; LALITHA BIKKUMALLA</div>
         </div>
       </div>
     </div>
@@ -302,7 +322,21 @@
     <div class="line-thin"></div>
     
     <div class="footer-text" id="footer-text" data-editable="text" style="">
-      Unlock the doors of possibility with the key of self-belief. Embrace your inner strength and trust in your abilities to conquer challenges that come your way. With self-belief as your guiding light, you have the power to unlock doors leading to growth and fulfillment.
+      Happy first birthday, Vatsala. May every year ahead be as full of laughter as this one has been. With the love of your parents, Adarsh and Ravali, and the blessings of your grandparents, Ravinder and Lalitha, may you grow into a life filled with health, happiness and endless possibilities.
+    </div>
+
+    <!-- BRAND FOOTER -->
+    <div class="brand-foot">
+      <div class="brand-left" data-editable="text" style="">CAPTURED BY- TIMELESS CLICKS MEMORIES</div>
+      <div class="brand-right">
+        <div class="brand-ig">
+          <div class="brand-ig-label" data-editable="text" style="">Instagram</div>
+          <div class="brand-ig-handle" data-editable="text" style="">timelessclicks__photobooth</div>
+        </div>
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=https://instagram.com/timelessclicks__photobooth"
+          alt="QR Code" class="brand-qr">
+      </div>
     </div>
 
   </article>

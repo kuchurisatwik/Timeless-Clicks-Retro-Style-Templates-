@@ -183,6 +183,47 @@
       text-align: justify;
     }
 
+    /* ========== BRAND FOOTER ========== */
+    .brand-foot {
+      border-top: 2px solid var(--ink-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 8px;
+    }
+    .brand-left {
+      font-family: var(--font-sans);
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .brand-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-ig {
+      text-align: right;
+      line-height: 1.2;
+    }
+    .brand-ig-label {
+      font-family: var(--font-script);
+      font-size: 19px;
+    }
+    .brand-ig-handle {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 10.5px;
+    }
+    .brand-qr {
+      width: 62px;
+      height: 62px;
+      border: 1.5px solid var(--ink-color);
+      padding: 3px;
+    }
+
     @media print {
       body { background: #fff; }
       .image-upload-box::after, .image-file-input { display: none !important; }
@@ -196,30 +237,30 @@
     
     <div class="top-header-box">
       <div class="header-side left" id="meta-left" data-editable="text">
-        123 CENTRAL PARK<br>
-        NEW YORK 567
+        BIKKUMALLA FAMILY<br>
+        EST. 10 AUGUST 2025
       </div>
       <div class="header-center" id="site-title" data-editable="text">
         BREAKING NEWS
       </div>
       <div class="header-side right" id="meta-right" data-editable="text">
-        SATURDAY,<br>
-        19 JULY 2025
+        MONDAY,<br>
+        10 AUGUST 2026
       </div>
     </div>
 
     <div class="double-line-divider"></div>
 
     <div class="sub-meta-row">
-      <div id="sub-meta-1" data-editable="text">CENTRAL PARK</div>
-      <div id="sub-meta-2" data-editable="text">JULY 19TH</div>
-      <div id="sub-meta-3" data-editable="text">7:00 O'CLOCK PM</div>
+      <div id="sub-meta-1" data-editable="text">VATSALA BIKKUMALLA</div>
+      <div id="sub-meta-2" data-editable="text">AUGUST 10TH</div>
+      <div id="sub-meta-3" data-editable="text">ONE YEAR OLD</div>
     </div>
 
     <div class="single-line-divider"></div>
 
     <div class="titles-section">
-      <div class="script-title" id="script-title" data-editable="text">It's the queen's</div>
+      <div class="script-title" id="script-title" data-editable="text">It's Vatsala's first</div>
       <div class="bold-title" id="main-title" data-editable="text">BIRTHDAY!</div>
     </div>
 
@@ -242,23 +283,37 @@
     <div class="content-columns">
       <div class="text-column">
         <div class="quote-text" id="quote-text" data-editable="text">
-          "A YEAR OLDER,<br>A YEAR BOLDER!"
+          "ONE WHOLE YEAR<br>OF WONDER!"
         </div>
         <div class="body-text-block" id="body-text-1" data-editable="text">
-          Join us to celebrate Emma's 25th birthday with laughter, music, good vibes, and unforgettable memories. Let's make it magical! Let's raise a toast to 25 fabulous years of Emma! Don't miss out &mdash; it won't be the same without you!
+          Join us to celebrate Vatsala Bikkumalla's first birthday with laughter, music, good vibes, and unforgettable memories. Born on the 10th of August 2025, she has turned every ordinary day into something magical. Don't miss out &mdash; it won't be the same without you!
         </div>
         <div class="body-text-block" id="body-text-2" data-editable="text">
-          Venue located at 123 Central Park, Upper East Side, New York 94568
+          Daughter of Adarsh Bikkumalla and Ravali Bikkumalla
         </div>
       </div>
 
       <div class="text-column">
         <div class="body-text-block" id="body-text-3" data-editable="text">
-          Bring your enthusiasm and festive spirit! we hope you can make it and celebrate with us. The night will be filled with surprises, amazing food, and a playlist that guarantees we won't stop dancing until dawn. 
+          Granddaughter of Ravinder Bikkumalla and Lalitha Bikkumalla. Bring your enthusiasm and festive spirit! The day will be filled with surprises, amazing food, and a house full of the people she loves most.
         </div>
         <div class="body-text-block" id="body-text-4" data-editable="text">
-          Please RSVP by July 10th so we can ensure everything is perfect. We are looking forward to creating more beautiful moments with all the people who mean the most.
+          Please join us in showering Vatsala with your love and blessings. We are looking forward to creating more beautiful moments with all the people who mean the most.
         </div>
+      </div>
+    </div>
+
+    <!-- BRAND FOOTER -->
+    <div class="brand-foot">
+      <div class="brand-left" data-editable="text">CAPTURED BY- TIMELESS CLICKS MEMORIES</div>
+      <div class="brand-right">
+        <div class="brand-ig">
+          <div class="brand-ig-label" data-editable="text">Instagram</div>
+          <div class="brand-ig-handle" data-editable="text">timelessclicks__photobooth</div>
+        </div>
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&amp;data=https://instagram.com/timelessclicks__photobooth"
+          alt="QR Code" class="brand-qr">
       </div>
     </div>
 
